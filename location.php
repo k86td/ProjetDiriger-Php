@@ -33,6 +33,11 @@
 				<!-- insert Categories here -->
 			</div>
 		</div>
+		<button id="btn_appliquer" class="uk-button uk-button-primary">Appliquer</button>
+	</div>
+
+	<div class="main-content">
+
 	</div>
 
   </body>
