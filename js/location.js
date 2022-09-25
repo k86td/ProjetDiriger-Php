@@ -14,6 +14,12 @@ const GenCheckboxFromApi = (endpoint, dataPath, mappingFunc, additionalFunc) => 
 
         if (additionalFunc != undefined)
             additionalFunc();
+    })
+    .fail(function () {
+        setTimeout(function () {
+            // if cannot access api, wait 30 seconds, then try to fetch again
+            GenCheckboxFromApi(endpoint, dataPath, mappingFunc, additionalFunc);
+        },30000);
     });
 };
 
@@ -41,7 +47,6 @@ const mappingFunc = (filterName) => (d) => {
 const LoadMainContent = (queryString = "") => {
     const parser = (json) => {
         return json.map(j => {
-            console.log(j);
            return `<div class="uk-card uk-card-default"><h3 class="uk-card-title">${j.nom}</h3><div class="uk-card-body"><p>${j.prix}$ / jour</p></div></div>`;
         });
     };
@@ -52,9 +57,12 @@ const LoadMainContent = (queryString = "") => {
     $.get(API_PATH + queryString, function(data) {
         let parsedData = parser(data);
 
-        console.log(parsedData);
-
         $(DATA_PATH).html(parsedData);
+    })
+    .fail(function () {
+        setTimeout(function () {
+            LoadMainContent(queryString);
+        }, 10000)
     });
 };
 
