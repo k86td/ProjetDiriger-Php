@@ -1,5 +1,7 @@
 // js file for /location.php
 
+const BASE_URL = 'https://localhost:7103/api';
+
 const GenCheckboxFromApi = (endpoint, dataPath, mappingFunc, additionalFunc) => {
     $.get(endpoint, function (data) {
         // convert data to html format
@@ -8,8 +10,7 @@ const GenCheckboxFromApi = (endpoint, dataPath, mappingFunc, additionalFunc) => 
         $(dataPath).html("");
 
         data.forEach(e => {
-            $(dataPath).append(e[0]);
-            $(dataPath).append(e[1]);
+            $(dataPath).append(e);
         });
 
         if (additionalFunc != undefined)
@@ -38,31 +39,62 @@ const RefreshCategoryOffre = (ids) => {
 };
 
 const mappingFunc = (filterName) => (d) => {
-    let label = `<label for="${filterName}_${d.id}">${d.nom}</label>`;
-    let checkbox = `<input name="${filterName}-filter" type="checkbox" id="${filterName}_${d.id}" value="${d.id}">`;
+    let label = ``;
+    let checkbox = `<label for="${filterName}_${d.id}"><input name="${filterName}-filter" type="checkbox" id="${filterName}_${d.id}" value="${d.id}">${d.nom}</label>`;
 
-    return [label, checkbox];
+    return [checkbox];
 }
 
-const LoadMainContent = (queryString = "") => {
-    const parser = (json) => {
-        return json.map(j => {
-           return `<div class="uk-card uk-card-default"><h3 class="uk-card-title">${j.nom}</h3><div class="uk-card-body"><p>${j.prix}$ / jour</p></div></div>`;
-        });
+const defaultCardMaker = async (j) => {
+    // check to see if there's an offer detail for that location
+    var payload = await $.ajax({
+        url: BASE_URL + "/Voiture",
+        type: 'GET'
+    });
+
+    console.log(JSON.stringify(payload));
+
+    return `<div class="card" style="width: 18rem;"><div class="card-body"><h3 class="card-title">${j.nom}</h3><p>${j.prix}$ / jour</p></div></div>`;
+}
+
+const LoadMainContent = async (queryString = "", makerFunc) => {
+    if (makerFunc == undefined) {
+        console.log("LoadMainContent.makeFunc cannot be undefined!");
+        throw new Error("makerFunc cannot be undefined");
+    }
+
+    const parser = async (json) => {
+        return await Promise.all(json.map(async j => {
+            var payload = await $.ajax({
+                url: BASE_URL + "/Voiture/" + j["id"],
+                type: 'GET'
+            });
+
+            let description = "";
+            if (payload !== undefined) {
+                description = `<a href="offre.php?id=${j["id"]}">Description</a>`;
+            }
+
+            return `<div class="card" style="width: 18rem;"><div class="card-body"><h3 class="card-title">${j["nom"]}</h3><p>${j["prix"]}$ / jour</p><br>${description}</div></div>`;
+        }));
     };
+
+
     
     const DATA_PATH = ".main-content";
     const API_PATH = "https://localhost:7103/api/Offre";
 
-    $.get(API_PATH + queryString, function(data) {
-        let parsedData = parser(data);
+    $.get(API_PATH + queryString, async function(data) {
+        let parsedData = await parser(data);
+
+        console.log(JSON.stringify(parsedData));
 
         $(DATA_PATH).html(parsedData);
     })
     .fail(function () {
         setTimeout(function () {
-            LoadMainContent(queryString);
-        }, 10000)
+            LoadMainContent(queryString, makerFunc);
+        }, 10000);
     });
 };
 
@@ -82,7 +114,7 @@ function main() {
 
             let checkedIds = $.map(checked, c => {
                 return c.value;
-            })
+            });
             
             RefreshCategoryOffre(checkedIds);
         });
@@ -99,11 +131,11 @@ function main() {
         categoriesSelected;
 
         queryString = "?" + typeCategoriesSelected.concat(categoriesSelected).join("&");
-        LoadMainContent(queryString);
+        LoadMainContent(queryString, defaultCardMaker);
     });
             
     // Get main content
-    LoadMainContent();
+    LoadMainContent("", defaultCardMaker);
 }
 
 window.addEventListener('load', main)
