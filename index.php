@@ -1,8 +1,10 @@
 <?php
+$_SESSION["email"] = "test"
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
      <title>Home - Autorius</title>
@@ -19,6 +21,7 @@
      <link rel="stylesheet" href="css/styleHome.css">
 
 </head>
+
 <body id="top" data-spy="scroll" data-target=".navbar-collapse" data-offset="50">
 
      <!-- PRE LOADER -->
@@ -51,13 +54,21 @@
                          <li><a href="location.php">Offres</a></li>
                          <li><a href="about.php">À propos</a></li>
                          <?php
-                              if(isset($_SESSION['email'])){
-                                   echo '<li><a href="profil.php">Profil</a></li>';
-                              }
-                              else{
-                                   echo '<li><a href="login.php">Se connecter</a></li>';
-                                   echo '<li><a href="inscription.php">Inscription</a></li>';
-                              }
+                         if (isset($_SESSION['email'])) {
+                              echo '<li><a href="profil.php">Profil</a></li>';
+                              echo '<li>
+                                        <a class="dropdown">Ajouter une location</a>
+                                        <div class="dropdown-content">
+                                             <a href="#">Voiture</a>
+                                             <a href="#">Camion</a>
+                                             <a href="#">Bateau</a>
+                                        </div> 
+                                    </li>';
+                              echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
+                         } else {
+                              echo '<li><a href="login.php">Se connecter</a></li>';
+                              echo '<li><a href="inscription.php">Inscription</a></li>';
+                         }
                          ?>
                     </ul>
                </div>
@@ -69,14 +80,14 @@
      <section id="home">
           <div class="caption" style="background: url(images/homeAuto.jpg) no-repeat; height: 700px;">
                <div class="container">
-                         <div class="col-md-6 col-sm-12">
-                              <h1>Title 1</h1>
-                              <h3>Quote 1</h3>
-                              <a href="location.php" class="section-btn btn btn-default">Offres</a>
-                         </div>
+                    <div class="col-md-6 col-sm-12">
+                         <h1>Title 1</h1>
+                         <h3>Quote 1</h3>
+                         <a href="location.php" class="section-btn btn btn-default">Offres</a>
                     </div>
                </div>
-         </div>
+          </div>
+          </div>
      </section>
 
      <main>
@@ -107,7 +118,7 @@
 
                               <div class="col-md-12 col-sm-12">
                                    <input type="text" class="form-control" placeholder="Entrez votre nom complet" name="name" required>
-                    
+
                                    <input type="email" class="form-control" placeholder="Entrez votre adresse courriel" name="email" required>
 
                                    <textarea class="form-control" rows="6" placeholder="Message" name="message" required></textarea>
@@ -128,7 +139,7 @@
 
                </div>
           </div>
-     </section>       
+     </section>
 
      <!-- FOOTER -->
      <footer id="footer">
@@ -144,4 +155,5 @@
      <script src="js/custom.js"></script>
 
 </body>
+
 </html>
