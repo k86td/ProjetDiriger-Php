@@ -1,5 +1,5 @@
 <?php
-$_SESSION["email"] = "test"
+session_start()
 ?>
 
 <!DOCTYPE html>
