@@ -237,7 +237,7 @@ function CreateVendeur()
 {
     $url = 'https://localhost:7103/api/Vendeur';
     $tableau = array(
-    "id" => $_SESSION['email']['id'];
+    "id" => $_SESSION['email']['id']);
     $json_content = json_encode($tableau);
      
 
