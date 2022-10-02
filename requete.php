@@ -1,5 +1,4 @@
 <?php
-
 const BASE_URL = 'https://localhost:7103/api';
 
 function MakeBodyRequest ($endpoint, $httpMethod, $body) {
