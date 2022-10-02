@@ -26,7 +26,7 @@ $password = $_SESSION['email']['password'];
     <script>
         const BASE_URL = 'https://localhost:7103/api';
         const data = {
-            id: $_SESSION['email']['is']
+            id: $_SESSION['email']['id']
         }
 
         $('#vendeurBtn').click(function() {
