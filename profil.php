@@ -21,8 +21,26 @@ $password = $_SESSION['email']['password'];
 
 <!DOCTYPE html>
 <html lang="fr">
+<html>
+<head>
+    <script>
+        const BASE_URL = 'https://localhost:7103/api';
+        const data = {
+            id: $_SESSION['email']['is']
+        }
 
-<div class='form-container'>
+        $('#vendeurBtn').click(function() {
+            $.post(BASE_URL + 'Vendeur', data, function(data,status){
+                console.log(`${data} and status is ${status}`)
+            });
+        })
+    </script>
+</head>
+<body>
+    <div class='form-container'>
+        <div>
+            <button class="form-input-btn" id="vendeurBtn">Devenir vendeur</button>
+        </div>
         <div class='form-content-right'>
             <form class='form' method="POST">
                 <h1>
@@ -55,7 +73,7 @@ $password = $_SESSION['email']['password'];
                     <input class='form-input' required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password' placeholder='Enter your password' />
                 </div> -->
                 <button class='form-input-btn' type='Inscription'>
-                    Sauver les changements
+                    Sauvegarder les changements
                 </button>
                 <a href="index.php" class="delete-btn">Revenir</a>
                 <br>

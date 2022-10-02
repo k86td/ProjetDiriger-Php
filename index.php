@@ -59,7 +59,7 @@ session_start()
                               echo '<li>
                                         <a class="dropdown">Ajouter une location</a>
                                         <div class="dropdown-content">
-                                             <a href="#">Voiture</a>
+                                             <a href="offre_voiture.php">Voiture</a>
                                              <a href="#">Camion</a>
                                              <a href="#">Bateau</a>
                                         </div> 
