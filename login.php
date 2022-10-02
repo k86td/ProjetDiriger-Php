@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    include 'requete.php';
     $courriel = $_POST['courriel'];
     $password = $_POST['password'];
-    $_SESSION['email'] = LoginToken($courriel,$password);
+    $_SESSION['token'] = LoginToken($courriel,$password);
     $_SESSION['email'] = LoginNoToken($courriel,$password);
 
     // echo  $_SESSION['email'];
