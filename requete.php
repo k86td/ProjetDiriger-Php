@@ -60,14 +60,14 @@ function MakeRequest ($endpoint, $httpMethod) {
     return json_decode($response, true);
 }
 
-function CreateUsager($nom,$prenom,$email,$telephone,$password,$password2){
+function CreateUsager($nom,$prenom,$email,$telephone,$password,$adresse){
     $url = 'https://localhost:7103/api/Usager';
     $tableau = array("nom" =>   $nom,
     "prenom" => $prenom,
     "email"=> $email,
     "telephone"=> $telephone,
     "password"=> $password,
-    "adresse"=> $password2);
+    "adresse"=> $adresse);
     $json_content = json_encode($tableau);
 
 
@@ -119,7 +119,6 @@ function LoginToken($courriel,$password){
     );
 
     $token = curl_exec($ch);
-    print_r($token);
     if($errno = curl_errno($ch)){
         $error_message = curl_strerror($errno);
        // echo "Curl error ({$errno}): \n {$error_message}";
@@ -155,7 +154,7 @@ function LoginNoToken($courriel,$password)
         CURLOPT_HTTPHEADER => array(
             "cache-control: no-cache",
             "Content-Type: application/json",
-            "Authorization: Bearer " . $_SESSION['email']
+            "Authorization: Bearer " . $_SESSION['token']
         ))
     );
 
@@ -173,11 +172,67 @@ function LoginNoToken($courriel,$password)
 }
 
 
+function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$porte,$siege,$traction,$description,$etat,$prix)
+{
+    $coordonner = "45.64228106493186, -73.8414494825723";
+    $url = 'https://localhost:7103/api/Offre';
+    $tableau = array(
+        "nom" => $_SESSION['email']['prenom'],
+        "idVendeur"=> $_SESSION['email']['id'],
+        "prix" => $prix,
+        "coordonner" => $coordonner,
+        "idCategorieOffre" => $type_voiture,
+        "idTypeOffre" => 3);
+        $json_content = json_encode($tableau);
 
+        $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_POSTFIELDS => $json_content,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json"
+        ))
+    );
 
+    $result = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
 
+    $url ='https://localhost:7103/api/Voiture';
+    $tableau = array(
+        "nom" => $_SESSION['email']['prenom'],
+        "idVendeur"=> $_SESSION['email']['id'],
+        "prix" => $prix,
+        "coordonner" => $coordonner,
+        "idCategorieOffre" => $type_voiture,
+        "idTypeOffre" => 3);
+        $json_content = json_encode($tableau);
 
+        $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_POSTFIELDS => $json_content,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json"
+        ))
+    );
 
+}
 
 
 
