@@ -213,7 +213,7 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
         "prix" => $prix,
         "coordonner" => $coordonner,
         "idCategorieOffre" => $type_voiture,
-        "idTypeOffre" => 3);
+        "idTypeOffre" => 1);
         $json_content = json_encode($tableau);
 
         $ch = curl_init();
