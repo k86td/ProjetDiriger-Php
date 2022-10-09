@@ -147,8 +147,8 @@ function LoginNoToken($courriel,$password)
         CURLOPT_SSL_VERIFYHOST => false,
         CURLOPT_POSTFIELDS => $json_content,
         CURLOPT_TIMEOUT => 30,
-        CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "Get",
         CURLOPT_HTTPHEADER => array(
             "cache-control: no-cache",
@@ -162,6 +162,7 @@ function LoginNoToken($courriel,$password)
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
     }
+    $result = json_decode($result);
     /*
     $response = '';
     $err = '';
@@ -181,7 +182,7 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
         "prix" => $prix,
         "coordonner" => $coordonner,
         "idCategorieOffre" => $type_voiture,
-        "idTypeOffre" => 3);
+        "idTypeOffre" => 1);
         $json_content = json_encode($tableau);
 
         $ch = curl_init();
@@ -213,7 +214,7 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
         "prix" => $prix,
         "coordonner" => $coordonner,
         "idCategorieOffre" => $type_voiture,
-        "idTypeOffre" => 1);
+        "idTypeOffre" => 3);
         $json_content = json_encode($tableau);
 
         $ch = curl_init();
@@ -232,6 +233,7 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
     );
 
 }
+
 
 function CreateVendeur()
 {

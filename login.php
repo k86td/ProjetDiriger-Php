@@ -11,7 +11,7 @@
     <div class='form-container'>
         <span class='close-btn'><a style="color: white;" href="index.php">x</a></span>
         <div class='form-content-left'>
-            <img class='form-img' src='img/image_favicon.png' alt='voiture' />
+            <img class='form-img' src='images/image_favicon.png' alt='voiture' />
         </div>
         <div class='form-content-right'>
         <form class='form' method="POST">
@@ -47,10 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     $password = $_POST['password'];
     $_SESSION['token'] = LoginToken($courriel,$password);
     $_SESSION['email'] = LoginNoToken($courriel,$password);
-
-    // echo  $_SESSION['email'];
-    // print_r($_SESSION);
-    // header('Location: index.php');
+   // $_SESSION['email']['id'];
+     header('Location: index.php');
     
 }
 

@@ -50,23 +50,23 @@ $password = $_SESSION['email']['password'];
                 <h4> Vouillez changer vos information au besoin <h4>
                   <div class='form-inputs'>
                     <label class='form-label'>Prenom</label>
-                    <input class='form-input' value="<?php echo $_SESSION['email']['prenom']; ?>"  required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='prenom' placeholder='Entrez votre prenom' />
+                    <input class='form-input' value="<?php echo $_SESSION['email']->prenom; ?>"  required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='prenom' placeholder='Entrez votre prenom' />
                 </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Nom</label>
-                    <input class='form-input' value="<?php echo $_SESSION['email']['nom']; ?>" required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='nom' placeholder='Entrez votre nom' />
+                    <input class='form-input' value="<?php echo $_SESSION['email']->nom; ?>" required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='nom' placeholder='Entrez votre nom' />
                 </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Adresse</label>
-                    <input class='form-input' value="<?php echo $_SESSION['email']['adresse']; ?>" required type='text' pattern="^[a-zA-Z0-9- ]+$" title="Seulement des lettres et chiffre" name='adresse' placeholder='Entrez votre Adresse' />
+                    <input class='form-input' value="<?php echo $_SESSION['email']->adresse; ?>" required type='text' pattern="^[a-zA-Z0-9- ]+$" title="Seulement des lettres et chiffre" name='adresse' placeholder='Entrez votre Adresse' />
                 </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Telephone</label>
-                    <input class='form-input' value="<?php echo $_SESSION['email']['telephone']; ?>" required type='text' pattern="^[]*[(][0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" title="(999)-999-9999" name='telephone' placeholder='Entrez votre Telephone' />
+                    <input class='form-input' value="<?php echo $_SESSION['email']->telephone; ?>" required type='text' pattern="^[]*[(][0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" title="(999)-999-9999" name='telephone' placeholder='Entrez votre Telephone' />
                 </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Email</label>
-                    <input class='form-input' value="<?php echo $_SESSION['email']['email']; ?>" required type='email' name='email' placeholder='Enter your email' />
+                    <input class='form-input' value="<?php echo $_SESSION['email']->email; ?>" required type='email' name='email' placeholder='Enter your email' />
                 </div>
                 <!-- <div class='form-inputs'>
                     <label class='form-label'>Mot de passe</label>
