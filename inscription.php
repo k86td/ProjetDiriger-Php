@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <link href="style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -47,7 +47,7 @@
                     <input class='form-input' required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password2' placeholder='Confirm your password' />
                 </div>
                 <button class='form-input-btn' type='Inscription'>
-                    Sign up
+                    Inscription
                 </button>
                 <span class='form-input-login'>
                     déjà un compte? Connectez-vous

@@ -52,7 +52,7 @@ session_start();
                <!-- MENU LINKS -->
                <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-nav-first">
-                         <li class="active"><a href="index.html">Accueil</a></li>
+                         <li class="active"><a href="index.php">Accueil</a></li>
                          <li><a href="location.php">Offres</a></li>
                          <li><a href="about.php">À propos</a></li>
                          <?php
@@ -66,6 +66,7 @@ session_start();
                                              <a href="#">Bateau</a>
                                         </div> 
                                     </li>';
+                              echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
                               echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
                          } else {
                               echo '<li><a href="login.php">Se connecter</a></li>';
