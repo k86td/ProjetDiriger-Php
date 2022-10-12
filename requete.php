@@ -336,3 +336,69 @@ function GetOffresVendeur()
         curl_close($ch);
 
 }
+
+
+function GetOffre($offerId)
+{
+    $url = 'https://localhost:7103/api/Offre/'.$offerId;
+
+    $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+            ))
+        );
+
+    $result = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    $_SESSION['offreDetails'] = json_decode($result);
+    curl_close($ch);
+}
+
+function UpdateOffre($nom, $prix, $coordonner, $idCategorie, $idType){
+    $url = 'https://localhost:7103/api/Offre';
+    $tableau = array(
+        "nom" => $nom,
+        "idVendeur"=> $_SESSION['email']-> id,
+        "prix" => $prix,
+        "date" => date(),
+        "coordonner" => $coordonner,
+        "idCategorieOffre" => $idCategorie,
+        "idTypeOffre" => $idType);
+        $json_content = json_encode($tableau);
+
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => $json_content,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json"
+            ))
+        );
+
+    $result = curl_exec($ch);
+    
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+}

@@ -82,23 +82,16 @@ if (isset($_SESSION['email'])) {
                         <img src="images/chevrolet-cruze.jpg">
                     </div>
                     <p>2018</p>
-                    <h3>2018 Chevrolet Cruze rs</h3>
+                    <h3>Chevrolet Cruze rs</h3>
                     <h2>'.$_SESSION['offre'][$i] ->prix .' | par jours</h2>
-                    <a href="#" class="btn">details</a>
+                    <form method="POST">
+                        <button type="submit" value="'.$_SESSION['offre'][$i]->id.'" name="offreDetails">Details</button>
+                    </form>
                 </div>
                  </div>';
             }
-
         ?>
-       
-
     </section>
-
-
-
-
-
-
 
     <!-- SCRIPTS -->
     <script src="js/jquery.js"></script>
@@ -108,3 +101,13 @@ if (isset($_SESSION['email'])) {
 </body>
 
 </html>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == "POST") 
+{
+    if(isset($_POST['offreDetails'])){
+        GetOffre($_POST['offreDetails']);
+        header('Location: offreDetails.php');
+    }
+}
+?>
