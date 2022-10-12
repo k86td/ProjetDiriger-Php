@@ -23,24 +23,16 @@ $password = $_SESSION['email']['password'];
 <html lang="fr">
 <html>
 <head>
-    <script>
-        const BASE_URL = 'https://localhost:7103/api';
-        const data = {
-            id: $_SESSION['email']['id']
-        }
-
-        $('#vendeurBtn').click(function() {
-            $.post(BASE_URL + 'Vendeur', data, function(data,status){
-                console.log(`${data} and status is ${status}`)
-            });
-        })
-    </script>
+<title>Autorius - Profil</title>
+    <meta charset="UTF-8">
 </head>
 <body>
     <div class='form-container'>
-        <div>
-            <button class="form-input-btn" id="vendeurBtn">Devenir vendeur</button>
-        </div>
+    <div>
+        <form method="POST" name="addVendeur" id="AddVendeur">
+            <button type="submit" value="<?php echo $_SESSION['email']->id?>" class="form-input-btn" name="addVendeur" id="addVendeur">Devenir vendeur</button>
+        </form>
+    </div>
         <div class='form-content-right'>
             <form class='form' method="POST">
                 <h1>
@@ -84,6 +76,10 @@ $password = $_SESSION['email']['password'];
                 //include 'bd.php';
                 if ($_SERVER['REQUEST_METHOD'] == "POST") 
                 {
+                    if(isset($_POST['addVendeur'])){
+                        CreateVendeur($_POST['addVendeur']);
+                    }
+                    else{
                     $prenom = $_POST['prenom'];
                     $nom = $_POST['nom'];
                     $adresse = $_POST['adresse'];
@@ -125,7 +121,7 @@ $password = $_SESSION['email']['password'];
                         }
                         
                         curl_close($ch);
-                      
+                    }
                     //    header('Location: confirmation.php');
                     
                     

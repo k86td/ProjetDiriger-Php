@@ -273,16 +273,15 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
 }
 
 
-function CreateVendeur()
+function CreateVendeur($userId)
 {
     $url = 'https://localhost:7103/api/Vendeur';
     $tableau = array(
-    "id" => $_SESSION['email']['id']);
-    $json_content = json_encode($tableau);
-     
+        "idUsager"=> $userId);
+        $json_content = json_encode($tableau);
 
-    $ch = curl_init();
-    curl_setopt_array($ch, array(
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
         CURLOPT_URL => $url,
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
@@ -301,12 +300,7 @@ function CreateVendeur()
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
     }
-    /*
-    $response = '';
-    $err = '';
-    */
     curl_close($ch);
-    return $result;
 }
 
 
