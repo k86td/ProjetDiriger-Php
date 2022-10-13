@@ -85,7 +85,7 @@ if (isset($_SESSION['email'])) {
                     <h3>Chevrolet Cruze rs</h3>
                     <h2>'.$_SESSION['offre'][$i] ->prix .' | par jours</h2>
                     <form method="POST">
-                        <button type="submit" value="'.$_SESSION['offre'][$i]->id.'" name="offreDetails">Details</button>
+                        <button type="submit" value="'.$_SESSION['offre'][$i]->id.'" name="offreId">Edit</button>
                     </form>
                 </div>
                  </div>';
@@ -105,9 +105,9 @@ if (isset($_SESSION['email'])) {
 <?php
 if ($_SERVER['REQUEST_METHOD'] == "POST") 
 {
-    if(isset($_POST['offreDetails'])){
-        GetOffre($_POST['offreDetails']);
-        header('Location: offreDetails.php');
+    if(isset($_POST['offreId'])){
+        GetOffre($_POST['offreId']);
+        header('Location:offreEdit.php');
     }
 }
 ?>
