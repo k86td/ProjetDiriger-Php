@@ -1,6 +1,20 @@
 // js file for /location.php
 
+import * as $ from 'jquery';
+import * as Mustache from 'mustache';
+
 const BASE_URL = 'https://localhost:7103/api';
+
+async function test () {
+    const url1 = 'http://localhost:8000/templates/test.mustache';
+    const response = await fetch(url1);
+    const data = await response.text();
+
+
+    console.log(mustache.Mustache.render(data, { "test": "This is a test string" }));
+    
+}
+test();
 
 const GenCheckboxFromApi = (endpoint, dataPath, mappingFunc, additionalFunc) => {
     $.get(endpoint, function (data) {
@@ -46,6 +60,7 @@ const mappingFunc = (filterName) => (d) => {
 }
 
 const defaultCardMaker = async (j) => {
+
     // check to see if there's an offer detail for that location
     // var payload = await $.ajax({
         //     url: BASE_URL + "/Voiture",
@@ -62,12 +77,13 @@ const defaultCardMaker = async (j) => {
 
 const LoadMainContent = async (queryString = "", makerFunc) => {
     if (makerFunc == undefined) {
-        console.log("LoadMainContent.makeFunc cannot be undefined!");
+        console.log("LoadMainContent.makerFunc cannot be undefined!");
         throw new Error("makerFunc cannot be undefined");
     }
-
+    
     let user_token = $("#user_token").val();
-
+    
+    // this is the function that creates the cards
     // this is the function that creates the cards
     const parser = async (json) => {
         return await Promise.all(json.map(async j => {
@@ -114,6 +130,8 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
     const API_PATH = "https://localhost:7103/api/Offre";
 
     $.get(API_PATH + queryString, async function (data) {
+        console.debug("Got data!");
+
         let parsedData = await parser(data);
 
         // setup the handlers for all the "Louer" buttons
@@ -144,6 +162,7 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
         });
     })
     .fail(function () {
+        console.debug("Failed to load content")
         setTimeout(function () {
             LoadMainContent(queryString, makerFunc);
         }, 10000);
