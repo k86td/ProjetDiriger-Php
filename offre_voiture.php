@@ -22,9 +22,9 @@
           echo $_POST['etat'];
           echo $_POST['prix'];
           */
-          
-          CreateVoiture($_POST['couleur'],$_POST['marque'],$_POST['modele'],$_POST['type_voiture'], $_POST['odometre'],$_POST['type'],$_POST['porte'],$_POST['siege'],$_POST['traction'],$_POST['description'],$_POST['etat'],$_POST['prix']);
-          header('Location: location.php');
+
+          CreateVoiture($_POST['couleur'],$_POST['marque'],$_POST['modele'],$_POST['type_voiture'], $_POST['odometre'],$_POST['type'],$_POST['porte'],$_POST['siege'],$_POST['traction'],$_POST['description'],$_POST['etat'],$_POST['prix'],$_POST['postal'], $_POST['dateDebut'], $_POST['dateFin']);
+          //header('Location: location.php');
         }
 ?>
 
@@ -36,15 +36,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <link href="style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
 
-    <div class='form-container'>
+    <div class='form-container' style="height: 850px ;">
         <span class='close-btn'><a style="color: white;" href="index.php">x</a></span>
         <div class='form-content-left'>
-            <img class='form-img' src='img/image_favicon.png' alt='voiture' />
+            <img class='form-img' src='images/image_favicon.png' alt='voiture' />
         </div>
         <div class='form-content-right'>
             <form class='form' method="POST">
@@ -117,6 +117,18 @@
                 <div class='form-inputs'>
                     <label class='form-label'>prix</label>
                     <input class='form-input' required pattern="^[0-9]+$" title="un chiffre est requis" type='number' min="0" name='prix' placeholder='Entrez le prix par jours pour la location' />
+                </div>
+                <div class='form-inputs'>
+                    <label class='form-label'>Date de début</label>
+                    <input class='form-input' required name='dateDebut' type="datetime-local"/>
+                </div>
+                <div class='form-inputs'>
+                    <label class='form-label'>Date de fin</label>
+                    <input class='form-input' required name='dateFin' type="datetime-local"/>
+                </div>
+                <div class='form-inputs'>
+                    <label class='form-label'>Votre Code Postal</label>
+                    <input class='form-input' required type='text' pattern="^[a-zA-Z0-9]+$" title="Seulement des lettres" name='postal' placeholder='Entrez votre code postal' />
                 </div>
                 <button class='form-input-btn' type='Inscription'>
                     Enregistrez
