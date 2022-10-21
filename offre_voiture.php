@@ -22,8 +22,8 @@
           echo $_POST['etat'];
           echo $_POST['prix'];
           */
-          
-          CreateVoiture($_POST['couleur'],$_POST['marque'],$_POST['modele'],$_POST['type_voiture'], $_POST['odometre'],$_POST['type'],$_POST['porte'],$_POST['siege'],$_POST['traction'],$_POST['description'],$_POST['etat'],$_POST['prix'],$_POST['postal']);
+
+          CreateVoiture($_POST['couleur'],$_POST['marque'],$_POST['modele'],$_POST['type_voiture'], $_POST['odometre'],$_POST['type'],$_POST['porte'],$_POST['siege'],$_POST['traction'],$_POST['description'],$_POST['etat'],$_POST['prix'],$_POST['postal'], $_POST['dateDebut'], $_POST['dateFin']);
           //header('Location: location.php');
         }
 ?>
@@ -117,6 +117,14 @@
                 <div class='form-inputs'>
                     <label class='form-label'>prix</label>
                     <input class='form-input' required pattern="^[0-9]+$" title="un chiffre est requis" type='number' min="0" name='prix' placeholder='Entrez le prix par jours pour la location' />
+                </div>
+                <div class='form-inputs'>
+                    <label class='form-label'>Date de début</label>
+                    <input class='form-input' required name='dateDebut' type="datetime-local"/>
+                </div>
+                <div class='form-inputs'>
+                    <label class='form-label'>Date de fin</label>
+                    <input class='form-input' required name='dateFin' type="datetime-local"/>
                 </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Votre Code Postal</label>

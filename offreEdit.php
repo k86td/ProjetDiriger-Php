@@ -23,14 +23,19 @@
                 </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Prix</label>
-                    <input class='form-input' value="<?php echo $_SESSION['offreDetails']->prix; ?>" required type='number' pattern="[0-9]+" title="Seulement des chiffres" name='prix' placeholder="Prix de l'offre" />
+                    <input class='form-input' value="<?php echo $_SESSION['offreDetails']->prix; ?>" required type='number' name='prix' placeholder="Prix de l'offre" />
                 </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Adresse</label>
                     <input class='form-input' value="<?php echo $_SESSION['offreDetails']->coordonner; ?>" required name='coordonner'/>
                 </div>
-                <div>
-                    <!-- TODO: Modifier la date de l'offre-->
+                <div class='form-inputs'>
+                    <label class='form-label'>Date de début</label>
+                    <input class='form-input' value="<?php echo $_SESSION['offreDetails']->dateDebut; ?>" required name='dateDebut' type="datetime-local"/>
+                </div>
+                <div class='form-inputs'>
+                    <label class='form-label'>Date de fin</label>
+                    <input class='form-input' value="<?php echo $_SESSION['offreDetails']->dateFin; ?>" required name='dateFin' type="datetime-local"/>
                 </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Type</label>
@@ -55,7 +60,9 @@
                     $coordonner = $_POST['coordonner'];
                     $type = $_POST['coordonner'];
                     $categorie = $_POST['categorie'];
-                    UpdateOffre($nom, $prix, $coordonner, $type, $categorie);
+                    $dateDebut = $_POST['dateDebut'];
+                    $dateFin = $_POST['dateFin'];
+                    UpdateOffre($nom, $prix, $coordonner, $type, $categorie, $dateDebut, $dateFin);
                     header("Location: mesOffres.php"); // TODO: Trouver meilleur façon de rediriger l'usager
                 }
                 ?>

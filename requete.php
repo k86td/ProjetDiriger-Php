@@ -173,7 +173,7 @@ function LoginNoToken($courriel,$password)
 }
 
 
-function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$porte,$siege,$traction,$description,$etat,$prix,$postal)
+function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$porte,$siege,$traction,$description,$etat,$prix,$postal, $dateDebut, $dateFin)
 {
     /*
     $google = "http://maps.googleapis.com/maps/api/geocode/json?address=".$postal."&sensor=false";
@@ -190,13 +190,16 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
     
     $coordonner = "45.64228106493186, -73.8414494825723";
     $url = 'https://localhost:7103/api/Offre';
+
     $tableau = array(
         "nom" => $_SESSION['email']-> prenom,
         "idVendeur"=> $_SESSION['email']-> id,
         "prix" => $prix,
         "coordonner" => $coordonner,
         "idCategorieOffre" => $type_voiture,
-        "idTypeOffre" => 1);
+        "idTypeOffre" => 1,
+        "dateDebut" => $dateDebut,
+        "dateFin" => $dateFin);
         $json_content = json_encode($tableau);
 
         $ch = curl_init();
@@ -367,16 +370,18 @@ function GetOffre($offerId)
     curl_close($ch);
 }
 
-function UpdateOffre($nom, $prix, $coordonner, $idCategorie, $idType){
+function UpdateOffre($nom, $prix, $coordonner, $idCategorie, $idType, $dateDebut, $dateFin){
     $url = 'https://localhost:7103/api/Offre';
+
     $tableau = array(
         "nom" => $nom,
         "idVendeur"=> $_SESSION['email']-> id,
         "prix" => $prix,
-        "date" => date(),
         "coordonner" => $coordonner,
         "idCategorieOffre" => $idCategorie,
-        "idTypeOffre" => $idType);
+        "idTypeOffre" => $idType,
+        "dateDebut" => $dateDebut,
+        "dateFin" => $dateFin);
         $json_content = json_encode($tableau);
 
         $ch = curl_init();
