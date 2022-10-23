@@ -2,7 +2,7 @@
 
 import TimeAgo from 'javascript-time-ago';
 import fr from 'javascript-time-ago/locale/fr';
-import { uGetJson, pGetJson, pPostJson, pDelete } from './request';
+import { uGetJson, pGetJson, pPostJson, pDelete, pPutJson } from './request';
 import { GetTemplate, JqueryDateFormat } from './helper';
 const Mustache = require('mustache');
 import { Toast } from 'bootstrap';
@@ -36,14 +36,31 @@ const DATA_MAPPER = {
         {"idOffre":5,"idUsager":1,"date":"2022-10-04T17:15:32.6333333","accepter":false}
         */
 
-        return {
+        let templatePayload = {
             "idOffre": elem.idOffre,
-            "accepter": elem.accepter,
-            "button": {
-                "name": elem.accepter ? "cancelLocation" : "cancelRequest",
-                "texte": elem.accepter ? "Annuler la location" : "Annuler la demande",
-            }
+            "accepter": elem.accepter
         };
+
+        if (elem.accepter) {
+            templatePayload['button'] = { 
+                "name": "cancelLocation", 
+                "texte": "Annuler la location" 
+            };
+        }
+        else {
+            templatePayload['date'] = elem.date;
+            templatePayload['editButton'] = {
+                "name": "editRequest",
+                "texte": "Modifier la demande de location",
+                "iconClass": "bi bi-pencil-square"
+            };
+            templatePayload['button'] = { 
+                "name": "cancelRequest", 
+                "texte": "Annuler la demande" 
+            };
+        }
+
+        return templatePayload;
     }
 }
 
@@ -162,6 +179,36 @@ async function RenderOffres(querySelector = ".main-content") {
             const api_path = "/Offre/Rent/" + offreId;
 
             pDelete(BASE_URL + api_path, user_token, 1, 10000, _ => {
+                RenderOffres();
+            });
+        });
+
+        let editDemandeOffreModal = document.getElementById("editDemandeOffreModal");
+        editDemandeOffreModal.addEventListener("show.bs.modal", event => {
+            let button = event.relatedTarget;
+
+            let dateDebut = $(button).attr('data-bs-offreDateDebut');
+            let dateFin = $(button).attr('data-bs-offreDateFin');
+            let idOffre = $(button).attr('data-bs-offreId');
+            let date = $(button).attr('data-bs-demandeOffreDate');
+
+            // 1- set min/max of the date picker
+            const datePicker = $("#editDemandeOffre_Dates");
+            // should check if the min is actually between (dateDebut || Date.now) and dateFin
+            datePicker.attr("min", JqueryDateFormat(dateDebut)); 
+            datePicker.attr("max", JqueryDateFormat(dateFin));
+            datePicker.attr("value", JqueryDateFormat(date));
+
+            $("#editDemandeOffre_Id").val(idOffre);
+        });
+
+        $("#editRequest").on('click', event => {
+            // gather modal data
+
+            let idOffre = $("#editDemandeOffre_Id");
+            let date = $("#editDemandeOffre_Dates");
+
+            pPutJson(BASE_URL + "/api/Rent/" + idOffre, $("#user_token").val(), date, 1, 5000, _ => {
                 RenderOffres();
             });
         });

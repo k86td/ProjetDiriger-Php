@@ -128,3 +128,38 @@ export async function pPostJson(url, bearer_token, body, retry = -1, retry_timeo
     return result;
 }
 
+/**
+ * Protected Delete to a url
+ * @param {string} url to access
+ */
+ export async function pPutJson(url, bearer_token, body, retry = -1, retry_timeout = 30000, callback = undefined) {
+
+    var result = undefined;
+    while (result == undefined && (retry > 0 || retry == -1)) {
+        result = await $.ajax({
+            type: 'PUT',
+            url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + bearer_token);
+            },
+            data: JSON.stringify(body),
+            success: function (data) {
+                if (callback !== undefined)
+                    callback(data);
+
+                return data;
+            },
+            error: async function () {
+                console.error(`[REQUEST:pDelete] Failed to access "${url}". Retry count: ${retry}`);
+                retry--;
+                await new Promise(r => setTimeout(r, retry_timeout));
+
+            }
+        })
+            .catch(_ => {
+                console.error(`[REQUEST:pDelete] Failed to access "${url}". Retry count: ${retry}`);
+            });
+    }
+
+    return result;
+}

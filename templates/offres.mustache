@@ -8,6 +8,20 @@
                     <h6 class="card-subtitle text-muted">{{ prix }}$</h6>
                     {{ #connected }}
                         {{ #demandes }}
+                            {{ #editButton }}
+                                <button id="{{ name }}Btn_{{ id }}" name="{{ name }}"
+                                    class="btn btn-outline-warning card-btn"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editDemandeOffreModal" 
+                                    data-bs-offreName="{{ demandes.name }}" 
+                                    data-bs-offreId="{{ id }}"
+                                    data-bs-offreDateDebut="{{ dateDebut }}"
+                                    data-bs-offreDateFin="{{ dateFin }}"
+                                    data-bs-demandeOffreDate="{{ date }}"
+                                >
+                                    <i class="{{ iconClass }}"></i>
+                                </button>
+                            {{ /editButton }}
                             {{ #button }}
                             <button type="submit" id="{{ name }}Btn_{{ id }}" name="{{ name }}" 
                                 class="btn btn-outline-danger card-btn">{{ texte }}</button>                    
@@ -44,6 +58,30 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <button id="sendRequest" type="button" data-bs-dismiss="modal" class="btn btn-primary">Envoyer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- editDemandeOffreModal -->
+                        <div class="modal fade" id="editDemandeOffreModal" tabindex="-1" aria-labelledby="editDemandeOffreLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="editDemandeOffreLabel">Envoyer une demande de location</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                    </div>
+                                    <div class="modal-body" style="text-align: center;">
+                                        <form id="editDemandeOffreForm">
+                                            <input type="number" id="editDemandeOffre_Id" hidden>
+                                        
+                                            <label>Date de la location:</label>
+                                            <input type="date" id="editDemandeOffre_Dates">
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button id="editRequest" type="button" data-bs-dismiss="modal" class="btn btn-warning">Modifier</button>
                                     </div>
                                 </div>
                             </div>
