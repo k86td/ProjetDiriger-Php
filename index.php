@@ -67,6 +67,7 @@ session_start();
                                         </div> 
                                     </li>';
                               echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
+                              echo '<li><a href="listUsers_admin.php">Admin</a></li>';
                               echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
                          } else {
                               echo '<li><a href="login.php">Se connecter</a></li>';

@@ -114,6 +114,7 @@ function LoginToken($courriel,$password){
         CURLOPT_HTTPHEADER => array(
             "cache-control: no-cache",
             "Content-Type: application/json",
+            "Authorization: Bearer " . $_SESSION['token']
         ))
     );
 
@@ -406,4 +407,66 @@ function UpdateOffre($nom, $prix, $coordonner, $idCategorie, $idType, $dateDebut
         echo "Curl error ({$errno}): \n {$error_message}";
     }
     curl_close($ch);
+}
+
+function GetAllUsers()
+{
+
+    $url = 'https://localhost:7103/api/Usager';
+
+
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "Get",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json",
+            "Authorization: Bearer " . $_SESSION['token']
+        ))
+    );
+
+    $result = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+    return $result;
+}
+
+function DeleteUsager($user_id){
+
+    $url = 'https://localhost:7103/api/Usager?id='.$user_id;
+    
+
+
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "DELETE",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json",
+            "Authorization: Bearer " . $_SESSION['token']
+        ))
+    );
+
+    $result = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
 }
