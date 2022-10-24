@@ -1,6 +1,7 @@
-<?php session_start() ?>
+
 
 <?php
+//session_start();
 $DEFAULT_CLASS = "class='nav-link'";
 $ACTIVE_CLASS = "class='nav-link active'";
 if (isset($active_link)) {

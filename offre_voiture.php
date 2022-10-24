@@ -8,22 +8,8 @@
        if ($_SERVER['REQUEST_METHOD'] == "POST")
         {
           include 'requete.php';
-          /*
-          echo $_POST['couleur'];
-          echo $_POST['marque'];
-          echo $_POST['modele'];
-          echo $_POST['type_voiture'];
-          echo $_POST['odometre'];
-          echo $_POST['type'];
-          echo $_POST['porte'];
-          echo $_POST['siege'];
-          echo $_POST['traction'];
-          echo $_POST['description'];
-          echo $_POST['etat'];
-          echo $_POST['prix'];
-          */
 
-          CreateVoiture($_POST['couleur'],$_POST['marque'],$_POST['modele'],$_POST['type_voiture'], $_POST['odometre'],$_POST['type'],$_POST['porte'],$_POST['siege'],$_POST['traction'],$_POST['description'],$_POST['etat'],$_POST['prix'],$_POST['postal'], $_POST['dateDebut'], $_POST['dateFin']);
+          CreateVoiture($_POST['annee'],$_POST['couleur'],$_POST['marque'],$_POST['modele'],$_POST['type_voiture'], $_POST['odometre'],$_POST['type'],$_POST['porte'],$_POST['siege'],$_POST['traction'],$_POST['description'],$_POST['etat'],$_POST['prix'],$_POST['postal'], $_POST['dateDebut'], $_POST['dateFin']);
           //header('Location: location.php');
         }
 ?>
@@ -51,6 +37,10 @@
                 <h1>
                     Veuillez entrez vos informations
                 </h1>
+                <div class='form-inputs'>
+                    <label class='form-label'>Année de fabrication</label>
+                    <input class='form-input' required type='number' pattern="^[0-9]+$"  title=" seulement des chiffres entre 1980 et 2023" min="1980" max="2023" name='annee' placeholder='Entrez la date de fabrication du véhicule'>
+                </div>
                 <div class='form-inputs'>
                     <label class='form-label'>Couleur</label>
                     <input class='form-input' required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='couleur' placeholder='Entrez la couleur' />
