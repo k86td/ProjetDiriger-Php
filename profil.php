@@ -1,5 +1,6 @@
 <?php
-session_start();
+
+include '_headerBar.php';
 include 'requete.php';
 // include 'config.php';
 /*
@@ -19,20 +20,9 @@ $password = $_SESSION['email']['password'];
 
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<html>
-<head>
-<title>Autorius - Profil</title>
-    <meta charset="UTF-8">
-</head>
+
 <body>
     <div class='form-container'>
-    <div>
-        <form method="POST" name="addVendeur" id="AddVendeur">
-            <button type="submit" value="<?php echo $_SESSION['email']->id?>" class="form-input-btn" name="addVendeur" id="addVendeur">Devenir vendeur</button>
-        </form>
-    </div>
         <div class='form-content-right'>
             <form class='form' method="POST">
                 <h1>
@@ -64,17 +54,22 @@ $password = $_SESSION['email']['password'];
                     <label class='form-label'>Mot de passe</label>
                     <input class='form-input' required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password' placeholder='Enter your password' />
                 </div> -->
+                <div>
+        <form method="POST" name="addVendeur" id="AddVendeur">
+            <button type="submit" value="<?php echo $_SESSION['email']->id?>" class="form-input-btn" name="addVendeur" id="addVendeur">Devenir vendeur</button>
+        </form>
+    </div>
                 <button class='form-input-btn' type='Inscription'>
                     Sauvegarder les changements
                 </button>
                 <a href="index.php" class="delete-btn">Revenir</a>
                 <br>
                 <?php
-              
-                    
-                
+
+
+
                 //include 'bd.php';
-                if ($_SERVER['REQUEST_METHOD'] == "POST") 
+                if ($_SERVER['REQUEST_METHOD'] == "POST")
                 {
                     if(isset($_POST['addVendeur'])){
                         CreateVendeur($_POST['addVendeur']);
@@ -86,8 +81,8 @@ $password = $_SESSION['email']['password'];
                     $telephone = $_POST['telephone'];
                     $email = $_POST['email'];
 
-                    
-                        
+
+
                         $url = 'https://localhost:7103/api/Usager/'.$_SESSION['email']['id'];
                         print_r($url);
                         $tableau = array("nom" =>   $nom,
@@ -96,7 +91,7 @@ $password = $_SESSION['email']['password'];
                         "telephone"=> $telephone,
                         "adresse"=> $adresse);
                         $json_content = json_encode($tableau);
-                      
+
 
                         $ch = curl_init();
                         curl_setopt_array($ch, array(
@@ -119,12 +114,12 @@ $password = $_SESSION['email']['password'];
                             $error_message = curl_strerror($errno);
                             echo "Curl error ({$errno}): \n {$error_message}";
                         }
-                        
+
                         curl_close($ch);
                     }
                     //    header('Location: confirmation.php');
-                    
-                    
+
+
                 }
                 ?>
             </form>
