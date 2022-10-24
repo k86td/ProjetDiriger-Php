@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
 <?php
-session_start();
+include '_headerBar.php';
 $active_link = "location";
 ?>
 
+<<<<<<< HEAD
+=======
 <head>
 	<title>Location - Autorius</title>
 	<meta charset="UTF-8">
@@ -31,6 +33,7 @@ $active_link = "location";
 	<style>
 	</style>
 </head>
+>>>>>>> a62454ddd822c6055c19d0755de9caa101420f8a
 
 <body>
 
