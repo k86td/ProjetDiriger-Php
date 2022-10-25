@@ -172,23 +172,82 @@ function LoginNoToken($courriel,$password)
     return $result;
 }
 
+function AccepterDemande($idOffre,$idUsager){
+    
+    $url = "https://localhost:7103/api/DemandeOffre/Accept?idOffre=".$idOffre.'&idUsager='.$idUsager;
 
-function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$porte,$siege,$traction,$description,$etat,$prix,$postal, $dateDebut, $dateFin)
+
+
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "PUT",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json"
+        ))
+    );
+
+$result = curl_exec($ch);
+echo $result;
+
+if($errno = curl_errno($ch)){
+    $error_message = curl_strerror($errno);
+    echo "Curl error ({$errno}): \n {$error_message}";
+}
+curl_close($ch);
+}
+function GetVoiture($id)
 {
+    $url = "https://localhost:7103/api/Voiture/".$id;
+
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "Get",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json",
+        ))
+    );
+
+    $offre = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+       // echo "Curl error ({$errno}): \n {$error_message}";
+    }
     /*
-    $google = "http://maps.googleapis.com/maps/api/geocode/json?address=".$postal."&sensor=false";
+    $response = '';
+    $err = '';
+    */
+    $_SESSION['voiture'] = json_decode($offre);
+    curl_close($ch);
+
+
+
+}
+function CreateVoiture($annee,$couleur,$marque,$modele,$type_voiture, $odometre,$type,$porte,$siege,$traction,$description,$etat,$prix,$postal, $dateDebut, $dateFin)
+{
+    
+    $google = "https://maps.googleapis.com/maps/api/geocode/json?address=".$postal."&sensor=false&key=AIzaSyAsHD-02ODNh5vYAx45eBkpbq2_8G-fN4Q";
     $details=file_get_contents($google);
     $result = json_decode($details,true);
-    print_r($result);
-    */
-
-    //$lat=$result['results'][0]['geometry']['location']['lat'];
-    //$lng=$result['results'][0]['geometry']['location']['lng'];
-    //echo "Latitude :" .$lat;
-    //echo '<br>';
-    //echo "Longitude :" .$lng;
     
-    $coordonner = "45.64228106493186, -73.8414494825723";
+    $lat=$result['results'][0]['geometry']['location']['lat'];
+    $lng=$result['results'][0]['geometry']['location']['lng'];
+  
+    
+    $coordonner = ''.$lat.','.$lng.'';
     $url = 'https://localhost:7103/api/Offre';
 
     $tableau = array(
@@ -233,11 +292,10 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
     {
         $etat = false;
     }
-   // echo " ";
-    echo $result;
     $url ='https://localhost:7103/api/Voiture';
     $tableau = array(
         "IdOffre" => $result,
+        "Annee" => $annee,
         "Couleur" => $couleur,
         "Marque"=> $marque,
         "Modele" => $modele,
@@ -245,6 +303,7 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
         "TypeVehicule" => $type_voiture,
         "NombrePorte" => $porte,
         "NombreSiege" => $siege,
+        "Carburant" => $type,
         "Traction" => $traction,
         "Description" => $description,
         "Accidente" => $etat);
@@ -272,9 +331,12 @@ function CreateVoiture($couleur,$marque,$modele,$type_voiture, $odometre,$type,$
     }
     curl_close($ch);
 
-
+    
 
 }
+
+
+
 
 
 function CreateVendeur($userId)
@@ -440,7 +502,89 @@ function GetAllUsers()
 
     return $result;
 }
+function GetUser($id)
+{
+    $url = 'https://localhost:7103/api/Usager/'.$id;
+    
 
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json",
+        ))
+    );
+    $user = curl_exec($ch);
+    $_SESSION["User"] = json_decode($user);
+    
+  
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    
+    curl_close($ch);
+}
+function GetDemandeOffre($id)
+{
+    $url = 'https://localhost:7103/api/DemandeOffre/offre/'.$id;
+
+    $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+            ))
+        );
+
+    $result = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    $_SESSION['demandeOffre'] = json_decode($result);
+    curl_close($ch);
+}
+function DeleteOffreDemande($idOffre,$idUsager)
+{
+    $url ='https://localhost:7103/api/DemandeOffre?idOffre='.$idOffre.'&idUsager='.$idUsager.'';
+
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "DELETE",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json",
+        ))
+    );
+
+    $result = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+}
 function DeleteUsager($user_id){
 
     $url = 'https://localhost:7103/api/Usager?id='.$user_id;

@@ -1,14 +1,22 @@
 <?php
 session_start();
 include 'requete.php';
-if (isset($_SESSION['email'])) {
-    GetOffresVendeur();
-    
-} else {
+if (!isset($_SESSION['email'])) {
     header('Location: index.php');
 }
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
+       DeleteOffreDemande($_SESSION['offreid'],$_POST['refuser']);
+       GetDemandeOffre(  $_SESSION['offreid']);
+}
+else if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter']))
+{
+    AccepterDemande($_SESSION['offreid'],$_POST['accepter']);
+}
+
+
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,12 +24,12 @@ if (isset($_SESSION['email'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes Offres</title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styleHome.css">
     <link rel="stylesheet" href="css/offre.css">
+    <title>Demande Offre</title>
 </head>
 
 <body id="top" data-spy="scroll" data-target=".navbar-collapse" data-offset="50">
@@ -70,34 +78,27 @@ if (isset($_SESSION['email'])) {
 
     <section class="services" id="services">
         <div class="heading">
-            <h1 style="margin-left: 10px;"> Vos Offres </h1>
-        </div>
-        <div class="services-container">
+            <h1> Vos offres recu pour cette voiture </h1>
+            <div class="services-container">
 
-
-
-            <?php
-            
-            for ($i = 0; $i < count($_SESSION['offre']); $i++) {
-                GetVoiture($_SESSION['offre'][$i]->id);
-              
-                echo '
+                <?php
+                for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) {
+                    $_SESSION['offreid'] = $_SESSION['demandeOffre'][$i]->idOffre;
+                    GetUser($_SESSION['demandeOffre'][$i]->idUsager);
+                    echo '
                 <div class="box">
-                    <div class="box-img">
-                        <img src="images/chevrolet-cruze.jpg">
-                    </div>
-                    <p>'. $_SESSION['voiture']->annee.'</p>
-                    <h3>'. $_SESSION['voiture']->annee.' '. $_SESSION['voiture']->marque.' '. $_SESSION['voiture']->modele.'</h3>
-                    <h2>'.$_SESSION['offre'][$i]->prix.'$ | <span>mois</span></h2>
                     <form method="POST">
-                    <button type="submit" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Edit</button>
-                    <button type="submit"  class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreOfferts">Voir les demandes offre</button>
+                    <div>Nom: ' . $_SESSION['User']->prenom . '</div>
+                        <button type="submit" class="btn" value="' .$_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
+                        <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
                     </form>
-                 </div>';
-                 
-            }
-            ?>
+                </div>';
+                }
+                ?>
+
+            </div>
         </div>
+
     </section>
 
     <!-- SCRIPTS -->
@@ -109,17 +110,3 @@ if (isset($_SESSION['email'])) {
 
 </html>
 
-<?php
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['offreId'])) 
-    {
-        GetOffre($_POST['offreId']);
-        header('Location:offreEdit.php');
-    } 
-    else if (isset($_POST['offreOfferts']))
-    {
-        GetDemandeOffre($_POST['offreOfferts']);
-        header('Location:offreofferts.php');
-    }
-}
-?>
