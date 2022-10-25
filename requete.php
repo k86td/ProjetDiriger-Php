@@ -238,20 +238,16 @@ function GetVoiture($id)
 }
 function CreateVoiture($annee,$couleur,$marque,$modele,$type_voiture, $odometre,$type,$porte,$siege,$traction,$description,$etat,$prix,$postal, $dateDebut, $dateFin)
 {
-    /*
-    $google = "http://maps.googleapis.com/maps/api/geocode/json?address=".$postal."&sensor=false";
+    
+    $google = "https://maps.googleapis.com/maps/api/geocode/json?address=".$postal."&sensor=false&key=AIzaSyAsHD-02ODNh5vYAx45eBkpbq2_8G-fN4Q";
     $details=file_get_contents($google);
     $result = json_decode($details,true);
-    print_r($result);
-    */
-
-    //$lat=$result['results'][0]['geometry']['location']['lat'];
-    //$lng=$result['results'][0]['geometry']['location']['lng'];
-    //echo "Latitude :" .$lat;
-    //echo '<br>';
-    //echo "Longitude :" .$lng;
     
-    $coordonner = "45.64228106493186, -73.8414494825723";
+    $lat=$result['results'][0]['geometry']['location']['lat'];
+    $lng=$result['results'][0]['geometry']['location']['lng'];
+  
+    
+    $coordonner = ''.$lat.','.$lng.'';
     $url = 'https://localhost:7103/api/Offre';
 
     $tableau = array(
@@ -296,7 +292,6 @@ function CreateVoiture($annee,$couleur,$marque,$modele,$type_voiture, $odometre,
     {
         $etat = false;
     }
-    echo $result;
     $url ='https://localhost:7103/api/Voiture';
     $tableau = array(
         "IdOffre" => $result,
@@ -336,9 +331,12 @@ function CreateVoiture($annee,$couleur,$marque,$modele,$type_voiture, $odometre,
     }
     curl_close($ch);
 
-
+    
 
 }
+
+
+
 
 
 function CreateVendeur($userId)
