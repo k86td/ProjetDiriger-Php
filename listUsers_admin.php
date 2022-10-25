@@ -3,7 +3,7 @@
 session_start();
 include 'requete.php';
 $users= json_decode(GetAllUsers(),true);
-print_r($users);
+
 ?>
 
 
