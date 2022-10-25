@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     </div>
                     <div class='input-box'>
                         <span  class='details' >Votre Code Postal</span>
-                        <input required type='text' pattern="^[a-zA-Z0-9]+$" title="Seulement des lettres" name='postal' placeholder='Entrez votre code postal' />
+                        <input required type='text' pattern="^[a-zA-Z0-9]{6}$" title="Seulement des lettres" name='postal' placeholder='Entrez votre code postal' />
                     </div>
                     <button class='button' type='Inscription'>
                         Ajouter l'offre
