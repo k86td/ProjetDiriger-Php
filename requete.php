@@ -202,7 +202,40 @@ if($errno = curl_errno($ch)){
 }
 curl_close($ch);
 }
+function GetVoiture($id)
+{
+    $url = "https://localhost:7103/api/Voiture/".$id;
 
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "Get",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json",
+        ))
+    );
+
+    $offre = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+       // echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    /*
+    $response = '';
+    $err = '';
+    */
+    $_SESSION['voiture'] = json_decode($offre);
+    curl_close($ch);
+
+
+
+}
 function CreateVoiture($annee,$couleur,$marque,$modele,$type_voiture, $odometre,$type,$porte,$siege,$traction,$description,$etat,$prix,$postal, $dateDebut, $dateFin)
 {
     /*
@@ -495,7 +528,6 @@ function GetUser($id)
     
   
     if($errno = curl_errno($ch)){
-        echo "allo";
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
     }
@@ -528,6 +560,32 @@ function GetDemandeOffre($id)
     }
     $_SESSION['demandeOffre'] = json_decode($result);
     curl_close($ch);
+}
+function DeleteOffreDemande($idOffre,$idUsager)
+{
+    $url ='https://localhost:7103/api/DemandeOffre?idOffre='.$idOffre.'&idUsager='.$idUsager.'';
+
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "DELETE",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json",
+        ))
+    );
+
+    $result = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
 }
 function DeleteUsager($user_id){
 

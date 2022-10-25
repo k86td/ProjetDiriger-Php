@@ -4,6 +4,16 @@ include 'requete.php';
 if (!isset($_SESSION['email'])) {
     header('Location: index.php');
 }
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
+       DeleteOffreDemande($_SESSION['offreid'],$_POST['refuser']);
+       GetDemandeOffre(  $_SESSION['offreid']);
+}
+else if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter']))
+{
+    AccepterDemande($_SESSION['offreid'],$_POST['accepter']);
+}
+
+
 
 ?>
 
@@ -79,7 +89,7 @@ if (!isset($_SESSION['email'])) {
                 <div class="box">
                     <form method="POST">
                     <div>Nom: ' . $_SESSION['User']->prenom . '</div>
-                        <button type="submit" class="btn" value="' . $_SESSION['User']->prenom . '" name="refuser">Refuser</button>
+                        <button type="submit" class="btn" value="' .$_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
                         <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
                     </form>
                 </div>';
@@ -100,15 +110,3 @@ if (!isset($_SESSION['email'])) {
 
 </html>
 
-<?php
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['refuser'])) {
-       echo "refuser";
-    } 
-    else if (isset($_POST['accepter'])) 
-    {
-       
-        AccepterDemande($_SESSION['offreid'],$_POST['accepter']);
-    }
-}
-?>

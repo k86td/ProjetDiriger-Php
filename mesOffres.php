@@ -3,6 +3,7 @@ session_start();
 include 'requete.php';
 if (isset($_SESSION['email'])) {
     GetOffresVendeur();
+    
 } else {
     header('Location: index.php');
 }
@@ -78,15 +79,15 @@ if (isset($_SESSION['email'])) {
             <?php
             
             for ($i = 0; $i < count($_SESSION['offre']); $i++) {
-               // print_r($_SESSION['offre']);//[$i]->nom);
-                
+                GetVoiture($_SESSION['offre'][$i]->id);
+              
                 echo '
                 <div class="box">
                     <div class="box-img">
                         <img src="images/chevrolet-cruze.jpg">
                     </div>
-                    <p>2018</p>
-                    <h3>2018 chevrolet cruze</h3>
+                    <p>'. $_SESSION['voiture']->annee.'</p>
+                    <h3>'. $_SESSION['voiture']->annee.' '. $_SESSION['voiture']->marque.' '. $_SESSION['voiture']->modele.'</h3>
                     <h2>'.$_SESSION['offre'][$i]->prix.'$ | <span>mois</span></h2>
                     <form method="POST">
                     <button type="submit" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Edit</button>
@@ -110,10 +111,13 @@ if (isset($_SESSION['email'])) {
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['offreId'])) {
+    if (isset($_POST['offreId'])) 
+    {
         GetOffre($_POST['offreId']);
         header('Location:offreEdit.php');
-    } else if (isset($_POST['offreOfferts'])) {
+    } 
+    else if (isset($_POST['offreOfferts']))
+    {
         GetDemandeOffre($_POST['offreOfferts']);
         header('Location:offreofferts.php');
     }
