@@ -1,3 +1,51 @@
+<!-- newDemandeOffreModal -->
+<div class="modal fade" id="newDemandeOffreModal" tabindex="-1" aria-labelledby="newDemandeOffreModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newDemandeOffreModalLabel">Envoyer une demande de location</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <form id="newDemandeOffreModalForm">
+                    <input type="number" id="newDemandeOffreModal_Id" hidden>
+                
+                    <label>Date de la location:</label>
+                    <input type="date" id="newDemandeOffreModal_Dates">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button id="sendRequest" type="button" data-bs-dismiss="modal" class="btn btn-primary">Envoyer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- editDemandeOffreModal -->
+<div class="modal fade" id="editDemandeOffreModal" tabindex="-1" aria-labelledby="editDemandeOffreLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editDemandeOffreLabel">Envoyer une demande de location</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <form id="editDemandeOffreForm">
+                    <input type="number" id="editDemandeOffre_Id" hidden>
+                
+                    <label>Date de la location:</label>
+                    <input type="date" id="editDemandeOffre_Dates">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button id="editRequest" type="button" data-bs-dismiss="modal" class="btn btn-warning">Modifier</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="mainBody">
     <div style="text-align: left;" class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 offre-body">
         {{ #offres }}
@@ -23,7 +71,7 @@
                                 </button>
                             {{ /editButton }}
                             {{ #button }}
-                            <button type="submit" id="{{ name }}Btn_{{ id }}" name="{{ name }}" 
+                            <button id="{{ name }}Btn_{{ id }}" name="{{ name }}" 
                                 class="btn btn-outline-danger card-btn">{{ texte }}</button>                    
                             {{ /button }}
                         {{ /demandes }}
@@ -39,58 +87,19 @@
                             </button>
                         {{ /demandes }}
 
-                        <!-- newDemandeOffreModal -->
-                        <div class="modal fade" id="newDemandeOffreModal" tabindex="-1" aria-labelledby="newDemandeOffreModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="newDemandeOffreModalLabel">Envoyer une demande de location</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                                    </div>
-                                    <div class="modal-body" style="text-align: center;">
-                                        <form id="newDemandeOffreModalForm">
-                                            <input type="number" id="newDemandeOffreModal_Id" hidden>
-                                        
-                                            <label>Date de la location:</label>
-                                            <input type="date" id="newDemandeOffreModal_Dates">
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button id="sendRequest" type="button" data-bs-dismiss="modal" class="btn btn-primary">Envoyer</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- editDemandeOffreModal -->
-                        <div class="modal fade" id="editDemandeOffreModal" tabindex="-1" aria-labelledby="editDemandeOffreLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="editDemandeOffreLabel">Envoyer une demande de location</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                                    </div>
-                                    <div class="modal-body" style="text-align: center;">
-                                        <form id="editDemandeOffreForm">
-                                            <input type="number" id="editDemandeOffre_Id" hidden>
-                                        
-                                            <label>Date de la location:</label>
-                                            <input type="date" id="editDemandeOffre_Dates">
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button id="editRequest" type="button" data-bs-dismiss="modal" class="btn btn-warning">Modifier</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                     {{ /connected }}
                 </div>
                 <div class="card-footer text-muted d-flex">
-                    Simon
+                    {{ #infoVendeur }}
+                        {{ fullName }}
+                    {{ /infoVendeur }}
+                    
+                    {{ #demandes }}
+                        <div class="vr"></div>
+                        {{ shortDate }}
+                    {{ /demandes }}
             </div>
         </div>
         {{ /offres }}

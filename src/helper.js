@@ -6,7 +6,7 @@ export async function GetTemplate (template_url) {
     const template = await fetch(template_path)
         .then(async response => await response.text());
     
-    console.debug(`[HELPER:GetTemplate] Template src: ${template}`);
+    // console.debug(`[HELPER:GetTemplate] Template src: ${template}`);
 
     return template;
 }

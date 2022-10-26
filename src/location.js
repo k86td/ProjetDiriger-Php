@@ -6,6 +6,7 @@ import { uGetJson, pGetJson, pPostJson, pDelete, pPutJson } from './request';
 import { GetTemplate, JqueryDateFormat } from './helper';
 const Mustache = require('mustache');
 import { Toast } from 'bootstrap';
+import $ from 'jquery';
 
 TimeAgo.addDefaultLocale(fr);
 const timeAgo = new TimeAgo("fr");
@@ -26,6 +27,7 @@ const DATA_MAPPER = {
         return {
             "id": elem.id,
             "nom": elem.nom,
+            "idVendeur": elem.idVendeur,
             "dateDebut": new Date(elem.dateDebut).toISOString(),
             "dateFin": new Date(elem.dateFin).toISOString(),
             "prix": elem.prix
@@ -42,29 +44,39 @@ const DATA_MAPPER = {
         };
 
         if (elem.accepter) {
-            templatePayload['button'] = { 
-                "name": "cancelLocation", 
-                "texte": "Annuler la location" 
+            templatePayload['button'] = {
+                "name": "cancelLocation",
+                "texte": "Annuler la location"
             };
         }
         else {
             templatePayload['date'] = elem.date;
+            templatePayload['shortDate'] = elem.date.split("T")[0];
             templatePayload['editButton'] = {
                 "name": "editRequest",
                 "texte": "Modifier la demande de location",
                 "iconClass": "bi bi-pencil-square"
             };
-            templatePayload['button'] = { 
-                "name": "cancelRequest", 
-                "texte": "Annuler la demande" 
+            templatePayload['button'] = {
+                "name": "cancelRequest",
+                "texte": "Annuler la demande"
             };
         }
 
         return templatePayload;
+    }, 
+    "usagerPublicInfo": function (elem) {
+        /*
+        {"nom":"Lepine","prenom":"Tristan","email":"tristanlepine14@gmail.com","telephone":"5148828118"}
+        */
+
+        return {
+            "fullName": `${elem.prenom} ${elem.nom}`
+        };
     }
 }
 
-async function RenderOffres(querySelector = ".main-content") {
+async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
     let template = await GetTemplate(TEMPLATES_PATH.offres);
 
@@ -75,9 +87,9 @@ async function RenderOffres(querySelector = ".main-content") {
     if (user_token !== undefined && user_token !== "")
         connected = true;
 
-    const getOffres = async () => {
-        let offres = await uGetJson(BASE_URL + "/Offre", 1, 10000);
-        console.debug(`[LOCATION] Offres: ${JSON.stringify(offres)}`)
+    const getOffres = async (queryString) => {
+        let offres = await uGetJson(BASE_URL + "/Offre" + queryString, 1, 10000);
+
         if (offres !== undefined)
             offres = offres.map(DATA_MAPPER.offres);
 
@@ -93,8 +105,26 @@ async function RenderOffres(querySelector = ".main-content") {
         return demandes;
     }
 
-    let offres = await getOffres();
+    const appendUsagerPublicInfo = async (offres) => {
+        for (let x = 0; x < offres.length; x++) {
+            let offre = offres[x];
 
+            let idVendeur = offre.idVendeur;
+
+            let infoVendeur = await uGetJson(BASE_URL + "/usager/info/" + idVendeur);
+
+            if (infoVendeur == undefined)
+                continue;
+            
+            console.debug("[LOCATION:getUsagerPublicInfo] Info vendeur: " + JSON.stringify(infoVendeur));
+            offre["infoVendeur"] = DATA_MAPPER.usagerPublicInfo(infoVendeur);
+        }
+
+        return offres;
+    };
+
+    let offres = await getOffres(queryString);
+    offres = await appendUsagerPublicInfo(offres);
 
     if (connected) {
         let demandes = await getDemandesOffres();
@@ -117,7 +147,7 @@ async function RenderOffres(querySelector = ".main-content") {
         console.debug("[LOCATION:RenderOffres] Impossible to fetch offres");
 
         template = await GetTemplate(TEMPLATES_PATH.erreur);
-        _data["erreur"] = "Impossible d'acceder aux offres"
+        _data["erreur"] = "Il n'y a aucune offre pour les filtres que vous avez utiliser. Soit l'api est hors ligne, ou aucune offre existe avec les filtres que vous avez choisis!"
     }
     else {
         _data.offres = offres;
@@ -127,6 +157,7 @@ async function RenderOffres(querySelector = ".main-content") {
     _data.connected = connected;
 
     var templateHtml = Mustache.render(template, _data)
+
     $(querySelector).html(templateHtml);
 
     // set the events handlers if connected
@@ -153,8 +184,6 @@ async function RenderOffres(querySelector = ".main-content") {
             $("#newDemandeOffreModal_Id").val(offreId);
 
         });
-
-        $('input[name="range_datepicker"]').daterangepicker();
 
         $('#sendRequest').click(event => { // envoyer demande de location
 
@@ -195,7 +224,7 @@ async function RenderOffres(querySelector = ".main-content") {
             // 1- set min/max of the date picker
             const datePicker = $("#editDemandeOffre_Dates");
             // should check if the min is actually between (dateDebut || Date.now) and dateFin
-            datePicker.attr("min", JqueryDateFormat(dateDebut)); 
+            datePicker.attr("min", JqueryDateFormat(dateDebut));
             datePicker.attr("max", JqueryDateFormat(dateFin));
             datePicker.attr("value", JqueryDateFormat(date));
 
@@ -205,17 +234,17 @@ async function RenderOffres(querySelector = ".main-content") {
         $("#editRequest").on('click', event => {
             // gather modal data
 
-            let idOffre = $("#editDemandeOffre_Id");
-            let date = $("#editDemandeOffre_Dates");
+            let idOffre = $("#editDemandeOffre_Id").val();
+            let date = $("#editDemandeOffre_Dates").val();
 
-            pPutJson(BASE_URL + "/api/Rent/" + idOffre, $("#user_token").val(), date, 1, 5000, _ => {
+            pPutJson(BASE_URL + "/Offre/Rent/" + idOffre, $("#user_token").val(), date, 1, 5000, _ => {
                 RenderOffres();
             });
         });
     } else {
         // if not connected send an alert saying the user is not connected
         let basicToastTemplate = await GetTemplate(TEMPLATES_PATH.basicToast);
-        
+
         var toastHtml = Mustache.render(basicToastTemplate, {
             "text": "Vous n'etes pas connecter!",
             "id": "notConnectedToast"
@@ -293,7 +322,6 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
 
     let user_token = $("#user_token").val();
 
-    // this is the function that creates the cards
     // this is the function that creates the cards
     const parser = async (json) => {
         return await Promise.all(json.map(async j => {
@@ -382,25 +410,39 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
 export function main() {
     // get TypeOffre
 
-    // GenCheckboxFromApi("https://localhost:7103/api/TypeOffre",
-    //     ".type-categorie-content",
-    //     mappingFunc("type"),
-    //     _ => {
-    //         // add event listener
-    //         let chk = $("input[type='checkbox'][name='type-filter']")
+    GenCheckboxFromApi("https://localhost:7103/api/TypeOffre",
+        ".type-categorie-content",
+        mappingFunc("type"),
+        _ => {
+            // add event listener
+            let chk = $("input[type='checkbox'][name='type-filter']")
 
-    //         chk.click(_ => {
-    //             let selectedIds = "";
-    //             let checked = $("input[type='checkbox'][name='type-filter']")
-    //                 .filter(":checked");
+            chk.click(_ => {
+                let selectedIds = "";
+                let checked = $("input[type='checkbox'][name='type-filter']")
+                    .filter(":checked");
 
-    //             let checkedIds = $.map(checked, c => {
-    //                 return c.value;
-    //             });
+                let checkedIds = $.map(checked, c => {
+                    return c.value;
+                });
 
-    //             RefreshCategoryOffre(checkedIds);
-    //         });
-    //     });
+                RefreshCategoryOffre(checkedIds);
+            });
+        });
+
+    $("#btn_appliquer").click(_ => {
+        let queryString = "";
+
+        let typeCategoriesSelected = $("input:checked[type='checkbox'][name='type-filter']");
+        let categoriesSelected = $("input:checked[type='checkbox'][name='categories-filter']");
+
+        typeCategoriesSelected = $.map(typeCategoriesSelected, t => "typeId=" + t.value);
+        categoriesSelected = $.map(categoriesSelected, c => "categorieId=" + c.value);
+
+        queryString = "?" + typeCategoriesSelected.concat(categoriesSelected).join("&");
+
+        RenderOffres(undefined, queryString == "?" ? "" : queryString);
+    });
 
     // $("#btn_appliquer").click(_ => {
     //     let typeCategoriesSelected = $("input:checked[type='checkbox'][name='type-filter']");

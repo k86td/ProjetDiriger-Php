@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
 <?php
-include '_headerBar.php';
+session_start();
 $active_link = "location";
 ?>
 
+<head>
+	<input hidden id="user_token" value="<?php echo $_SESSION["token"]; ?>">
+	<link href="css/location.css" rel="stylesheet">
 
+	<script src="dist/main.js"></script>
+</head>
 <body>
 
-	<?php //include '_header.php'; ?>
+	<?php include '_header.php'; // include '_headerBar.php';  ?>
 
 	<main class="container">
 		<h2 style="width: 100%; text-align: center; margin-bottom: 25px;">🚧 en construction 🚧</h2>
