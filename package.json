@@ -4,6 +4,7 @@
     "bootstrap": "^5.2.1",
     "javascript-time-ago": "^2.5.7",
     "jquery": "^3.6.1",
+    "load-google-maps-api": "^2.0.2",
     "mustache": "^4.2.0"
   },
   "devDependencies": {
