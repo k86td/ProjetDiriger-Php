@@ -7,6 +7,19 @@ if (isset($_SESSION['email'])) {
 } else {
     header('Location: index.php');
 }
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    if (isset($_POST['offreId'])) 
+    {
+        GetOffre($_POST['offreId']);
+        GetVoiture($_POST['offreId']);
+        header('Location:offreEdit.php');
+    } 
+    else if (isset($_POST['offreOfferts']))
+    {
+        GetDemandeOffre($_POST['offreOfferts']);
+        header('Location:offreofferts.php');
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -110,16 +123,3 @@ if (isset($_SESSION['email'])) {
 </html>
 
 <?php
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['offreId'])) 
-    {
-        GetOffre($_POST['offreId']);
-        header('Location:offreEdit.php');
-    } 
-    else if (isset($_POST['offreOfferts']))
-    {
-        GetDemandeOffre($_POST['offreOfferts']);
-        header('Location:offreofferts.php');
-    }
-}
-?>
