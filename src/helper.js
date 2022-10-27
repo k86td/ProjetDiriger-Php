@@ -30,3 +30,11 @@ export function JqueryDateFormat (date) {
     
     return `${year}-${month}-${day}`;
 }
+
+export function getCurrentPositionAsync () {
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+            pos => resolve(pos), 
+            err => reject(err));
+    });
+}

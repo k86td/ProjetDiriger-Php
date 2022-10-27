@@ -10,6 +10,7 @@ $active_link = "location";
 	<link href="css/location.css" rel="stylesheet">
 
 	<script src="dist/main.js"></script>
+
 </head>
 <body>
 
@@ -18,7 +19,7 @@ $active_link = "location";
 	<main class="container">
 		<h2 style="width: 100%; text-align: center; margin-bottom: 25px;">🚧 en construction 🚧</h2>
 		<div class="container row">
-			<div class="col-md-4">
+			<div id="filterContainer" class="col-md-4">
 				<div class="categories-filter">
 					<div class="type-categorie">
 						<h4>Type categories</h4>

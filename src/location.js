@@ -3,19 +3,25 @@
 import TimeAgo from 'javascript-time-ago';
 import fr from 'javascript-time-ago/locale/fr';
 import { uGetJson, pGetJson, pPostJson, pDelete, pPutJson } from './request';
-import { GetTemplate, JqueryDateFormat } from './helper';
+import { GetTemplate, JqueryDateFormat, getCurrentPositionAsync } from './helper';
 const Mustache = require('mustache');
 import { Toast } from 'bootstrap';
 import $ from 'jquery';
+import loadGoogleMapsApi from 'load-google-maps-api';
+
+
 
 TimeAgo.addDefaultLocale(fr);
 const timeAgo = new TimeAgo("fr");
 
+
 const BASE_URL = 'https://localhost:7103/api';
+const TEMPLATE_BASE_URL = "http://localhost:8000";
 const TEMPLATES_PATH = {
-    "erreur": "http://localhost:8000/templates/erreur.mustache",
-    "offres": "http://localhost:8000/templates/offres.mustache",
-    "basicToast": "http://localhost:8000/templates/basic_toast.mustache"
+    "erreur": TEMPLATE_BASE_URL + "/templates/erreur.mustache",
+    "offres": TEMPLATE_BASE_URL + "/templates/offres.mustache",
+    "basicToast": TEMPLATE_BASE_URL + "/templates/basic_toast.mustache",
+    "locationFilter": TEMPLATE_BASE_URL + "/templates/location_filter.mustache"
 }
 const DATA_MAPPER = {
     "offres": function (elem) {
@@ -76,6 +82,47 @@ const DATA_MAPPER = {
     }
 }
 
+async function RenderMapFilter(querySelector = "#filterContainer") {
+    let clientPos = await getCurrentPositionAsync();
+    console.debug(`[LOCATION:RenderMapFilter] Client position: lat:${JSON.stringify(clientPos.coords.latitude)} lon:${clientPos.coords.longitude}`);
+
+    // generate the template
+    let template = await GetTemplate(TEMPLATES_PATH.locationFilter);
+
+    let templateHtml = Mustache.render(template, {
+        "latitude": clientPos.coords.latitude,
+        "longitude": clientPos.coords.longitude
+    });
+
+    $(querySelector).append(templateHtml);  
+    
+    const currentPosition = {
+        lat: parseFloat(clientPos.coords.latitude),
+        lng: parseFloat(clientPos.coords.longitude)
+    };
+
+    console.debug(currentPosition);
+
+    loadGoogleMapsApi({
+        key: 'AIzaSyD81DrP2OP8glBYbP9CKweHbs7cRk5W3wI'
+    })
+        .then(maps => {
+            console.debug("[LOCATION:LoadGoogleMapsApi] Creating map")
+            new maps.Map(document.getElementById("locationFilter_Map"), {
+                center: currentPosition,
+                zoom: 13
+            })
+                .setOptions({
+                    gestureHandling: "none",
+                    disableDefaultUI: true,
+                    zoomControl: true
+                });
+        })
+        .catch(e => {
+            console.error(`Got an error while creating the map: ${JSON.stringify(e)}`)
+        });
+}
+
 async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
     let template = await GetTemplate(TEMPLATES_PATH.offres);
@@ -106,6 +153,9 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
     }
 
     const appendUsagerPublicInfo = async (offres) => {
+        if (offres == undefined)
+            return;
+
         for (let x = 0; x < offres.length; x++) {
             let offre = offres[x];
 
@@ -241,7 +291,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
                 RenderOffres();
             });
         });
-    } else {
+    } else if (offres !== undefined) {
         // if not connected send an alert saying the user is not connected
         let basicToastTemplate = await GetTemplate(TEMPLATES_PATH.basicToast);
 
@@ -253,7 +303,6 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
         new Toast(document.getElementById("notConnectedToast")).show();
     }
 }
-RenderOffres();
 
 const GenCheckboxFromApi = (endpoint, dataPath, mappingFunc, additionalFunc) => {
     $.get(endpoint, function (data) {
@@ -407,8 +456,11 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
         });
 };
 
-export function main() {
+export async function main() {
     // get TypeOffre
+
+    RenderOffres();
+    RenderMapFilter();
 
     GenCheckboxFromApi("https://localhost:7103/api/TypeOffre",
         ".type-categorie-content",
