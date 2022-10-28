@@ -14,7 +14,7 @@
             <img class='form-img' src='images/image_favicon.png' alt='voiture' />
         </div>
         <div class='form-content-right'>
-            <form class='form' method="POST">
+            <form class='form' action='mailFonction.php' method="POST">
                 <h1>
                     Veuillez entrez vos informations
                 </h1>
@@ -46,7 +46,8 @@
                     <label class='form-label'>Confirm Password</label>
                     <input class='form-input' required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password2' placeholder='Confirm your password' />
                 </div>
-                <button class='form-input-btn' type='Inscription'>
+                
+                <button class='form-input-btn' name='inscription' type='Inscription'>
                     Inscription
                 </button>
                 <span class='form-input-login'>
@@ -72,14 +73,14 @@
                     } else {
                         
                         $url = 'https://localhost:7103/api/Usager';
-                        $tableau = array("nom" =>   $nom,
+                        $tableau = array(
+                        "nom" =>   $nom,
                         "prenom" => $prenom,
                         "email"=> $email,
                         "telephone"=> $telephone,
                         "password"=> $password,
                         "adresse"=> $adresse);
                         $json_content = json_encode($tableau);
-                      
 
                         $ch = curl_init();
                         curl_setopt_array($ch, array(
@@ -101,17 +102,8 @@
                             $error_message = curl_strerror($errno);
                             echo "Curl error ({$errno}): \n {$error_message}";
                         }
-                        /*
-                        $response = '';
-                        $err = '';
-                        */
                         curl_close($ch);
-                      //  $response = json_decode($response, true); //because of true, it's in an array
-                        //print_r($response);
-                       // echo "<br>";
-                        //echo 'Fail: ' . $err;
-                       header('Location: confirmation.php');
-                    }
+
                 }
                 ?>
             </form>

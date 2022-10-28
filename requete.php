@@ -335,10 +335,6 @@ function CreateVoiture($annee,$couleur,$marque,$modele,$type_voiture, $odometre,
 
 }
 
-
-
-
-
 function CreateVendeur($userId)
 {
     $url = 'https://localhost:7103/api/Vendeur';

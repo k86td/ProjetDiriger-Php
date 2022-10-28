@@ -67,7 +67,9 @@ session_start();
                                         </div> 
                                     </li>';
                               echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
+                              //$_SESSION['email']['id'] == "1";
                               echo '<li><a href="listUsers_admin.php">Admin</a></li>';
+                              
                               echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
                          } else {
                               echo '<li><a href="login.php">Se connecter</a></li>';
@@ -115,7 +117,7 @@ session_start();
           <div class="container">
                <div class="row">
                     <div class="col-md-6 col-sm-12">
-                         <form id="contact-form" role="form" action="" method="post">
+                         <form id="contact-form" role="form" action="mailFonction.php" method="POST">
                               <div class="section-title">
                                    <h2>Contactez-nous</h2>
                               </div>
@@ -129,7 +131,7 @@ session_start();
                               </div>
 
                               <div class="col-md-4 col-sm-12">
-                                   <input type="submit" class="form-control" name="message" value="Envoyer">
+                                   <input type="submit" class="form-control" name="envoyer" value="Envoyer">
                               </div>
 
                          </form>
