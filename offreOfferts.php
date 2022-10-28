@@ -88,7 +88,8 @@ else if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter']))
                     echo '
                 <div class="box">
                     <form method="POST">
-                    <div>Nom: ' . $_SESSION['User']->prenom . '</div>
+                    <div>' . $_SESSION['User']->prenom . ' vous a envoyez une offre sur cette location.</div>
+                    <br>
                         <button type="submit" class="btn" value="' .$_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
                         <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
                     </form>
