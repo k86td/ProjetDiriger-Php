@@ -16,8 +16,8 @@
                 <div class='input-box'>
                     <span class="details">Entrez-votre nom d'utilisateur</span>
                     <input required type='email' name='courriel' placeholder="Nom d'utilisateur" />
-                </div> 
-                
+                </div>
+
                 <div class='input-box'>
                     <span class="details">Entrez-votre mot de passe</span>
                     <input class='form-input' required type='password' name='password' placeholder='Mot de passe' />
@@ -30,22 +30,24 @@
                     <a href="inscription.php">ici</a>
                 </span>
             </div>
+            <?php
+            session_start();
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                include 'requete.php';
+                $courriel = $_POST['courriel'];
+                $password = $_POST['password'];
+                $_SESSION['token'] = LoginToken($courriel, $password);
+                $_SESSION['email'] = LoginNoToken($courriel, $password);
+                if ($_SESSION['email'] == null) {
+                  echo '<div style="color: red;"> Erreur votre mot de passe ou votre email est incorrect veuillez réessayer</div>';
+                } else {
+                    header('Location: index.php');
+                }
+            }
+
+            ?>
         </form>
     </div>
 </body>
 
 </html>
-
-<?php
-session_start();
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    include 'requete.php';
-    $courriel = $_POST['courriel'];
-    $password = $_POST['password'];
-    $_SESSION['token'] = LoginToken($courriel, $password);
-    $_SESSION['email'] = LoginNoToken($courriel, $password);
-    // $_SESSION['email']['id'];
-    header('Location: index.php');
-}
-
-?>

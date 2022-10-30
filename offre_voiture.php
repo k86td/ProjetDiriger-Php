@@ -51,9 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <span  class='details' >Type de voiture</span>
                         <select required name="type_voiture">
                             <option value=1>Vus</option>
-                            <option value=2>Sport</option>
-                            <option value=3>Berline</option>
-                            <option value=4>Hatchback</option>
+                            <option value=3>Sport</option>
+                            <option value=4>Berline</option>
+                            <option value=5>Hatchback</option>
                         </select>
                     </div>
                     <div class='input-box'>
@@ -63,9 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <div class='input-box'>
                         <span  class='details' >Type de consomation</span>
                         <select required name="type">
-                            <option value="electrique">Électrique</option>
-                            <option value="essence">Essence</option>
-                            <option value="hybride">Hybride</option>
+                            <option value="Electrique">Électrique</option>
+                            <option value="Essence">Essence</option>
+                            <option value="Hybride">Hybride</option>
+                            <option value="Diesel">Diesel</option>
                         </select>
                     </div>
                     <div class='input-box'>
@@ -79,9 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <div class='input-box'>
                         <span  class='details' >Traction</span>
                         <select required name="traction">
-                            <option value="avant">Avant</option>
-                            <option value="Arriere">Arrière</option>
-                            <option value="4 roue motrices">4 roue motrices</option>
+                            <option value="Avant">Avant</option>
+                            <option value="Arrière">Arrière</option>
+                            <option value="4x4">4 roue motrices</option>
                         </select>
                     </div>
                     <div class='input-box'>
