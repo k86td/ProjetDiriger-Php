@@ -3,12 +3,12 @@
 import TimeAgo from 'javascript-time-ago';
 import fr from 'javascript-time-ago/locale/fr';
 import { uGetJson, pGetJson, pPostJson, pDelete, pPutJson } from './request';
-import { GetTemplate, JqueryDateFormat, getCurrentPositionAsync } from './helper';
+import { GetTemplate, JqueryDateFormat, getCurrentPositionAsync, parseCoordinate } from './helper';
 const Mustache = require('mustache');
 import { Toast } from 'bootstrap';
 import $ from 'jquery';
 import loadGoogleMapsApi from 'load-google-maps-api';
-
+import { faCar } from '@fortawesome/free-solid-svg-icons';
 
 
 TimeAgo.addDefaultLocale(fr);
@@ -36,7 +36,8 @@ const DATA_MAPPER = {
             "idVendeur": elem.idVendeur,
             "dateDebut": new Date(elem.dateDebut).toISOString(),
             "dateFin": new Date(elem.dateFin).toISOString(),
-            "prix": elem.prix
+            "prix": elem.prix,
+            "coordonner": elem.coordonner
         };
     },
     "demandesOffres": function (elem) {
@@ -70,7 +71,7 @@ const DATA_MAPPER = {
         }
 
         return templatePayload;
-    }, 
+    },
     "usagerPublicInfo": function (elem) {
         /*
         {"nom":"Lepine","prenom":"Tristan","email":"tristanlepine14@gmail.com","telephone":"5148828118"}
@@ -82,7 +83,7 @@ const DATA_MAPPER = {
     }
 }
 
-async function RenderMapFilter(querySelector = "#filterContainer") {
+async function RenderMapFilter(querySelector = "#filterContainer", queryOptions = {}) {
     let clientPos = await getCurrentPositionAsync();
     console.debug(`[LOCATION:RenderMapFilter] Client position: lat:${JSON.stringify(clientPos.coords.latitude)} lon:${clientPos.coords.longitude}`);
 
@@ -94,8 +95,8 @@ async function RenderMapFilter(querySelector = "#filterContainer") {
         "longitude": clientPos.coords.longitude
     });
 
-    $(querySelector).append(templateHtml);  
-    
+    $(querySelector).append(templateHtml);
+
     const currentPosition = {
         lat: parseFloat(clientPos.coords.latitude),
         lng: parseFloat(clientPos.coords.longitude)
@@ -103,23 +104,126 @@ async function RenderMapFilter(querySelector = "#filterContainer") {
 
     console.debug(currentPosition);
 
+    // fetching offres qui sont proches
+    const getNearOffres = async (lat, lon, range = 10) => {
+        if ("range" in queryOptions)
+            range = queryOptions["range"];
+
+        if (lat == undefined || lon == undefined || range == undefined)
+            return [];
+
+        console.debug(`Url is: ${BASE_URL}/offre?latCent=${lat}&lonCent=${lon}&range=${range}`)
+        let nearOffres = await uGetJson(BASE_URL + `/offre?latCent=${lat}&lonCent=${lon}&range=${range}`);
+
+        if (nearOffres !== undefined || nearOffres !== [])
+            nearOffres = nearOffres.map(DATA_MAPPER.offres);
+
+        return nearOffres;
+    };
+
+    // get near offres
+    let nearOffres = await getNearOffres(currentPosition.lat, currentPosition.lng);
+    console.debug(`[LOCATION:RenderMapFilter] Near offres: ${JSON.stringify(nearOffres)}`);
+
     loadGoogleMapsApi({
         key: 'AIzaSyD81DrP2OP8glBYbP9CKweHbs7cRk5W3wI'
     })
         .then(maps => {
-            console.debug("[LOCATION:LoadGoogleMapsApi] Creating map")
-            new maps.Map(document.getElementById("locationFilter_Map"), {
+            console.debug("[LOCATION:RenderMapFilter] Creating map")
+            const filterMap = new maps.Map(document.getElementById("locationFilter_Map"), {
                 center: currentPosition,
-                zoom: 13
-            })
-                .setOptions({
-                    gestureHandling: "none",
-                    disableDefaultUI: true,
-                    zoomControl: true
+                zoom: 10
+            });
+            filterMap.setOptions({
+                gestureHandling: "auto",
+                disableDefaultUI: true,
+                zoomControl: true
+            });
+
+            // set markers
+            if (nearOffres !== undefined || nearOffres !== []) {
+
+                const createMarkersAsync = async () => {
+
+                    console.debug("Creating the markers async");
+                    return new Promise((resolve, reject) => {
+                        const infoWindow = new google.maps.InfoWindow();
+                        nearOffres.forEach(offre => {
+                            console.debug(`Creating Markers: coordinate: ${JSON.stringify(parseCoordinate(offre.coordonner))}`)
+
+                            let carIcon = {
+                                fillColor: "#0d6efd",
+                                scale: 0.050,
+                                fillOpacity: 1,
+                                anchor: new google.maps.Point(
+                                    faCar.icon[0] / 2,
+                                    faCar.icon[1]
+                                ),
+                                strokeColor: "#0d6efd",
+                                path: faCar.icon[4]
+                            }
+
+                            const marker = new maps.Marker({
+                                position: parseCoordinate(offre.coordonner),
+                                title: offre.nom,
+                                map: filterMap,
+                                icon: carIcon
+                            });
+
+                            marker.addListener("click", () => {
+                                infoWindow.close();
+                                infoWindow.setContent(marker.getTitle());
+                                infoWindow.open(marker.getMap(), marker);
+                            });
+                        });
+
+                        resolve();
+                    });
+                };
+
+                createMarkersAsync();
+            }
+
+            // set circle
+            const createRadiusCircle = async () => {
+                return new Promise((resolve, reject) => {
+                    const circle = new google.maps.Circle({
+                        strokeColor: "#0d6efd",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 1,
+                        fillColor: "#0d6efd",
+                        fillOpacity: 0.2,
+                        map: filterMap,
+                        center: currentPosition,
+                        radius: "range" in queryOptions ? queryOptions["range"] : 10000
+                    });
+
+                    // set handler
+                    $("#locationFilter_Range").on("input", async event => {
+                        let radius = event.target.value;
+
+                        circle.setRadius(radius * 1000);
+                    });
+
+                    resolve();
                 });
+            };
+            createRadiusCircle();
+
+            // set render handler
+            $("#locationFilter_Submit").on("click", _ => {
+                let rangeValue = $("#locationFilter_Range").val();
+
+                RenderOffres(
+                    ".main-content", 
+                    `?latCent=${currentPosition.lat}&lonCent=${currentPosition.lng}&range=${rangeValue}`
+                );
+            });
+
         })
         .catch(e => {
-            console.error(`Got an error while creating the map: ${JSON.stringify(e)}`)
+            console.error(`Got an error while creating the map`);
+            console.error(e);
         });
 }
 
@@ -165,7 +269,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
             if (infoVendeur == undefined)
                 continue;
-            
+
             console.debug("[LOCATION:getUsagerPublicInfo] Info vendeur: " + JSON.stringify(infoVendeur));
             offre["infoVendeur"] = DATA_MAPPER.usagerPublicInfo(infoVendeur);
         }
