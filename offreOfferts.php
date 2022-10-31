@@ -5,12 +5,8 @@ if (!isset($_SESSION['email'])) {
     header('Location: index.php');
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
-       DeleteOffreDemande($_SESSION['offreid'],$_POST['refuser']);
-       GetDemandeOffre(  $_SESSION['offreid']);
-}
-else if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter']))
-{
-    AccepterDemande($_SESSION['offreid'],$_POST['accepter']);
+    DeleteOffreDemande($_SESSION['offreid'], $_POST['refuser']);
+    GetDemandeOffre($_SESSION['offreid']);
 }
 
 
@@ -82,19 +78,45 @@ else if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter']))
             <div class="services-container">
 
                 <?php
-                for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) {
-                    $_SESSION['offreid'] = $_SESSION['demandeOffre'][$i]->idOffre;
-                    GetUser($_SESSION['demandeOffre'][$i]->idUsager);
-                    echo '
-                <div class="box">
-                    <form method="POST">
-                    <div>' . $_SESSION['User']->prenom . ' vous a envoyez une offre sur cette location.</div>
-                    <br>
-                        <button type="submit" class="btn" value="' .$_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
-                        <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
-                    </form>
-                </div>';
+                if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter'])) 
+                {
+                    //print_r($_SESSION['demandeOffre']);
+                    AccepterDemande($_SESSION['offreid'], $_POST['accepter']);
+                    for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) 
+                    {
+                        if($_SESSION['demandeOffre'][$i]->accepter == null)
+                        {
+                            // idoffre, idusager
+                            DeleteOffreDemande($_SESSION['demandeOffre'][$i]->idOffre, $_SESSION['demandeOffre'][$i]->idUsager);
+                        }
+                        else
+                        {
+                            GetUser($_SESSION['demandeOffre'][$i]->idUsager);
+                            echo '
+                            <div class="box">
+                                <div> vous avez accepter la demande de: ' . $_SESSION['User']->prenom . '</div>
+                            </div>';
+                        }
+                       // echo $_SESSION['demandeOffre'][$i]->accepter;
+                    }
+                } 
+                else
+                {
+                    for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) {
+                        $_SESSION['offreid'] = $_SESSION['demandeOffre'][$i]->idOffre;
+                        GetUser($_SESSION['demandeOffre'][$i]->idUsager);
+                        echo '
+                    <div class="box">
+                        <form method="POST">
+                        <div>' . $_SESSION['User']->prenom . ' vous a envoyez une offre sur cette location.</div>
+                        <br>
+                            <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
+                            <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
+                        </form>
+                    </div>';
+                    }
                 }
+
                 ?>
 
             </div>
@@ -110,4 +132,3 @@ else if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter']))
 </body>
 
 </html>
-
