@@ -105,15 +105,26 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
                     for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) {
                         $_SESSION['offreid'] = $_SESSION['demandeOffre'][$i]->idOffre;
                         GetUser($_SESSION['demandeOffre'][$i]->idUsager);
-                        echo '
-                    <div class="box">
-                        <form method="POST">
-                        <div>' . $_SESSION['User']->prenom . ' vous a envoyez une offre sur cette location.</div>
-                        <br>
-                            <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
-                            <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
-                        </form>
-                    </div>';
+                        if($_SESSION['demandeOffre'][$i]->accepter == null)
+                        {
+                            echo '
+                            <div class="box">
+                                <form method="POST">
+                                <div>' . $_SESSION['User']->prenom . ' vous a envoyez une offre sur cette location.</div>
+                                <br>
+                                    <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
+                                    <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
+                                </form>
+                            </div>';
+                        }
+                        else
+                        {
+                            echo '
+                            <div class="box">
+                                <div> vous avez accepter la demande de: ' . $_SESSION['User']->prenom . ' une confirmation de transaction seras administrée sous peu.</div>
+                            </div>';
+                        }
+                     
                     }
                 }
 
