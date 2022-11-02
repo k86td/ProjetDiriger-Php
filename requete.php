@@ -254,12 +254,9 @@ function GetVoiture($id)
     $offre = curl_exec($ch);
     if ($errno = curl_errno($ch)) {
         $error_message = curl_strerror($errno);
-        // echo "Curl error ({$errno}): \n {$error_message}";
+        echo "Curl error ({$errno}): \n {$error_message}";
     }
-    /*
-    $response = '';
-    $err = '';
-    */
+
     $_SESSION['voiture'] = json_decode($offre);
     curl_close($ch);
 }
@@ -366,7 +363,7 @@ function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odome
 
 function UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $siege, $carburant, $traction, $description, $etat)
 {
-    $url = 'https://localhost:7103/api/Voiture/' . $_SESSION['offreDetails']->id;
+    $url = 'https://localhost:7103/api/Voiture';
     $tableau = array(
         "IdOffre" => $_SESSION['offreDetails']->id,
         "Annee" => $annee,
@@ -374,7 +371,7 @@ function UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $s
         "Marque" => $marque,
         "Modele" => $modele,
         "Odometre" => $odometre,
-        "typeVehicule" => "typeRandom",
+        "TypeVehicule" => "typeRandom",
         "NombrePorte" => $porte,
         "NombreSiege" => $siege,
         "Carburant" => $carburant,
@@ -383,7 +380,6 @@ function UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $s
         "Accidente" => $etat
     );
     $json_content = json_encode($tableau);
-
     $ch = curl_init();
     curl_setopt_array(
         $ch,

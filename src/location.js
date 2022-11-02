@@ -16,7 +16,7 @@ const timeAgo = new TimeAgo("fr");
 
 
 const BASE_URL = 'https://localhost:7103/api';
-const TEMPLATE_BASE_URL = "http://localhost:8000";
+const TEMPLATE_BASE_URL = "http://localhost:443";
 const TEMPLATES_PATH = {
     "erreur": TEMPLATE_BASE_URL + "/templates/erreur.mustache",
     "offres": TEMPLATE_BASE_URL + "/templates/offres.mustache",

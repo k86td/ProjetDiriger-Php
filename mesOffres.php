@@ -10,6 +10,7 @@ if (isset($_SESSION['email'])) {
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['offreId'])) 
     {
+        print_r($_POST);
         GetOffre($_POST['offreId']);
         GetVoiture($_POST['offreId']);
         header('Location:offreEdit.php');
@@ -47,8 +48,6 @@ include '_headerBar.php';
         </div>
         <div class="services-container">
 
-
-
             <?php
             
             for ($i = 0; $i < count($_SESSION['offre']); $i++) {
@@ -62,8 +61,8 @@ include '_headerBar.php';
                     <p>'. $_SESSION['voiture']->annee.'</p>
                     <h3>'. $_SESSION['voiture']->annee.' '. $_SESSION['voiture']->marque.' '. $_SESSION['voiture']->modele.'</h3>
                     <h2>'.$_SESSION['offre'][$i]->prix.'$ | <span>mois</span></h2>
-                    <form method="POST">
-                    <button type="submit" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Edit</button>
+                    <form action="mesOffres.php" id="'. $_SESSION['offre'][$i]->id.'" method="POST">
+                    <button type="submit" id="'. $_SESSION['offre'][$i]->id.'" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Edit</button>
                     <button type="submit"  class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreOfferts">Voir les demandes offre</button>
                     </form>
                  </div>';

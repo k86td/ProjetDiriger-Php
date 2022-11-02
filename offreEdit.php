@@ -1,7 +1,7 @@
 <?php
 session_start();
+print_r($_POST);
 include 'requete.php';
-
 if (!isset($_SESSION['email'])) {
     unset($_SESSION['offreDetails']);
     header('Location: index.php');
@@ -24,20 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $carburant = $_POST['carburant'];
     $traction = $_POST['traction'];
     $description = $_POST['description'];
-    $etat = $_POST['etat'];
+    $accidente = $_POST['accidente'];
 
-    
+    UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $siege, $carburant, $traction, $description, $accidente);
     UpdateOffre($nom, $prix, $coordonner, $type, $idCategorie, $dateDebut, $dateFin);
-    UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $siege, $carburant, $traction, $description, $etat);
-    unset($_SESSION['offreDetails']);
-    unset($_SESSION['voiture']);
-    header("Location: mesOffres.php"); // TODO: Trouver meilleur façon de rediriger l'usager
+    // unset($_SESSION['offreDetails']);
+    // unset($_SESSION['voiture']);
+    //header("Location: mesOffres.php"); // TODO: Trouver meilleur façon de rediriger l'usager
 
 }
 const idCategorie = 1;
 $categories = getCategoriesByType(idCategorie);
 $listCarburants = ["Essence", "Diesel", "Hybride", "Electrique"];
-$tractions = ["Avant", "Arrière", "4x4"];
+$tractions = ["Avant", "Arriere", "4x4"];
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -180,9 +179,9 @@ include '_headerBar.php';
                     </div>
                     <div class='input-box'>
                         <span class='form-label'>État du véhicule</span>
-                        <select required name="etat">
+                        <select required name="accidente">
                             <?php
-                            if ($_SESSION['voiture']->etat == 1) {
+                            if ($_SESSION['voiture']-> accidente == 1) {
                                 echo "<option selected value='1'>Accidenté</option>";
                                 echo "<option value='0'>Non-Accidenté</option>";
                             } else {
