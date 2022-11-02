@@ -1,11 +1,11 @@
 <?php
 session_start();
 include 'requete.php';
-
 if (!isset($_SESSION['email'])) {
     unset($_SESSION['offreDetails']);
     header('Location: index.php');
 }
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $nom = $_POST['nom'];
     $prix = $_POST['prix'];
@@ -24,20 +24,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $carburant = $_POST['carburant'];
     $traction = $_POST['traction'];
     $description = $_POST['description'];
-    $etat = $_POST['etat'];
+    $accidente = $_POST['accidente'];
 
-    
-    UpdateOffre($nom, $prix, $coordonner, $type, $idCategorie, $dateDebut, $dateFin);
-    UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $siege, $carburant, $traction, $description, $etat);
-    unset($_SESSION['offreDetails']);
-    unset($_SESSION['voiture']);
-    header("Location: mesOffres.php"); // TODO: Trouver meilleur façon de rediriger l'usager
-
+    UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $siege, $carburant, $traction, $description, $accidente);
+    UpdateOffre($nom, $prix, $coordonner,  $idCategorie, $type, $dateDebut, $dateFin);
+    $_SESSION['voiture'] = GetVoiture($_SESSION['offreDetails']->id);
+    GetOffre($_SESSION['offreDetails']->id);
 }
-const idCategorie = 1;
-$categories = getCategoriesByType(idCategorie);
+$categories = getCategoriesByType($_SESSION['offreDetails']->idTypeOffre);
 $listCarburants = ["Essence", "Diesel", "Hybride", "Electrique"];
-$tractions = ["Avant", "Arrière", "4x4"];
+$tractions = ["Avant", "Arriere", "4x4"];
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -121,11 +117,12 @@ include '_headerBar.php';
                         <span class='form-label'>Catégorie de voiture</span>
                         <select required name="categorie">
                             <?php
+                            print_r($categories);
                             foreach ($categories as $categorie) {
                                 if ($categorie->id == $_SESSION['offreDetails']->idCategorieOffre) {
-                                    echo "<option selected value='$categorie->id'>$categorie->nom</option>";
+                                    echo "<option selected value=$categorie->id>$categorie->nom</option>";
                                 } else {
-                                    echo "<option value='$categorie->id'>$categorie->nom</option>";
+                                    echo "<option value=$categorie->id>$categorie->nom</option>";
                                 }
                             }
                             ?>
@@ -180,14 +177,14 @@ include '_headerBar.php';
                     </div>
                     <div class='input-box'>
                         <span class='form-label'>État du véhicule</span>
-                        <select required name="etat">
+                        <select required name="accidente">
                             <?php
-                            if ($_SESSION['voiture']->etat == 1) {
-                                echo "<option selected value='1'>Accidenté</option>";
-                                echo "<option value='0'>Non-Accidenté</option>";
+                            if ($_SESSION['voiture']-> accidente == 1) {
+                                echo "<option selected value=0>Accidenté</option>";
+                                echo "<option value=0>Non-Accidenté</option>";
                             } else {
-                                echo "<option value='1'>Accidenté</option>";
-                                echo "<option selected value='0'>Non-Accidenté</option>";
+                                echo "<option value=1>Accidenté</option>";
+                                echo "<option selected value=0>Non-Accidenté</option>";
                             }
                             ?>
                         </select>

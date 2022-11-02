@@ -254,14 +254,11 @@ function GetVoiture($id)
     $offre = curl_exec($ch);
     if ($errno = curl_errno($ch)) {
         $error_message = curl_strerror($errno);
-        // echo "Curl error ({$errno}): \n {$error_message}";
+        echo "Curl error ({$errno}): \n {$error_message}";
     }
-    /*
-    $response = '';
-    $err = '';
-    */
-    $_SESSION['voiture'] = json_decode($offre);
     curl_close($ch);
+
+    return json_decode($offre);
 }
 function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odometre, $type, $porte, $siege, $traction, $description, $etat, $prix, $postal, $dateDebut, $dateFin)
 {
@@ -366,7 +363,14 @@ function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odome
 
 function UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $siege, $carburant, $traction, $description, $etat)
 {
-    $url = 'https://localhost:7103/api/Voiture/' . $_SESSION['offreDetails']->id;
+    $url = 'https://localhost:7103/api/Voiture';
+    if($etat == 1){
+        $etat = true;
+    }
+    else{
+        $etat = false;
+    }
+
     $tableau = array(
         "IdOffre" => $_SESSION['offreDetails']->id,
         "Annee" => $annee,
@@ -374,7 +378,7 @@ function UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $s
         "Marque" => $marque,
         "Modele" => $modele,
         "Odometre" => $odometre,
-        "typeVehicule" => "typeRandom",
+        "TypeVehicule" => "typeRandom",
         "NombrePorte" => $porte,
         "NombreSiege" => $siege,
         "Carburant" => $carburant,
@@ -515,14 +519,14 @@ function UpdateOffre($nom, $prix, $coordonner, $idCategorie, $idType, $dateDebut
     $url = 'https://localhost:7103/api/Offre/' . $_SESSION['offreDetails']->id;
 
     $tableau = array(
-        "nom" => $nom,
-        "idVendeur" => $_SESSION['email']->id,
-        "prix" => $prix,
-        "coordonner" => $coordonner,
-        "idCategorieOffre" => $idCategorie,
-        "idTypeOffre" => $idType,
-        "dateDebut" => $dateDebut,
-        "dateFin" => $dateFin
+        "Nom" => $nom,
+        "Prix" => $prix,
+        "DateDebut" => $dateDebut,
+        "DateFin" => $dateFin,
+        "Coordonner" => $coordonner,
+        "IdCategorieOffre" => $idCategorie,
+        "IdTypeOffre" => $idType
+
     );
     $json_content = json_encode($tableau);
 
@@ -778,5 +782,7 @@ function getCategoriesByType($idType)
         echo "Curl error ({$errno}): \n {$error_message}";
     }
     curl_close($ch);
+    print_r($idType);
+    
     return json_decode($result);
 }

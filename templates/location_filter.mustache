@@ -2,7 +2,10 @@
     <h4>Filtre par localisation</h4>
     
     <h6>Localisation actuelle: </h6>
-    <div id="locationFilter_Map" style="width= 200px; height: 250px;" ></div>
+    <div id="locationFilter_Map" style="width: 100%; height: 250px; border-radius: 5px;" ></div>
 
-    <!-- range slider -->
+    <label for="locationFilter_Range" class="form-label">Rayon de recherche (km)</label>
+    <input type="range" class="form-range" min="1" max="100" id="locationFilter_Range" value=10>
+
+    <button id="locationFilter_Submit" class="btn btn-primary">Appliquer</button
 </div>

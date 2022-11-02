@@ -11,7 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['offreId'])) 
     {
         GetOffre($_POST['offreId']);
-        GetVoiture($_POST['offreId']);
+        $data = GetVoiture($_POST['offreId']);
+        $_SESSION['voiture'] = $data;
         header('Location:offreEdit.php');
     } 
     else if (isset($_POST['offreOfferts']))
@@ -37,9 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <link rel="stylesheet" href="css/offre.css">
 </head>
 
-<?php
-include '_headerBar.php';
-?>
+<?php include '_headerBar.php'; ?>
 
     <section class="services" id="services">
         <div class="heading">
@@ -47,27 +46,24 @@ include '_headerBar.php';
         </div>
         <div class="services-container">
 
-
-
             <?php
             
             for ($i = 0; $i < count($_SESSION['offre']); $i++) {
-                GetVoiture($_SESSION['offre'][$i]->id);
+                $data = GetVoiture($_SESSION['offre'][$i]->id);
               
                 echo '
                 <div class="box">
                     <div class="box-img">
                         <img src="images/chevrolet-cruze.jpg">
                     </div>
-                    <p>'. $_SESSION['voiture']->annee.'</p>
-                    <h3>'. $_SESSION['voiture']->annee.' '. $_SESSION['voiture']->marque.' '. $_SESSION['voiture']->modele.'</h3>
+                    <p>'. $data->annee.'</p>
+                    <h3>'. $data->annee.' '. $data->marque.' '. $data->modele.'</h3>
                     <h2>'.$_SESSION['offre'][$i]->prix.'$ | <span>mois</span></h2>
-                    <form method="POST">
-                    <button type="submit" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Edit</button>
-                    <button type="submit"  class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreOfferts">Voir les demandes offre</button>
+                    <form action="mesOffres.php" id="'. $_SESSION['offre'][$i]->id.'" method="POST">
+                        <button type="submit" id="'. $_SESSION['offre'][$i]->id.'" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Edit</button>
+                        <button type="submit"  class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreOfferts">Voir les demandes offre</button>
                     </form>
-                 </div>';
-                 
+                 </div>';  
             }
             ?>
         </div>

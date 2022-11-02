@@ -38,3 +38,11 @@ export function getCurrentPositionAsync () {
             err => reject(err));
     });
 }
+
+export function parseCoordinate (coords) {
+    coords = coords.split(/, ?/);
+    return {
+        lat: parseFloat(coords[0]),
+        lng: parseFloat(coords[1])
+    };
+}
