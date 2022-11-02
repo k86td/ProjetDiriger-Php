@@ -2,7 +2,7 @@
 
 
 include 'requete.php';
-include '_headerBar.php';
+
 
 require 'PHPMailer/Exception.php';
 require 'PHPMailer/PHPMailer.php';
@@ -40,8 +40,9 @@ $mail->Password = 'jcwwciksgjggkyhc';
         $mail->Subject = 'Autorius - Contactez-Nous!';
 
         // Mail body content
-        $bodyContent = '<h1>Contactez-Nous!! </h1>';
+        $bodyContent = "<h2>Contactez-Nous!! </h2>";
         $bodyContent .= $userMessage;
+        $bodyContent .= "<h5>Envoyez par $userEmail ($userName)</h5>";
         $mail->Body    = $bodyContent;
 
         // Send email
@@ -53,14 +54,9 @@ $mail->Password = 'jcwwciksgjggkyhc';
         }
     }
 
-    if (isset($_POST['inscription']))
-    {
-        print_r($_POST);
-        $prenom = $_POST['prenom'];
-        $nom = $_POST['nom'];
-        $adresse = $_POST['adresse'];
-        $tel = $_POST['telephone'];
-        $email = $_POST['email'];
+    function sendMailInscription($prenom, $nom, $adresse, $tel, $email, $mail, $webMail){
+        echo $email;
+        echo $tel;
         $mail->addAddress($email); // Add a recipient
 
         $mail->setFrom($webMail, 'Autorius'); // Sender info
@@ -68,7 +64,7 @@ $mail->Password = 'jcwwciksgjggkyhc';
         $mail->Subject = 'Autorius - Inscription!';
 
         // Mail body content
-        $bodyContent = "<h1>Inscription Reussie !! </h1>";
+        $bodyContent = "<h2>Inscription Reussie !! </h2>";
         $bodyContent .= "<h5>A partire de maintenant vous pouvez avoir accer a notre site web!<br>
         Voisi vos informations a fin de verifier si tout est correcte, si non vous pouvez toujours les changer
         sur le site dans l'option <b> Profile </b>. </h5><br>

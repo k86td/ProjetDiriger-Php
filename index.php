@@ -64,12 +64,13 @@ session_start();
                                              <a href="offre_voiture.php">Voiture</a>
                                              <a href="#">Camion</a>
                                              <a href="#">Bateau</a>
-                                        </div> 
+                                        </div>
                                     </li>';
                               echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
-                              //$_SESSION['email']['id'] == "1";
-                              echo '<li><a href="listUsers_admin.php">Admin</a></li>';
-                              
+                              //print_r(gettype($_SESSION['email']->idRole));
+                              if ($_SESSION['email']->idRole == 2){
+                                   echo '<li><a href="listUsers_admin.php">Admin</a></li>';
+                              }
                               echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
                          } else {
                               echo '<li><a href="login.php">Se connecter</a></li>';

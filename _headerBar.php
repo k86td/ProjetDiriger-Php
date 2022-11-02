@@ -21,7 +21,6 @@
                          <li><a href="location.php">Offres</a></li>
                          <li><a href="about.php">À propos</a></li>
                          <?php
-                              
                               if(isset($_SESSION['email'])){
                                     echo '<li><a href="profil.php">Profil</a></li>';
                                     echo '<li>
@@ -33,9 +32,7 @@
                                             </div> 
                                         </li>';
                                     echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
-                                    
                                     echo '<li><a href="listUsers_admin.php">Admin</a></li>';
-                                    
                                     echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
                               }
                               else{
@@ -49,4 +46,3 @@
 
           </div>
      </section>
-</body>

@@ -336,85 +336,7 @@ function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odome
         "Description" => $description,
         "Accidente" => $etat
     );
-    $result = curl_exec($ch);
-    if($errno = curl_errno($ch)){
-        $error_message = curl_strerror($errno);
-        echo "Curl error ({$errno}): \n {$error_message}";
-    }
-    curl_close($ch);
-
-    
-
-}
-
-function CreateVendeur($userId)
-{
-    $url = 'https://localhost:7103/api/Vendeur';
-    $tableau = array(
-        "idUsager"=> $userId);
-        $json_content = json_encode($tableau);
-
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-        CURLOPT_URL => $url,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_POSTFIELDS => $json_content,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_HTTPHEADER => array(
-            "cache-control: no-cache",
-            "Content-Type: application/json"
-        ))
-    );
-
-    $result = curl_exec($ch);
-    if($errno = curl_errno($ch)){
-        $error_message = curl_strerror($errno);
-        echo "Curl error ({$errno}): \n {$error_message}";
-    }
-    curl_close($ch);
-}
-
-
-function GetOffresVendeur()
-{
-    $url = "https://localhost:7103/api/Offre/Seller/".$_SESSION['email']-> id;
-    
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $url,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "Get",
-            CURLOPT_HTTPHEADER => array(
-                "cache-control: no-cache",
-                "Content-Type: application/json",
-            ))
-        );
-
-        $offre = curl_exec($ch);
-        if($errno = curl_errno($ch)){
-            $error_message = curl_strerror($errno);
-           // echo "Curl error ({$errno}): \n {$error_message}";
-        }
-        /*
-        $response = '';
-        $err = '';
-        */
-        $_SESSION['offre'] = json_decode($offre);
-        curl_close($ch);
-
-}
-
-
-function GetOffre($offerId)
-{
-    $url = 'https://localhost:7103/api/Offre/'.$offerId;
+    $json_content = json_encode($tableau);
 
     $ch = curl_init();
     curl_setopt_array(
@@ -488,8 +410,6 @@ function UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $s
     curl_close($ch);
 }
 
-
-
 function CreateVendeur($userId)
 {
     $url = 'https://localhost:7103/api/Vendeur';
@@ -523,7 +443,6 @@ function CreateVendeur($userId)
     }
     curl_close($ch);
 }
-
 
 function GetOffresVendeur()
 {
@@ -559,7 +478,6 @@ function GetOffresVendeur()
     $_SESSION['offre'] = json_decode($offre);
     curl_close($ch);
 }
-
 
 function GetOffre($offerId)
 {
@@ -672,7 +590,6 @@ function GetUser($id)
 {
     $url = 'https://localhost:7103/api/Usager/' . $id;
 
-
     $ch = curl_init();
     curl_setopt_array(
         $ch,
@@ -681,12 +598,13 @@ function GetUser($id)
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "Get",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
                 "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
             )
         )
     );
@@ -700,7 +618,45 @@ function GetUser($id)
     }
 
     curl_close($ch);
+    return $user;
 }
+
+function EditUser($id){
+    $url = 'https://localhost:7103/api/Usager/'.$id;
+    print_r($url);
+    $tableau = array("nom" => $nom,
+    "prenom" => $prenom,
+    "email"=> $email,
+    "telephone"=> $telephone,
+    "adresse"=> $adresse);
+    $json_content = json_encode($tableau);
+
+
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_POSTFIELDS => $json_content,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "PUT",
+        CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "Content-Type: application/json",
+            "Authorization: Bearer " . $_SESSION['token']
+        ))
+    );
+
+    $result = curl_exec($ch);
+    if($errno = curl_errno($ch)){
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+
+    curl_close($ch);
+}
+
 function GetDemandeOffre($id)
 {
     $url = 'https://localhost:7103/api/DemandeOffre/offre/' . $id;

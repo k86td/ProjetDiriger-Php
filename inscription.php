@@ -62,7 +62,7 @@
 
 
 
-    //include 'bd.php';
+    
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $prenom = $_POST['prenom'];
         $nom = $_POST['nom'];
@@ -74,6 +74,8 @@
         if ($password != $password2) {
             echo '<div style="color: red;">Les mots de passes ne sont pas identiques</div>';
         } else {
+
+            include 'mailFonction.php';
 
             $url = 'https://localhost:7103/api/Usager';
             $tableau = array(
@@ -119,6 +121,8 @@
             //print_r($response);
             // echo "<br>";
             //echo 'Fail: ' . $err;
+            echo $email;
+            sendMailInscription($prenom, $nom, $adresse, $telephone, $email, $mail, $webMail);
             header('Location: confirmation.php');
         }
     }
