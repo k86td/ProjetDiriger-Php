@@ -7,6 +7,19 @@ if (isset($_SESSION['email'])) {
 } else {
     header('Location: index.php');
 }
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    if (isset($_POST['offreId'])) 
+    {
+        GetOffre($_POST['offreId']);
+        GetVoiture($_POST['offreId']);
+        header('Location:offreEdit.php');
+    } 
+    else if (isset($_POST['offreOfferts']))
+    {
+        GetDemandeOffre($_POST['offreOfferts']);
+        header('Location:offreofferts.php');
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -24,49 +37,9 @@ if (isset($_SESSION['email'])) {
     <link rel="stylesheet" href="css/offre.css">
 </head>
 
-<body id="top" data-spy="scroll" data-target=".navbar-collapse" data-offset="50">
-
-    <!-- PRE LOADER -->
-    <section class="preloader">
-        <div class="spinner">
-            <span class="spinner-rotate"></span>
-        </div>
-    </section>
-
-
-    <!-- MENU -->
-    <section class="navbar custom-navbar navbar-fixed-top" role="navigation">
-        <div class="container">
-
-            <div class="navbar-header">
-                <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon icon-bar"></span>
-                    <span class="icon icon-bar"></span>
-                    <span class="icon icon-bar"></span>
-                </button>
-
-                <!-- lOGO TEXT HERE -->
-                <a href="#" class="navbar-brand">Autorius</a>
-            </div>
-
-            <!-- MENU LINKS -->
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-nav-first">
-                    <li class="active"><a href="index.php">Accueil</a></li>
-                    <li><a href="location.php">Offres</a></li>
-                    <li><a href="about.php">À propos</a></li>
-                    <?php
-                    if (isset($_SESSION['email'])) {
-                        echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
-                    } else {
-                        echo '<li><a href="login.php">Se connecter</a></li>';
-                        echo '<li><a href="inscription.php">Inscription</a></li>';
-                    }
-                    ?>
-                </ul>
-            </div>
-        </div>
-    </section>
+<?php
+include '_headerBar.php';
+?>
 
     <section class="services" id="services">
         <div class="heading">
@@ -110,16 +83,3 @@ if (isset($_SESSION['email'])) {
 </html>
 
 <?php
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['offreId'])) 
-    {
-        GetOffre($_POST['offreId']);
-        header('Location:offreEdit.php');
-    } 
-    else if (isset($_POST['offreOfferts']))
-    {
-        GetDemandeOffre($_POST['offreOfferts']);
-        header('Location:offreofferts.php');
-    }
-}
-?>

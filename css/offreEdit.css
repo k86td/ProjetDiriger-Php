@@ -1,0 +1,60 @@
+.col-sm-4>* {
+    margin: 2rem;
+}
+
+form.input-box {
+    margin-bottom: 15px;
+    width: calc(100% / 2 - 20px);
+}
+
+form .input-box span.details {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.input-box input {
+    height: 45px;
+    width: 100%;
+    outline: none;
+    font-size: 16px;
+    border-radius: 5px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+}
+
+.input-box input:focus,
+.input-box input:valid {
+    border-color: #ca2929;
+}
+
+#dot-1:checked~.category label .one,
+#dot-2:checked~.category label .two,
+#dot-3:checked~.category label .three {
+    background: #ca2929;
+    border-color: #d9d9d9;
+}
+
+form input[type="radio"] {
+    display: none;
+}
+
+form .btn {
+    cursor: pointer;
+    justify-content: center;
+    background: #ca2929;
+    color: #fff;
+    padding: 10px;
+    border-radius: 0.5rem;
+}
+
+form .btn:hover {
+    background-color: blue;
+}
+
+form .btn input:hover {
+    /* transform: scale(0.99); */
+    background: linear-gradient(-135deg, #fff, #ca2929);
+}

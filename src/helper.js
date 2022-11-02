@@ -6,7 +6,7 @@ export async function GetTemplate (template_url) {
     const template = await fetch(template_path)
         .then(async response => await response.text());
     
-    console.debug(`[HELPER:GetTemplate] Template src: ${template}`);
+    // console.debug(`[HELPER:GetTemplate] Template src: ${template}`);
 
     return template;
 }
@@ -29,4 +29,12 @@ export function JqueryDateFormat (date) {
     let day = date.getDate();
     
     return `${year}-${month}-${day}`;
+}
+
+export function getCurrentPositionAsync () {
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+            pos => resolve(pos), 
+            err => reject(err));
+    });
 }

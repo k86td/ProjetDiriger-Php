@@ -3,18 +3,25 @@
 import TimeAgo from 'javascript-time-ago';
 import fr from 'javascript-time-ago/locale/fr';
 import { uGetJson, pGetJson, pPostJson, pDelete, pPutJson } from './request';
-import { GetTemplate, JqueryDateFormat } from './helper';
+import { GetTemplate, JqueryDateFormat, getCurrentPositionAsync } from './helper';
 const Mustache = require('mustache');
 import { Toast } from 'bootstrap';
+import $ from 'jquery';
+import loadGoogleMapsApi from 'load-google-maps-api';
+
+
 
 TimeAgo.addDefaultLocale(fr);
 const timeAgo = new TimeAgo("fr");
 
+
 const BASE_URL = 'https://localhost:7103/api';
+const TEMPLATE_BASE_URL = "http://localhost:8000";
 const TEMPLATES_PATH = {
-    "erreur": "http://localhost:8000/templates/erreur.mustache",
-    "offres": "http://localhost:8000/templates/offres.mustache",
-    "basicToast": "http://localhost:8000/templates/basic_toast.mustache"
+    "erreur": TEMPLATE_BASE_URL + "/templates/erreur.mustache",
+    "offres": TEMPLATE_BASE_URL + "/templates/offres.mustache",
+    "basicToast": TEMPLATE_BASE_URL + "/templates/basic_toast.mustache",
+    "locationFilter": TEMPLATE_BASE_URL + "/templates/location_filter.mustache"
 }
 const DATA_MAPPER = {
     "offres": function (elem) {
@@ -26,6 +33,7 @@ const DATA_MAPPER = {
         return {
             "id": elem.id,
             "nom": elem.nom,
+            "idVendeur": elem.idVendeur,
             "dateDebut": new Date(elem.dateDebut).toISOString(),
             "dateFin": new Date(elem.dateFin).toISOString(),
             "prix": elem.prix
@@ -42,29 +50,80 @@ const DATA_MAPPER = {
         };
 
         if (elem.accepter) {
-            templatePayload['button'] = { 
-                "name": "cancelLocation", 
-                "texte": "Annuler la location" 
+            templatePayload['button'] = {
+                "name": "cancelLocation",
+                "texte": "Annuler la location"
             };
         }
         else {
             templatePayload['date'] = elem.date;
+            templatePayload['shortDate'] = elem.date.split("T")[0];
             templatePayload['editButton'] = {
                 "name": "editRequest",
                 "texte": "Modifier la demande de location",
                 "iconClass": "bi bi-pencil-square"
             };
-            templatePayload['button'] = { 
-                "name": "cancelRequest", 
-                "texte": "Annuler la demande" 
+            templatePayload['button'] = {
+                "name": "cancelRequest",
+                "texte": "Annuler la demande"
             };
         }
 
         return templatePayload;
+    }, 
+    "usagerPublicInfo": function (elem) {
+        /*
+        {"nom":"Lepine","prenom":"Tristan","email":"tristanlepine14@gmail.com","telephone":"5148828118"}
+        */
+
+        return {
+            "fullName": `${elem.prenom} ${elem.nom}`
+        };
     }
 }
 
-async function RenderOffres(querySelector = ".main-content") {
+async function RenderMapFilter(querySelector = "#filterContainer") {
+    let clientPos = await getCurrentPositionAsync();
+    console.debug(`[LOCATION:RenderMapFilter] Client position: lat:${JSON.stringify(clientPos.coords.latitude)} lon:${clientPos.coords.longitude}`);
+
+    // generate the template
+    let template = await GetTemplate(TEMPLATES_PATH.locationFilter);
+
+    let templateHtml = Mustache.render(template, {
+        "latitude": clientPos.coords.latitude,
+        "longitude": clientPos.coords.longitude
+    });
+
+    $(querySelector).append(templateHtml);  
+    
+    const currentPosition = {
+        lat: parseFloat(clientPos.coords.latitude),
+        lng: parseFloat(clientPos.coords.longitude)
+    };
+
+    console.debug(currentPosition);
+
+    loadGoogleMapsApi({
+        key: 'AIzaSyD81DrP2OP8glBYbP9CKweHbs7cRk5W3wI'
+    })
+        .then(maps => {
+            console.debug("[LOCATION:LoadGoogleMapsApi] Creating map")
+            new maps.Map(document.getElementById("locationFilter_Map"), {
+                center: currentPosition,
+                zoom: 13
+            })
+                .setOptions({
+                    gestureHandling: "none",
+                    disableDefaultUI: true,
+                    zoomControl: true
+                });
+        })
+        .catch(e => {
+            console.error(`Got an error while creating the map: ${JSON.stringify(e)}`)
+        });
+}
+
+async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
     let template = await GetTemplate(TEMPLATES_PATH.offres);
 
@@ -75,9 +134,9 @@ async function RenderOffres(querySelector = ".main-content") {
     if (user_token !== undefined && user_token !== "")
         connected = true;
 
-    const getOffres = async () => {
-        let offres = await uGetJson(BASE_URL + "/Offre", 1, 10000);
-        console.debug(`[LOCATION] Offres: ${JSON.stringify(offres)}`)
+    const getOffres = async (queryString) => {
+        let offres = await uGetJson(BASE_URL + "/Offre" + queryString, 1, 10000);
+
         if (offres !== undefined)
             offres = offres.map(DATA_MAPPER.offres);
 
@@ -93,8 +152,29 @@ async function RenderOffres(querySelector = ".main-content") {
         return demandes;
     }
 
-    let offres = await getOffres();
+    const appendUsagerPublicInfo = async (offres) => {
+        if (offres == undefined)
+            return;
 
+        for (let x = 0; x < offres.length; x++) {
+            let offre = offres[x];
+
+            let idVendeur = offre.idVendeur;
+
+            let infoVendeur = await uGetJson(BASE_URL + "/usager/info/" + idVendeur);
+
+            if (infoVendeur == undefined)
+                continue;
+            
+            console.debug("[LOCATION:getUsagerPublicInfo] Info vendeur: " + JSON.stringify(infoVendeur));
+            offre["infoVendeur"] = DATA_MAPPER.usagerPublicInfo(infoVendeur);
+        }
+
+        return offres;
+    };
+
+    let offres = await getOffres(queryString);
+    offres = await appendUsagerPublicInfo(offres);
 
     if (connected) {
         let demandes = await getDemandesOffres();
@@ -117,7 +197,7 @@ async function RenderOffres(querySelector = ".main-content") {
         console.debug("[LOCATION:RenderOffres] Impossible to fetch offres");
 
         template = await GetTemplate(TEMPLATES_PATH.erreur);
-        _data["erreur"] = "Impossible d'acceder aux offres"
+        _data["erreur"] = "Il n'y a aucune offre pour les filtres que vous avez utiliser. Soit l'api est hors ligne, ou aucune offre existe avec les filtres que vous avez choisis!"
     }
     else {
         _data.offres = offres;
@@ -127,6 +207,7 @@ async function RenderOffres(querySelector = ".main-content") {
     _data.connected = connected;
 
     var templateHtml = Mustache.render(template, _data)
+
     $(querySelector).html(templateHtml);
 
     // set the events handlers if connected
@@ -153,8 +234,6 @@ async function RenderOffres(querySelector = ".main-content") {
             $("#newDemandeOffreModal_Id").val(offreId);
 
         });
-
-        $('input[name="range_datepicker"]').daterangepicker();
 
         $('#sendRequest').click(event => { // envoyer demande de location
 
@@ -195,7 +274,7 @@ async function RenderOffres(querySelector = ".main-content") {
             // 1- set min/max of the date picker
             const datePicker = $("#editDemandeOffre_Dates");
             // should check if the min is actually between (dateDebut || Date.now) and dateFin
-            datePicker.attr("min", JqueryDateFormat(dateDebut)); 
+            datePicker.attr("min", JqueryDateFormat(dateDebut));
             datePicker.attr("max", JqueryDateFormat(dateFin));
             datePicker.attr("value", JqueryDateFormat(date));
 
@@ -205,17 +284,17 @@ async function RenderOffres(querySelector = ".main-content") {
         $("#editRequest").on('click', event => {
             // gather modal data
 
-            let idOffre = $("#editDemandeOffre_Id");
-            let date = $("#editDemandeOffre_Dates");
+            let idOffre = $("#editDemandeOffre_Id").val();
+            let date = $("#editDemandeOffre_Dates").val();
 
-            pPutJson(BASE_URL + "/api/Rent/" + idOffre, $("#user_token").val(), date, 1, 5000, _ => {
+            pPutJson(BASE_URL + "/Offre/Rent/" + idOffre, $("#user_token").val(), date, 1, 5000, _ => {
                 RenderOffres();
             });
         });
-    } else {
+    } else if (offres !== undefined) {
         // if not connected send an alert saying the user is not connected
         let basicToastTemplate = await GetTemplate(TEMPLATES_PATH.basicToast);
-        
+
         var toastHtml = Mustache.render(basicToastTemplate, {
             "text": "Vous n'etes pas connecter!",
             "id": "notConnectedToast"
@@ -224,7 +303,6 @@ async function RenderOffres(querySelector = ".main-content") {
         new Toast(document.getElementById("notConnectedToast")).show();
     }
 }
-RenderOffres();
 
 const GenCheckboxFromApi = (endpoint, dataPath, mappingFunc, additionalFunc) => {
     $.get(endpoint, function (data) {
@@ -293,7 +371,6 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
 
     let user_token = $("#user_token").val();
 
-    // this is the function that creates the cards
     // this is the function that creates the cards
     const parser = async (json) => {
         return await Promise.all(json.map(async j => {
@@ -379,28 +456,45 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
         });
 };
 
-export function main() {
+export async function main() {
     // get TypeOffre
 
-    // GenCheckboxFromApi("https://localhost:7103/api/TypeOffre",
-    //     ".type-categorie-content",
-    //     mappingFunc("type"),
-    //     _ => {
-    //         // add event listener
-    //         let chk = $("input[type='checkbox'][name='type-filter']")
+    RenderOffres();
+    RenderMapFilter();
 
-    //         chk.click(_ => {
-    //             let selectedIds = "";
-    //             let checked = $("input[type='checkbox'][name='type-filter']")
-    //                 .filter(":checked");
+    GenCheckboxFromApi("https://localhost:7103/api/TypeOffre",
+        ".type-categorie-content",
+        mappingFunc("type"),
+        _ => {
+            // add event listener
+            let chk = $("input[type='checkbox'][name='type-filter']")
 
-    //             let checkedIds = $.map(checked, c => {
-    //                 return c.value;
-    //             });
+            chk.click(_ => {
+                let selectedIds = "";
+                let checked = $("input[type='checkbox'][name='type-filter']")
+                    .filter(":checked");
 
-    //             RefreshCategoryOffre(checkedIds);
-    //         });
-    //     });
+                let checkedIds = $.map(checked, c => {
+                    return c.value;
+                });
+
+                RefreshCategoryOffre(checkedIds);
+            });
+        });
+
+    $("#btn_appliquer").click(_ => {
+        let queryString = "";
+
+        let typeCategoriesSelected = $("input:checked[type='checkbox'][name='type-filter']");
+        let categoriesSelected = $("input:checked[type='checkbox'][name='categories-filter']");
+
+        typeCategoriesSelected = $.map(typeCategoriesSelected, t => "typeId=" + t.value);
+        categoriesSelected = $.map(categoriesSelected, c => "categorieId=" + c.value);
+
+        queryString = "?" + typeCategoriesSelected.concat(categoriesSelected).join("&");
+
+        RenderOffres(undefined, queryString == "?" ? "" : queryString);
+    });
 
     // $("#btn_appliquer").click(_ => {
     //     let typeCategoriesSelected = $("input:checked[type='checkbox'][name='type-filter']");

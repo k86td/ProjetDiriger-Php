@@ -1,9 +1,10 @@
+import $ from 'jquery';
 
 /**
  * Unprotected Get Json from a url
  * @param {string} url to access
 */
-export async function uGetJson(url, retry = 1, retry_timeout = 30000, callback = undefined) {
+export async function uGetJson(url, retry = -1, retry_timeout = 30000, callback = undefined) {
     let data = undefined;
     
     while (data == undefined && (retry > 0 || retry == -1)) {
@@ -129,7 +130,7 @@ export async function pPostJson(url, bearer_token, body, retry = -1, retry_timeo
 }
 
 /**
- * Protected Delete to a url
+ * Protected Put Json to a url
  * @param {string} url to access
  */
  export async function pPutJson(url, bearer_token, body, retry = -1, retry_timeout = 30000, callback = undefined) {
@@ -141,6 +142,7 @@ export async function pPostJson(url, bearer_token, body, retry = -1, retry_timeo
             url: url,
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + bearer_token);
+                xhr.setRequestHeader("Content-Type", "application/json");
             },
             data: JSON.stringify(body),
             success: function (data) {
@@ -150,14 +152,14 @@ export async function pPostJson(url, bearer_token, body, retry = -1, retry_timeo
                 return data;
             },
             error: async function () {
-                console.error(`[REQUEST:pDelete] Failed to access "${url}". Retry count: ${retry}`);
+                console.error(`[REQUEST:pPut] Failed to access "${url}". Retry count: ${retry}`);
                 retry--;
                 await new Promise(r => setTimeout(r, retry_timeout));
 
             }
         })
             .catch(_ => {
-                console.error(`[REQUEST:pDelete] Failed to access "${url}". Retry count: ${retry}`);
+                console.error(`[REQUEST:pPut] Failed to access "${url}". Retry count: ${retry}`);
             });
     }
 
