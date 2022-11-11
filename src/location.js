@@ -13,11 +13,10 @@ import { loadScript } from "@paypal/paypal-js";
 
 TimeAgo.addDefaultLocale(fr);
 const timeAgo = new TimeAgo("fr");
-let paypal;
 
 
 const BASE_URL = 'https://localhost:7103/api';
-const TEMPLATE_BASE_URL = "http://localhost:443";
+const TEMPLATE_BASE_URL = "http://localhost:8000";
 const TEMPLATES_PATH = {
     "erreur": TEMPLATE_BASE_URL + "/templates/erreur.mustache",
     "offres": TEMPLATE_BASE_URL + "/templates/offres.mustache",
@@ -322,8 +321,10 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
     // set the events handlers if connected
     if (connected) {
         const newDemandeOffreModal = document.getElementById('newDemandeOffreModal');
-
-        // newDemandeOffreModal.addEventListener('show.bs.modal', event => {
+        $("#cancelRequest").on("click", event => {
+            const container = document.getElementById("paypal-button-container");
+            container.innerHTML = "";
+        });
         $(".louer-btn").on("click", event => {
 
             const button = event.delegateTarget
@@ -345,23 +346,27 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
             // 2- set the offre id in the modal
             $("#newDemandeOffreModal_Id").val(offreId);
-
-            let payButton = paypal.Buttons({
-				createOrder: function(data, actions) {
-				// 3- Set up the transaction
-				return actions.order.create({
-					purchase_units: [{
-					amount: {
-                        currency_code: 'CAD',
-						value: prix
-					}
-					}]
-				});
-				}
-			});
-
-            payButton.render('#paypal-button-container');
-
+            loadScript({ "client-id": "AV4HNPW8uvWfXoYHp_Y87XxThHgavnPD4sMPCIRsqLh7q4fwlDLz5jElXH0x21ISF2mYHctp7FuClCF_" })
+            .then((paypal) => {
+                let payButton = paypal.Buttons({
+                    createOrder: function(data, actions) {
+                    // 3- Set up the transaction
+                    return actions.order.create({
+                        purchase_units: [{
+                        amount: {
+                            currency_code: 'CAD',
+                            value: prix
+                        }
+                        }]
+                    });
+                    }
+                });
+    
+                payButton.render('#paypal-button-container');
+            })
+            .catch((err) => {
+                console.error("failed to load the PayPal JS SDK script", err);
+            });
         });
 
         $('#sendRequest').click(event => { // envoyer demande de location

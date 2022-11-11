@@ -10,6 +10,7 @@ $active_link = "location";
 	<link href="css/location.css" rel="stylesheet">
 
 	<script src="dist/main.js"></script>
+	<script src="src/location.js"></script>
 	
 </head>
 <body>
