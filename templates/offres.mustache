@@ -46,6 +46,8 @@
     </div>
 </div>
 
+<!-- showDetailsModal -->
+
 <div id="mainBody">
     <div style="text-align: left;" class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 offre-body">
         {{ #offres }}
@@ -77,7 +79,7 @@
                         {{ /demandes }}
 
                         {{ ^demandes }}
-                            <button type="button" class="btn btn-primary card-btn" data-bs-toggle="modal" 
+                            <button type="button" class="btn btn-primary card-btn louer-btn" data-bs-toggle="modal" 
                                 data-bs-target="#newDemandeOffreModal" 
                                 data-bs-offreName="{{ demandes.name }}" 
                                 data-bs-offreId="{{ id }}"
@@ -86,6 +88,7 @@
                             Louer
                             </button>
                         {{ /demandes }}
+
                     {{ /connected }}
                 </div>
                 <div class="card-footer text-muted d-flex">
