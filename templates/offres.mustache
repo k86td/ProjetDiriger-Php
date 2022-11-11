@@ -17,6 +17,9 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                 <button id="sendRequest" type="button" data-bs-dismiss="modal" class="btn btn-primary">Envoyer</button>
+                <div id="paypal-button-container">
+
+                </div>
             </div>
         </div>
     </div>
@@ -82,7 +85,9 @@
                                 data-bs-offreName="{{ demandes.name }}" 
                                 data-bs-offreId="{{ id }}"
                                 data-bs-offreDateDebut="{{ dateDebut }}"
-                                data-bs-offreDateFin="{{ dateFin }}">
+                                data-bs-offreDateFin="{{ dateFin }}"
+                                data-bs-prix="{{ prix }}"
+>
                             Louer
                             </button>
                         {{ /demandes }}

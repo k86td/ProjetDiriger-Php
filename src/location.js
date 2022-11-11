@@ -9,14 +9,21 @@ import { Toast } from 'bootstrap';
 import $ from 'jquery';
 import loadGoogleMapsApi from 'load-google-maps-api';
 import { faCar } from '@fortawesome/free-solid-svg-icons';
+import { loadScript } from "@paypal/paypal-js";
 
 
 TimeAgo.addDefaultLocale(fr);
 const timeAgo = new TimeAgo("fr");
+let paypal;
 
+try {
+    paypal = await loadScript({ "client-id": "AV4HNPW8uvWfXoYHp_Y87XxThHgavnPD4sMPCIRsqLh7q4fwlDLz5jElXH0x21ISF2mYHctp7FuClCF_" });
+} catch (error) {
+    console.error("failed to load the PayPal JS SDK script", error);
+}
 
 const BASE_URL = 'https://localhost:7103/api';
-const TEMPLATE_BASE_URL = "http://localhost:443";
+const TEMPLATE_BASE_URL = "http://localhost:8000";
 const TEMPLATES_PATH = {
     "erreur": TEMPLATE_BASE_URL + "/templates/erreur.mustache",
     "offres": TEMPLATE_BASE_URL + "/templates/offres.mustache",
@@ -29,7 +36,7 @@ const DATA_MAPPER = {
         {"id":3,"nom":"Jeep Wrangler","idVendeur":1,"prix":130,"date":"2022-10-04T17:39:52.7266667",
         "coordonner":"+73,-23","idCategorieOffre":null,"idTypeOffre":1}
         */
-
+        
         return {
             "id": elem.id,
             "nom": elem.nom,
@@ -317,14 +324,15 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
     // set the events handlers if connected
     if (connected) {
         const newDemandeOffreModal = document.getElementById('newDemandeOffreModal');
-        newDemandeOffreModal.addEventListener('show.bs.modal', event => {
+        newDemandeOffreModal.addEventListener('show.bs.modal',async event => {
             const button = event.relatedTarget
 
             // get the button data
             let offreId = button.getAttribute("data-bs-offreid");
             let dateDebut = button.getAttribute("data-bs-offredatedebut");
             let dateFin = button.getAttribute("data-bs-offredatefin");
-
+            let prix = button.getAttribute("data-bs-prix");
+            console.debug(prix);
 
             // update the modal content 
 
@@ -336,6 +344,22 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
             // 2- set the offre id in the modal
             $("#newDemandeOffreModal_Id").val(offreId);
+
+            let payButton = paypal.Buttons({
+				createOrder: function(data, actions) {
+				// 3- Set up the transaction
+				return actions.order.create({
+					purchase_units: [{
+					amount: {
+                        currency_code: 'CAD',
+						value: prix
+					}
+					}]
+				});
+				}
+			});
+
+            payButton.render('#paypal-button-container');
 
         });
 
