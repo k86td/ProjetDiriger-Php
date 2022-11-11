@@ -8,6 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
     DeleteOffreDemande($_SESSION['offreid'], $_POST['refuser']);
     GetDemandeOffre($_SESSION['offreid']);
 }
+else
+{
+    GetDemandeOffre($_SESSION['offreid']);
+}
 
 
 
@@ -76,29 +80,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
         <div class="heading">
             <h1> Vos offres recu pour cette voiture </h1>
             <div class="services-container">
-
                 <?php
                 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter'])) 
                 {
                     //print_r($_SESSION['demandeOffre']);
                     AccepterDemande($_SESSION['offreid'], $_POST['accepter']);
-                    for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) 
-                    {
-                        if($_SESSION['demandeOffre'][$i]->accepter == null)
-                        {
-                            // idoffre, idusager
-                            DeleteOffreDemande($_SESSION['demandeOffre'][$i]->idOffre, $_SESSION['demandeOffre'][$i]->idUsager);
-                        }
-                        else
-                        {
-                            GetUser($_SESSION['demandeOffre'][$i]->idUsager);
-                            echo '
-                            <div class="box">
-                                <div> vous avez accepter la demande de: ' . $_SESSION['User']->prenom . '</div>
-                            </div>';
-                        }
-                       // echo $_SESSION['demandeOffre'][$i]->accepter;
-                    }
+                    header('Location: offreOfferts.php');
                 } 
                 else
                 {
@@ -121,15 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
                         {
                             echo '
                             <div class="box">
-                                <div> vous avez accepter la demande de: ' . $_SESSION['User']->prenom . ' une confirmation de transaction seras administrée sous peu.</div>
+                                <div> vous avez accepter la demande de ' . $_SESSION['User']->prenom . ' une confirmation de transaction seras administrée sous peu.</div>
                             </div>';
                         }
-                     
                     }
                 }
-
                 ?>
-
             </div>
         </div>
 
