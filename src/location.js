@@ -11,19 +11,13 @@ import loadGoogleMapsApi from 'load-google-maps-api';
 import { faCar } from '@fortawesome/free-solid-svg-icons';
 import { loadScript } from "@paypal/paypal-js";
 
-
 TimeAgo.addDefaultLocale(fr);
 const timeAgo = new TimeAgo("fr");
 let paypal;
 
-try {
-    paypal = await loadScript({ "client-id": "AV4HNPW8uvWfXoYHp_Y87XxThHgavnPD4sMPCIRsqLh7q4fwlDLz5jElXH0x21ISF2mYHctp7FuClCF_" });
-} catch (error) {
-    console.error("failed to load the PayPal JS SDK script", error);
-}
 
 const BASE_URL = 'https://localhost:7103/api';
-const TEMPLATE_BASE_URL = "http://localhost:8000";
+const TEMPLATE_BASE_URL = "http://localhost:443";
 const TEMPLATES_PATH = {
     "erreur": TEMPLATE_BASE_URL + "/templates/erreur.mustache",
     "offres": TEMPLATE_BASE_URL + "/templates/offres.mustache",
@@ -222,7 +216,7 @@ async function RenderMapFilter(querySelector = "#filterContainer", queryOptions 
                 let rangeValue = $("#locationFilter_Range").val();
 
                 RenderOffres(
-                    ".main-content", 
+                    ".main-content",
                     `?latCent=${currentPosition.lat}&lonCent=${currentPosition.lng}&range=${rangeValue}`
                 );
             });
@@ -235,6 +229,8 @@ async function RenderMapFilter(querySelector = "#filterContainer", queryOptions 
 }
 
 async function RenderOffres(querySelector = ".main-content", queryString = "") {
+
+    // TODO add icons to see if the offer was paid or not
 
     let template = await GetTemplate(TEMPLATES_PATH.offres);
 
@@ -321,12 +317,17 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
     $(querySelector).html(templateHtml);
 
+    console.debug("Iterating inside RenderOffres");
+
     // set the events handlers if connected
     if (connected) {
         const newDemandeOffreModal = document.getElementById('newDemandeOffreModal');
-        newDemandeOffreModal.addEventListener('show.bs.modal',async event => {
-            const button = event.relatedTarget
 
+        // newDemandeOffreModal.addEventListener('show.bs.modal', event => {
+        $(".louer-btn").on("click", event => {
+
+            const button = event.delegateTarget
+            
             // get the button data
             let offreId = button.getAttribute("data-bs-offreid");
             let dateDebut = button.getAttribute("data-bs-offredatedebut");
@@ -392,6 +393,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
         let editDemandeOffreModal = document.getElementById("editDemandeOffreModal");
         editDemandeOffreModal.addEventListener("show.bs.modal", event => {
+
             let button = event.relatedTarget;
 
             let dateDebut = $(button).attr('data-bs-offreDateDebut');

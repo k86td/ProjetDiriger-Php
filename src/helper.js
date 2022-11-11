@@ -26,7 +26,7 @@ export function JqueryDateFormat (date) {
 
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
-    let day = date.getDate();
+    let day = date.getDate().toString().padStart(2, "0");
     
     return `${year}-${month}-${day}`;
 }

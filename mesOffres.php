@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     else if (isset($_POST['offreOfferts']))
     {
         GetDemandeOffre($_POST['offreOfferts']);
-        header('Location:offreofferts.php');
+        header('Location:offreOfferts.php');
     }
 }
 
