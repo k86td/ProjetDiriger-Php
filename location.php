@@ -10,12 +10,14 @@ $active_link = "location";
 	<link href="css/location.css" rel="stylesheet">
 
 	<script src="dist/main.js"></script>
-	<script src="src/location.js"></script>
-	
+	<!-- don't import this, its a module, it WONT work : <script src="src/location.js"></script> -->
+
 </head>
+
 <body>
 
-	<?php include '_header.php'; // include '_headerBar.php';  ?>
+	<?php include '_header.php'; // include '_headerBar.php';  
+	?>
 
 	<main class="container">
 		<h2 style="width: 100%; text-align: center; margin-bottom: 25px;">🚧 en construction 🚧</h2>
