@@ -322,8 +322,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
     if (connected) {
         const newDemandeOffreModal = document.getElementById('newDemandeOffreModal');
         $("#cancelRequest").on("click", event => {
-            const container = document.getElementById("paypal-button-container");
-            container.innerHTML = "";
+            document.getElementById("paypal-button-container").innerHTML = "";
         });
         $(".louer-btn").on("click", event => {
 
@@ -346,7 +345,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
             // 2- set the offre id in the modal
             $("#newDemandeOffreModal_Id").val(offreId);
-            loadScript({ "client-id": "AV4HNPW8uvWfXoYHp_Y87XxThHgavnPD4sMPCIRsqLh7q4fwlDLz5jElXH0x21ISF2mYHctp7FuClCF_" })
+            loadScript({ "client-id": "AV4HNPW8uvWfXoYHp_Y87XxThHgavnPD4sMPCIRsqLh7q4fwlDLz5jElXH0x21ISF2mYHctp7FuClCF_", intent: "authorize" })
             .then((paypal) => {
                 let payButton = paypal.Buttons({
                     createOrder: function(data, actions) {
@@ -354,16 +353,29 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
                     return actions.order.create({
                         purchase_units: [{
                         amount: {
-                            currency_code: 'CAD',
-                            value: prix
+                            value: prix,
+                            currency: "CAD"
                         }
                         }]
                     });
-                    }
-                });
-    
-                payButton.render('#paypal-button-container');
-            })
+                    },
+                    onApprove: function(data, actions) {
+                        let offreId = $("#newDemandeOffreModal_Id").val();
+                        let chosenDate = $("#newDemandeOffreModal_Dates").val();
+
+                        const api_path = "/Offre/Rent/" + offreId;
+
+                        $("#newDemandeOffreModal_Dates").val(JqueryDateFormat(Date.now()));
+                        $("#newDemandeOffreModal_Id").val("");
+
+                        pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
+                            RenderOffres();
+                        });
+                        
+                        alert('You have successfully created order ' + data.orderID);
+                      }
+                }).render('#paypal-button-container');
+                })
             .catch((err) => {
                 console.error("failed to load the PayPal JS SDK script", err);
             });
