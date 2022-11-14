@@ -260,6 +260,10 @@ function GetVoiture($id)
 
     return json_decode($offre);
 }
+function GetCoordinate($adresse)
+{
+    
+}
 function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odometre, $type, $porte, $siege, $traction, $description, $etat, $prix, $postal, $dateDebut, $dateFin)
 {
 
