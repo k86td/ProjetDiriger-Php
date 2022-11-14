@@ -29,7 +29,7 @@ const DATA_MAPPER = {
         {"id":3,"nom":"Jeep Wrangler","idVendeur":1,"prix":130,"date":"2022-10-04T17:39:52.7266667",
         "coordonner":"+73,-23","idCategorieOffre":null,"idTypeOffre":1}
         */
-        
+
         return {
             "id": elem.id,
             "nom": elem.nom,
@@ -47,17 +47,17 @@ const DATA_MAPPER = {
 
         let templatePayload = {
             "idOffre": elem.idOffre,
-            "accepter": elem.accepter
+            "accepter": elem.accepter,
         };
 
         if (elem.accepter) {
             templatePayload['button'] = {
                 "name": "cancelLocation",
-                "texte": "Annuler la location"
+                "texte": "Annuler la location",
+                "date": elem.date
             };
         }
         else {
-            templatePayload['date'] = elem.date;
             templatePayload['shortDate'] = elem.date.split("T")[0];
             templatePayload['editButton'] = {
                 "name": "editRequest",
@@ -66,7 +66,8 @@ const DATA_MAPPER = {
             };
             templatePayload['button'] = {
                 "name": "cancelRequest",
-                "texte": "Annuler la demande"
+                "texte": "Annuler la demande",
+                "date": elem.date
             };
         }
 
@@ -327,7 +328,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
         $(".louer-btn").on("click", event => {
 
             const button = event.delegateTarget
-            
+
             // get the button data
             let offreId = button.getAttribute("data-bs-offreid");
             let dateDebut = button.getAttribute("data-bs-offredatedebut");
@@ -345,56 +346,83 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
 
             // 2- set the offre id in the modal
             $("#newDemandeOffreModal_Id").val(offreId);
-            loadScript({ "client-id": "AV4HNPW8uvWfXoYHp_Y87XxThHgavnPD4sMPCIRsqLh7q4fwlDLz5jElXH0x21ISF2mYHctp7FuClCF_", intent: "authorize" })
-            .then((paypal) => {
-                let payButton = paypal.Buttons({
-                    createOrder: function(data, actions) {
-                    // 3- Set up the transaction
-                    return actions.order.create({
-                        purchase_units: [{
-                        amount: {
-                            value: prix,
-                            currency: "CAD"
+
+            // reset payment button
+            $("#paypal-button-container").html("");
+
+            loadScript({
+                "client-id": "AV4HNPW8uvWfXoYHp_Y87XxThHgavnPD4sMPCIRsqLh7q4fwlDLz5jElXH0x21ISF2mYHctp7FuClCF_",
+                "currency": "CAD",
+                "intent": "authorize"
+            })
+                .then((paypal) => {
+                    let payButton = paypal.Buttons({
+                        style: {
+                            layout: 'vertical',
+                            color: 'gold',
+                            tagline: false,
+                            height: 40
+                        },
+                        createOrder: function (data, actions) {
+
+                            let date = $("#newDemandeOffreModal_Dates").val();
+
+                            // 3- Set up the transaction
+                            return actions.order.create({
+                                intent: "AUTHORIZE",
+                                purchase_units: [{
+                                    description: "Receipt for your location request for the " + date,
+                                    amount: {
+                                        currency_code: 'CAD',
+                                        value: prix,
+                                    }
+                                }]
+                            });
+                        },
+                        onApprove: function (data, actions) {
+
+                            let offreId = $("#newDemandeOffreModal_Id").val();
+                            let chosenDate = $("#newDemandeOffreModal_Dates").val();
+
+                            const api_path = "/Offre/Rent/" + offreId;
+
+                            $("#newDemandeOffreModal_Dates").val(JqueryDateFormat(Date.now()));
+                            $("#newDemandeOffreModal_Id").val("");
+
+                            pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
+                                RenderOffres();
+                            });
+
+                            console.debug("Approving the location request, the seller must accept your request now!");
+
+                            // close the modal
+                            $(".btn-close").trigger("click");
+
                         }
-                        }]
                     });
-                    },
-                    onApprove: function(data, actions) {
-                        let offreId = $("#newDemandeOffreModal_Id").val();
-                        let chosenDate = $("#newDemandeOffreModal_Dates").val();
 
-                        const api_path = "/Offre/Rent/" + offreId;
-
-                        $("#newDemandeOffreModal_Dates").val(JqueryDateFormat(Date.now()));
-                        $("#newDemandeOffreModal_Id").val("");
-
-                        pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
-                            RenderOffres();
-                        });
-                        
-                        alert('You have successfully created order ' + data.orderID);
-                      }
-                }).render('#paypal-button-container');
+                    payButton.render('#paypal-button-container');
                 })
-            .catch((err) => {
-                console.error("failed to load the PayPal JS SDK script", err);
-            });
+                .catch((err) => {
+                    console.error("failed to load the PayPal JS SDK script", err);
+                });
         });
 
-        $('#sendRequest').click(event => { // envoyer demande de location
+        // deprecated
+        // $('#sendRequest').click(event => { // envoyer demande de location
 
-            let offreId = $("#newDemandeOffreModal_Id").val();
-            let chosenDate = $("#newDemandeOffreModal_Dates").val();
+        //     let offreId = $("#newDemandeOffreModal_Id").val();
+        //     let chosenDate = $("#newDemandeOffreModal_Dates").val();
 
-            const api_path = "/Offre/Rent/" + offreId;
+        //     const api_path = "/Offre/Rent/" + offreId;
 
-            $("#newDemandeOffreModal_Dates").val(JqueryDateFormat(Date.now()));
-            $("#newDemandeOffreModal_Id").val("");
+        //     $("#newDemandeOffreModal_Dates").val(JqueryDateFormat(Date.now()));
+        //     $("#newDemandeOffreModal_Id").val("");
 
-            pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
-                RenderOffres();
-            });
-        });
+        //     pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
+        //         RenderOffres();
+        //     });
+        // });
 
         $("button[name='cancelRequest']").on('click', event => { // annuler demande de location
             let offreId = event.target.id.split("_")[1];
@@ -438,6 +466,8 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
                 RenderOffres();
             });
         });
+
+        // TODO add event listener to cancel location
     } else if (offres !== undefined) {
         // if not connected send an alert saying the user is not connected
         let basicToastTemplate = await GetTemplate(TEMPLATES_PATH.basicToast);
