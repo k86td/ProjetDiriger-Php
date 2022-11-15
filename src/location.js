@@ -323,8 +323,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
     if (connected) {
         const newDemandeOffreModal = document.getElementById('newDemandeOffreModal');
         $("#cancelRequest").on("click", event => {
-            const container = document.getElementById("paypal-button-container");
-            container.innerHTML = "";
+            document.getElementById("paypal-button-container").innerHTML = "";
         });
         $(".louer-btn").on("click", event => {
 

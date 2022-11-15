@@ -260,6 +260,18 @@ function GetVoiture($id)
 
     return json_decode($offre);
 }
+function GetCoordinate($adresse)
+{
+   
+    $google = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$adresse.'&key=AIzaSyAsHD-02ODNh5vYAx45eBkpbq2_8G-fN4Q';
+    $details = file_get_contents($google);
+    $result = json_decode($details, true);
+
+    $lat = $result['results'][0]['geometry']['location']['lat'];
+    $lng = $result['results'][0]['geometry']['location']['lng'];
+   print_r($lat);
+   print_r($lng);
+}
 function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odometre, $type, $porte, $siege, $traction, $description, $etat, $prix, $postal, $dateDebut, $dateFin)
 {
 
