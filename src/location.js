@@ -390,14 +390,36 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
                             $("#newDemandeOffreModal_Dates").val(JqueryDateFormat(Date.now()));
                             $("#newDemandeOffreModal_Id").val("");
 
-                            pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
-                                RenderOffres();
+                            // Authorize the transaction
+                            actions.order.authorize().then(function (authorization) {
+                                // Get the authorization id
+                                var authorizationID = authorization.purchase_units[0].payments.authorizations[0].id
+                                
+                                console.debug("Order Id : " + data.orderID);
+                                console.debug('Transaction details : ' + JSON.stringify(authorization) );
+                                // Call your server to validate and capture the transaction
+
+                                pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
+                                    RenderOffres();
+                                });
+
+                                console.debug("Approving the location request, the seller must accept your request now!");
+
+                                // close the modal
+                                $(".btn-close").trigger("click");
+
+                                return fetch('/paypal-transaction-complete', {
+                                    method: 'post',
+                                    headers: {
+                                        'content-type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        orderID: data.orderID,
+                                        authorizationID: authorizationID
+                                    })
+                                });
                             });
 
-                            console.debug("Approving the location request, the seller must accept your request now!");
-
-                            // close the modal
-                            $(".btn-close").trigger("click");
 
                         }
                     });
