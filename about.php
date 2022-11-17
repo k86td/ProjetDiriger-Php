@@ -69,7 +69,7 @@ session_start();
 
         </div>
         <div class=".grid-item">
-            <img src="images/No_Avatar.png">
+            <img src="images/photo_justin.jpg">
             <p class="name">Justin Ouellet</p>
             <p class="finissant">Finissant 2023 - DEC Technique de l'informatique</p>
             <a class="courriel" href="mailto:justin_ouellet@hotmail.com">justin_ouellet@hotmail.com</a>
