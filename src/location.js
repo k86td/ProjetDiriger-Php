@@ -393,12 +393,12 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
                             actions.order.authorize().then(function (authorization) {
                                 // Get the authorization id
                                 var authorizationID = authorization.purchase_units[0].payments.authorizations[0].id
-                                
+
                                 console.debug("Order Id : " + data.orderID);
-                                console.debug('Transaction details : ' + JSON.stringify(authorization) );
+                                console.debug('Transaction details : ' + JSON.stringify(authorization));
                                 // Call your server to validate and capture the transaction
 
-                                pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
+                                pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate, "OrderId": data.orderID }, 1, 10000, _ => {
                                     RenderOffres();
                                 });
 
@@ -430,7 +430,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
                 });
         });
 
-        // deprecated
+        // deprecated sending request handler
         // $('#sendRequest').click(event => { // envoyer demande de location
 
         //     let offreId = $("#newDemandeOffreModal_Id").val();
