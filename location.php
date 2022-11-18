@@ -58,7 +58,6 @@ $active_link = "location";
 				</div>
 			</div>
 		</div>
-		<div id="notConnectedToast"></div>
 	</main>
 	
 </body>
