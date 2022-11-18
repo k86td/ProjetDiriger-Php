@@ -19,6 +19,8 @@ $active_link = "location";
 	<?php include '_header.php'; // include '_headerBar.php';  
 	?>
 
+	<div id="mainBody" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
 	<main class="container">
 		<h2 style="width: 100%; text-align: center; margin-bottom: 25px;">🚧 en construction 🚧</h2>
 		<script>
