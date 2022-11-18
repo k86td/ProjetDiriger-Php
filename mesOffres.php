@@ -3,20 +3,16 @@ session_start();
 include 'requete.php';
 if (isset($_SESSION['email'])) {
     GetOffresVendeur();
-    
 } else {
     header('Location: index.php');
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['offreId'])) 
-    {
+    if (isset($_POST['offreId'])) {
         GetOffre($_POST['offreId']);
         $data = GetVoiture($_POST['offreId']);
         $_SESSION['voiture'] = $data;
         header('Location:offreEdit.php');
-    } 
-    else if (isset($_POST['offreOfferts']))
-    {
+    } else if (isset($_POST['offreOfferts'])) {
         GetDemandeOffre($_POST['offreOfferts']);
         header('Location:offreOfferts.php');
     }
@@ -36,10 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styleHome.css">
     <link rel="stylesheet" href="css/offre.css">
+    <link rel="stylesheet" href="css/button.css">
 </head>
 
 <?php include '_headerBar.php'; ?>
 
+<body>
     <section class="services" id="services">
         <div class="heading">
             <h1 style="margin-left: 10px;"> Vos Offres </h1>
@@ -47,25 +45,54 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <div class="services-container">
 
             <?php
-            
+
             for ($i = 0; $i < count($_SESSION['offre']); $i++) {
                 $data = GetVoiture($_SESSION['offre'][$i]->id);
-              
+
                 echo '
                 <div class="box">
                     <div class="box-img">
                         <img src="images/chevrolet-cruze.jpg">
                     </div>
-                    <p>'. $data->annee.'</p>
-                    <h3>'. $data->annee.' '. $data->marque.' '. $data->modele.'</h3>
-                    <h2>'.$_SESSION['offre'][$i]->prix.'$ | <span>mois</span></h2>
-                    <form action="mesOffres.php" id="'. $_SESSION['offre'][$i]->id.'" method="POST">
-                        <button type="submit" id="'. $_SESSION['offre'][$i]->id.'" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Edit</button>
+                    <p>' . $data->annee . '</p>
+                    <h3>' . $data->annee . ' ' . $data->marque . ' ' . $data->modele . '</h3>
+                    <h2>' . $_SESSION['offre'][$i]->prix . '$ | <span>Jours</span></h2>
+                    <form action="mesOffres.php" id="' . $_SESSION['offre'][$i]->id . '" method="POST">
+                        <button type="submit" id="' . $_SESSION['offre'][$i]->id . '" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Modifier mon offre</button>
                         <button type="submit"  class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreOfferts">Voir les demandes offre</button>
                     </form>
-                 </div>';  
+                 </div>';
             }
             ?>
+        </div>
+        <input type="checkbox" id="show">
+        <label for="show" class="show-btn">
+            <img class="logo_chat" src="images/rocketchat.svg">
+        </label>
+        <div class="wrapper">
+            <h5>Voulez-vous chattez? - Online</h5>
+            <form class="scroll">
+                <span class="texto-destinataire">test1</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-destinataire">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+                <span class="texto-auteur">test2</span>
+
+
+            </form>
         </div>
     </section>
 

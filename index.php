@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +20,8 @@ session_start();
      <link rel="stylesheet" href="css/bootstrap.min.css">
      <link rel="stylesheet" href="css/font-awesome.min.css">
      <link rel="stylesheet" href="css/styleHome.css">
+     <link rel="stylesheet" href="css/button.css">
+
 
 </head>
 
@@ -68,7 +69,7 @@ session_start();
                                     </li>';
                               echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
                               //print_r(gettype($_SESSION['email']->idRole));
-                              if ($_SESSION['email']->idRole == 2){
+                              if ($_SESSION['email']->idRole == 2) {
                                    echo '<li><a href="listUsers_admin.php">Admin</a></li>';
                               }
                               echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
@@ -82,7 +83,6 @@ session_start();
 
           </div>
      </section>
-
      <!-- HOME -->
      <section id="home">
           <div class="caption" style="background: url(images/homeAuto.jpg) no-repeat; height: 700px;">
@@ -96,7 +96,7 @@ session_start();
           </div>
           </div>
      </section>
-
+   
      <main>
           <section>
                <div class="container">

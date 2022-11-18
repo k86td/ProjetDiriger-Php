@@ -1,0 +1,58 @@
+@media only screen and (max-width: 900px) {
+    /* For mobile phones: */
+     .paragraphe {
+      margin-left: 2px;
+    }
+  }
+    #titre{
+        color: #252525;
+        font-size: 3em;
+        line-height: normal;
+        text-align: center;
+    }
+    .services-container {
+        text-align: center;
+        display: grid;
+        grid-template-columns:  repeat(2,minmax(100px,auto));
+        gap: 100px;
+        padding: 10px;
+        position: relative;
+    }
+    .grid-item{
+        padding: 20px;
+    }
+    img{
+        height: 400px;
+        width: 300px;
+    }
+    a{
+        color: blue;
+    }
+    .name{
+        color: #252525;
+        font-size: 3em;
+        line-height: normal;
+    }
+    .finissant{
+        color: #252525;
+        font-size: 20px;
+        line-height: normal;
+    }
+    .courriel{
+        font-size: 20px;
+        line-height: normal;
+    }
+    h3{
+        text-align: center;
+    }
+    .paragraphe{
+        border: 10px;
+        border-style: solid 2px;
+        color: #252525;
+        font-size: 20px;
+        line-height: normal;
+        text-align: center;
+        border-radius: 1rem;
+        box-shadow: 1px 4px 41px rgba(118, 118, 118, 0.9);
+    }
+  
