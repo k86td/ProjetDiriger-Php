@@ -533,7 +533,7 @@ const RefreshCategoryOffre = (ids) => {
     ids = ids.join("&");
 
     GenCheckboxFromApi(
-        "https://localhost:7103/api/CategorieOffre/ids?" + ids,
+        BASE_URL + "/CategorieOffre/ids?" + ids,
         ".categorie-content",
         mappingFunc("categories")
     );
@@ -613,7 +613,7 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
     };
 
     const DATA_PATH = ".main-content";
-    const API_PATH = "https://localhost:7103/api/Offre";
+    const API_PATH = BASE_URL + "/Offre";
 
     $.get(API_PATH + queryString, async function (data) {
         console.debug("Got data!");
@@ -661,7 +661,7 @@ export async function main() {
     RenderOffres();
     RenderMapFilter();
 
-    GenCheckboxFromApi("https://localhost:7103/api/TypeOffre",
+    GenCheckboxFromApi(BASE_URL + "/TypeOffre",
         ".type-categorie-content",
         mappingFunc("type"),
         _ => {
