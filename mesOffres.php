@@ -32,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styleHome.css">
     <link rel="stylesheet" href="css/offre.css">
-    <link rel="stylesheet" href="css/button.css">
 </head>
 
 <?php include '_headerBar.php'; ?>
@@ -65,35 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             ?>
         </div>
-        <input type="checkbox" id="show">
-        <label for="show" class="show-btn">
-            <img class="logo_chat" src="images/rocketchat.svg">
-        </label>
-        <div class="wrapper">
-            <h5>Voulez-vous chattez? - Online</h5>
-            <form class="scroll">
-                <span class="texto-destinataire">test1</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-destinataire">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
-                <span class="texto-auteur">test2</span>
 
-
-            </form>
-        </div>
     </section>
 
     <!-- SCRIPTS -->
@@ -104,5 +75,3 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 </body>
 
 </html>
-
-<?php

@@ -53,7 +53,7 @@ session_start();
         </div>
     </section>
     <h1 id="titre"> Qu'est-ce que Autorius? </h1> </br>
-    <div class="paragraphe">Autorius c'est une plateforme d’autopartage. Notre site web vous permet de réserver un véhicule que vous voulez, peu importe où vous vous trouvez, offert par un d’hôte vérifié et approuvé par notre équipe. Bâtie avec une option de mode de paiement pour permettre les transactions et une possibilité de clavardage en direct avec les hôtes, notre plateforme permet à tout type de personne en besoin de trouver votre moyen de transport parfait pour chaque occasion. De plus, les utilisateurs sont libres de négocier le prix, de choisir la période désirée et devenir hôte. N’importe quel usager sera capable par la suite de voir les véhicules disponibles et pourra faire une offre de location. Le propriétaire sera en mesure d’accepter ou de refuser l’offre selon l’historique le classement de l’usager.
+    <div class="paragraphe">Autorius c'est une plateforme d’autopartage. Notre site web vous permet de réserver un véhicule que vous voulez, peu importe où vous vous trouvez, offert par un d’hôte vérifié et approuvé par notre équipe. Bâtie avec une option de mode de paiement pour permettre les transactions et une possibilité de clavardage en direct avec les hôtes, notre plateforme permet à tout type de personne en besoin de trouver votre moyen de transport parfait pour chaque occasion. De plus, les utilisateurs sont libres de négocier le prix, de choisir la période désirée et devenir hôte. N’importe quel usager sera capable par la suite de voir les véhicules disponibles et pourra faire une offre de location. Le propriétaire sera en mesure d’accepter ou de refuser l’offre selon l’historique de l’usager.
 
 
 
