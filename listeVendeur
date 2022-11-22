@@ -2,8 +2,8 @@
 
 session_start();
 include 'requete.php';
-$users= GetAllUsers();
-
+//$vendeur= json_decode(GetAllVendeur(),true);
+$user= json_decode(GetAllUsers(),true)
 ?>
 
 

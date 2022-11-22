@@ -59,12 +59,14 @@ session_start();
                          <?php
                          if (isset($_SESSION['email'])) {
                               echo '<li><a href="profil.php">Profil</a></li>';
+                              
                               echo '<li>
                                         <a class="dropdown">Ajouter une location</a>
                                         <div class="dropdown-content">
                                              <a href="offre_voiture.php">Voiture</a>
                                              <a href="#">Camion</a>
                                              <a href="#">Bateau</a>
+                                             
                                         </div>
                                     </li>';
                               echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
