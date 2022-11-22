@@ -37,7 +37,8 @@ const DATA_MAPPER = {
             "dateDebut": new Date(elem.dateDebut).toISOString(),
             "dateFin": new Date(elem.dateFin).toISOString(),
             "prix": elem.prix,
-            "coordonner": elem.coordonner
+            "coordonner": elem.coordonner,
+            "image": elem.image
         };
     },
     "demandesOffres": function (elem) {

@@ -5,7 +5,27 @@
   box-sizing: border-box;
   font-family: 'Poppins',sans-serif;
 }
+
+.image-preview{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #cccccc;
+  border: #ca2929;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.154);
+  display: block;
+}
+
+.image-preview__image{
+  max-width: calc(100%);
+  max-height: calc(100%);
+  border-radius: 5px;
+}
+
 body{
+  margin-top: 200px;
   height: 100vh;
   display: flex;
   justify-content: center;

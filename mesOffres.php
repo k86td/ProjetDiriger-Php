@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     <section class="services" id="services">
         <div class="heading">
-            <h1 style="margin-left: 10px;"> Vos Offres </h1>
+            <h1 style="margin-left: 10px;"> Mes offres </h1>
         </div>
         <div class="services-container">
 

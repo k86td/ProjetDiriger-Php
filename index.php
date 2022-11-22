@@ -68,7 +68,7 @@ session_start();
                                     </li>';
                               echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
                               //print_r(gettype($_SESSION['email']->idRole));
-                              if ($_SESSION['email']->idRole == 2){
+                              if ($_SESSION['email']->idRole == 2) {
                                    echo '<li><a href="listUsers_admin.php">Admin</a></li>';
                               }
                               echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
@@ -85,13 +85,11 @@ session_start();
 
      <!-- HOME -->
      <section id="home">
-          <div class="caption" style="background: url(images/homeAuto.jpg) no-repeat; height: 700px;">
-               <div class="container">
-                    <div class="col-md-6 col-sm-12">
-                         <h1>Title 1</h1>
-                         <h3>Quote 1</h3>
-                         <a href="location.php" class="section-btn btn btn-default">Offres</a>
-                    </div>
+          <div class="container-fluid" style="background: url(images/homeAuto.jpg) no-repeat; max-width: 100%; height: 1080px; ">
+               <div class="col-md-6 col-sm-12" style="padding-top: 15%;">
+                    <h1>À vos marques, prêt? Louez!</h1>
+                    <h3>Un véhicule à porté de main.</h3>
+                    <a href="location.php" class="section-btn btn btn-default">Consulter nos offres</a>
                </div>
           </div>
           </div>

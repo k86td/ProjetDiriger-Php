@@ -6,9 +6,11 @@ $active_link = "location";
 ?>
 
 <head>
-	<input hidden id="user_token" value="<?php echo $_SESSION["token"]; ?>">
+	<input hidden id="user_token" value="<?php if($_SESSION["token"] != null){echo $_SESSION["token"];} else{echo "";} ?>">
 	<link href="css/location.css" rel="stylesheet">
-
+	<link href="css/styleHome.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 	<script src="dist/main.js"></script>
 	<!-- don't import this, its a module, it WONT work : <script src="src/location.js"></script> -->
 
@@ -16,7 +18,7 @@ $active_link = "location";
 
 <body>
 
-	<?php include '_header.php'; // include '_headerBar.php';  
+	<?php include '_header.php'; //'_headerBar.php';
 	?>
 
 	<main class="container">
@@ -28,7 +30,7 @@ $active_link = "location";
 			<div id="filterContainer" class="col-md-4">
 				<div class="categories-filter">
 					<div class="type-categorie">
-						<h4>Type categories</h4>
+						<h4>Types de véhicule</h4>
 						<div class="row">
 							<div class="col">
 								<div class="type-categorie-content">
