@@ -597,6 +597,41 @@ function GetAllUsers()
     );
 
     $result = curl_exec($ch);
+    $result = json_decode($result,true);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+    return $result;
+}
+function GetAllVendeur()
+{
+
+    $url = 'https://localhost:7103/api/Vendeur';
+
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
     $result = json_decode($result);
     if ($errno = curl_errno($ch)) {
         $error_message = curl_strerror($errno);
