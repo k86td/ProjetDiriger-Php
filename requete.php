@@ -275,17 +275,17 @@ function GetCoordinate($adresse)
 function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odometre, $type, $porte, $siege, $traction, $description, $etat, $prix, $postal, $dateDebut, $dateFin, $image)
 {
 
-    //$google = "https://maps.googleapis.com/maps/api/geocode/json?address=" . $postal . "&sensor=false&key=AIzaSyAsHD-02ODNh5vYAx45eBkpbq2_8G-fN4Q";
-    //$details = file_get_contents($google);
-    //$result = json_decode($details, true);
+    $google = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $postal . '&key=AIzaSyAsHD-02ODNh5vYAx45eBkpbq2_8G-fN4Q';
+    $details = file_get_contents($google);
+    $result = json_decode($details, true);
 
-    //$lat = $result['results'][0]['geometry']['location']['lat'];
-    //$lng = $result['results'][0]['geometry']['location']['lng'];
+    $lat = $result['results'][0]['geometry']['location']['lat'];
+    $lng = $result['results'][0]['geometry']['location']['lng'];
 
 
-    //$coordonner = '' . $lat . ',' . $lng . '';
+    $coordonner = '' . $lat . ',' . $lng . '';
 
-    $coordonner = "45.578135, -73.638222";
+   // $coordonner = "45.578135, -73.638222";
     $url = 'https://localhost:7103/api/Offre';
 
     $tableau = array(
@@ -575,6 +575,41 @@ function GetAllUsers()
 {
 
     $url = 'https://localhost:7103/api/Usager';
+
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    $result = json_decode($result,true);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+    return $result;
+}
+function GetAllVendeur()
+{
+
+    $url = 'https://localhost:7103/api/Vendeur';
 
 
     $ch = curl_init();

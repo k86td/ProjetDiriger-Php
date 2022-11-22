@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    include 'requete.php';
+    //include 'requete.php';
     $target_dir = "images/imagesOffres/";
     $img = $_FILES["imageInput"]["tmp_name"];
     $target_file = $target_dir . $_FILES["imageInput"]["name"];
@@ -26,10 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if ($uploadOk == 0) {
         echo "<script> alert('Sorry, your file was not uploaded.') </script>";
-      } else {
+      } 
+      else
+       {
         if (move_uploaded_file($_FILES["imageInput"]["tmp_name"], $target_file)) {
             CreateVoiture($_POST['annee'], $_POST['couleur'], $_POST['marque'], $_POST['modele'], $_POST['type_voiture'], $_POST['odometre'], $_POST['type'], $_POST['porte'], $_POST['siege'], $_POST['traction'], $_POST['description'], $_POST['etat'], $_POST['prix'], $_POST['postal'], $_POST['dateDebut'], $_POST['dateFin'], $_FILES["imageInput"]["name"]);
-;
             echo "<script> console.debug('The file ". htmlspecialchars( basename( $_FILES["imageInput"]["name"])). " has been uploaded."."') </script>";
             header('Location: mesOffres.php');
         } else {
@@ -37,8 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
       }
 
-      
-    }
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
     //echo $_POST['adresse'];
     GetCoordinate($_POST['adresse']);
@@ -154,8 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
                         <input required name='dateFin' type="datetime-local" />
                     </div>
                     <div class='input-box'>
-                        <span class='details'>Votre Code Postal</span>
-                        <input required type='text' pattern="^[a-zA-Z0-9]{6}$" title="Seulement des lettres" name='postal' placeholder='Entrez votre code postal' />
+                        <span class='details'>Votre Adresse</span>
+                        <input required type='text' title="chiffre,nom de la rue coller et pas de caractere speciaux,ville coller" pattern="^[0-9]+[,]+[A-za-z-]+[,]+[A-Z-a-z-]+$" title="Seulement des lettres" name='postal' placeholder='Entrez votre adresse' />
                     </div>
 
                     <div class="input-box">
