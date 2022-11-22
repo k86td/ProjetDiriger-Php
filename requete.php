@@ -275,7 +275,7 @@ function GetCoordinate($adresse)
 function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odometre, $type, $porte, $siege, $traction, $description, $etat, $prix, $postal, $dateDebut, $dateFin, $image)
 {
 
-    $google = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $adresse . '&key=AIzaSyAsHD-02ODNh5vYAx45eBkpbq2_8G-fN4Q';
+    $google = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $postal . '&key=AIzaSyAsHD-02ODNh5vYAx45eBkpbq2_8G-fN4Q';
     $details = file_get_contents($google);
     $result = json_decode($details, true);
 
