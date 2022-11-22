@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +20,8 @@ session_start();
      <link rel="stylesheet" href="css/bootstrap.min.css">
      <link rel="stylesheet" href="css/font-awesome.min.css">
      <link rel="stylesheet" href="css/styleHome.css">
+     <link rel="stylesheet" href="css/button.css">
+
 
 </head>
 
@@ -82,7 +83,6 @@ session_start();
 
           </div>
      </section>
-
      <!-- HOME -->
      <section id="home">
           <div class="container-fluid" style="background: url(images/homeAuto.jpg) no-repeat; max-width: 100%; height: 1080px; ">
@@ -94,7 +94,7 @@ session_start();
           </div>
           </div>
      </section>
-
+   
      <main>
           <section>
                <div class="container">

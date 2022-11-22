@@ -260,6 +260,18 @@ function GetVoiture($id)
 
     return json_decode($offre);
 }
+function GetCoordinate($adresse)
+{
+
+    $google = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $adresse . '&key=AIzaSyAsHD-02ODNh5vYAx45eBkpbq2_8G-fN4Q';
+    $details = file_get_contents($google);
+    $result = json_decode($details, true);
+
+    $lat = $result['results'][0]['geometry']['location']['lat'];
+    $lng = $result['results'][0]['geometry']['location']['lng'];
+    print_r($lat);
+    print_r($lng);
+}
 function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odometre, $type, $porte, $siege, $traction, $description, $etat, $prix, $postal, $dateDebut, $dateFin, $image)
 {
 
@@ -334,7 +346,8 @@ function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odome
         "Carburant" => $type,
         "Traction" => $traction,
         "Description" => $description,
-        "Accidente" => $etat
+        "Accidente" => $etat,
+        "Image" => $image
     );
     $json_content = json_encode($tableau);
 
@@ -367,10 +380,9 @@ function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odome
 function UpdateVoiture($annee, $couleur, $marque, $modele, $odometre, $porte, $siege, $carburant, $traction, $description, $etat)
 {
     $url = 'https://localhost:7103/api/Voiture';
-    if($etat == 1){
+    if ($etat == 1) {
         $etat = true;
-    }
-    else{
+    } else {
         $etat = false;
     }
 
@@ -585,6 +597,7 @@ function GetAllUsers()
     );
 
     $result = curl_exec($ch);
+    $result = json_decode($result);
     if ($errno = curl_errno($ch)) {
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
@@ -628,35 +641,41 @@ function GetUser($id)
     return $user;
 }
 
-function EditUser($id){
-    $url = 'https://localhost:7103/api/Usager/'.$id;
-    print_r($url);
-    $tableau = array("nom" => $nom,
-    "prenom" => $prenom,
-    "email"=> $email,
-    "telephone"=> $telephone,
-    "adresse"=> $adresse);
+function EditUser($id)
+{
+    $url = 'https://localhost:7103/api/Usager/' . $id;
+    // print_r($url);
+    $tableau = array(
+        "nom" => $nom,
+        "prenom" => $prenom,
+        "email" => $email,
+        "telephone" => $telephone,
+        "adresse" => $adresse
+    );
     $json_content = json_encode($tableau);
 
 
     $ch = curl_init();
-    curl_setopt_array($ch, array(
-        CURLOPT_URL => $url,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_POSTFIELDS => $json_content,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "PUT",
-        CURLOPT_HTTPHEADER => array(
-            "cache-control: no-cache",
-            "Content-Type: application/json",
-            "Authorization: Bearer " . $_SESSION['token']
-        ))
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => $json_content,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            )
+        )
     );
 
     $result = curl_exec($ch);
-    if($errno = curl_errno($ch)){
+    if ($errno = curl_errno($ch)) {
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
     }
@@ -786,6 +805,80 @@ function getCategoriesByType($idType)
     }
     curl_close($ch);
     print_r($idType);
-    
+
     return json_decode($result);
+}
+
+function GetMessage()
+{
+    $url = "https://localhost:7103/api/Conversations";
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    $result = json_decode($result);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+
+    return $result;
+}
+function PostMessage($text,$date,$destinataire)
+{
+    $url = "https://localhost:7103/api/Conversations";
+ 
+   
+
+    // echo  $datetime ;
+    $tableau = array(
+        "idAuteur" => $_SESSION['email']->id,
+        "idDestinataire" => $destinataire,
+        "Contenu" => $text,
+        "Date" =>  $date
+    );
+    $json_content = json_encode($tableau);
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => $json_content,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json"
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
 }

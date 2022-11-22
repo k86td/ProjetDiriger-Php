@@ -390,14 +390,36 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
                             $("#newDemandeOffreModal_Dates").val(JqueryDateFormat(Date.now()));
                             $("#newDemandeOffreModal_Id").val("");
 
-                            pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate }, 1, 10000, _ => {
-                                RenderOffres();
+                            // Authorize the transaction
+                            actions.order.authorize().then(function (authorization) {
+                                // Get the authorization id
+                                var authorizationID = authorization.purchase_units[0].payments.authorizations[0].id
+
+                                console.debug("Order Id : " + data.orderID);
+                                console.debug('Transaction details : ' + JSON.stringify(authorization));
+                                // Call your server to validate and capture the transaction
+
+                                pPostJson(BASE_URL + api_path, user_token, { "Date": chosenDate, "OrderId": data.orderID }, 1, 10000, _ => {
+                                    RenderOffres();
+                                });
+
+                                console.debug("Approving the location request, the seller must accept your request now!");
+
+                                // close the modal
+                                $(".btn-close").trigger("click");
+
+                                return fetch('/paypal-transaction-complete', {
+                                    method: 'post',
+                                    headers: {
+                                        'content-type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        orderID: data.orderID,
+                                        authorizationID: authorizationID
+                                    })
+                                });
                             });
 
-                            console.debug("Approving the location request, the seller must accept your request now!");
-
-                            // close the modal
-                            $(".btn-close").trigger("click");
 
                         }
                     });
@@ -409,7 +431,7 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
                 });
         });
 
-        // deprecated
+        // deprecated sending request handler
         // $('#sendRequest').click(event => { // envoyer demande de location
 
         //     let offreId = $("#newDemandeOffreModal_Id").val();
@@ -512,7 +534,7 @@ const RefreshCategoryOffre = (ids) => {
     ids = ids.join("&");
 
     GenCheckboxFromApi(
-        "https://localhost:7103/api/CategorieOffre/ids?" + ids,
+        BASE_URL + "/CategorieOffre/ids?" + ids,
         ".categorie-content",
         mappingFunc("categories")
     );
@@ -592,7 +614,7 @@ const LoadMainContent = async (queryString = "", makerFunc) => {
     };
 
     const DATA_PATH = ".main-content";
-    const API_PATH = "https://localhost:7103/api/Offre";
+    const API_PATH = BASE_URL + "/Offre";
 
     $.get(API_PATH + queryString, async function (data) {
         console.debug("Got data!");
@@ -640,7 +662,7 @@ export async function main() {
     RenderOffres();
     RenderMapFilter();
 
-    GenCheckboxFromApi("https://localhost:7103/api/TypeOffre",
+    GenCheckboxFromApi(BASE_URL + "/TypeOffre",
         ".type-categorie-content",
         mappingFunc("type"),
         _ => {

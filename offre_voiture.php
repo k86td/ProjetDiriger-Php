@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'requete.php';
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
     //echo $_SESSION['email']['id'];
 }
@@ -30,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             CreateVoiture($_POST['annee'], $_POST['couleur'], $_POST['marque'], $_POST['modele'], $_POST['type_voiture'], $_POST['odometre'], $_POST['type'], $_POST['porte'], $_POST['siege'], $_POST['traction'], $_POST['description'], $_POST['etat'], $_POST['prix'], $_POST['postal'], $_POST['dateDebut'], $_POST['dateFin'], $_FILES["imageInput"]["name"]);
 ;
             echo "<script> console.debug('The file ". htmlspecialchars( basename( $_FILES["imageInput"]["name"])). " has been uploaded."."') </script>";
+            header('Location: mesOffres.php');
         } else {
           echo "<script> alert('Sorry, there was an error uploading your file.') </script>";
         }
@@ -37,9 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
       
 
-
-    //header('Location: location.php');
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
+    //echo $_POST['adresse'];
+    GetCoordinate($_POST['adresse']);
 }
+
+
 ?>
 
 
