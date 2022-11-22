@@ -597,7 +597,7 @@ function GetAllUsers()
     );
 
     $result = curl_exec($ch);
-    $result = json_decode($result,true);
+    $result = json_decode($result);
     if ($errno = curl_errno($ch)) {
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
