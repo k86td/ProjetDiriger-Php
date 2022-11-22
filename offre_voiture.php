@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    include 'requete.php';
+    //include 'requete.php';
     $target_dir = "images/imagesOffres/";
     $img = $_FILES["imageInput"]["tmp_name"];
     $target_file = $target_dir . $_FILES["imageInput"]["name"];
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
       }
 
-      
+    }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
     //echo $_POST['adresse'];
@@ -154,8 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
                         <input required name='dateFin' type="datetime-local" />
                     </div>
                     <div class='input-box'>
-                        <span class='details'>Votre Code Postal</span>
-                        <input required type='text' pattern="^[a-zA-Z0-9]{6}$" title="Seulement des lettres" name='postal' placeholder='Entrez votre code postal' />
+                        <span class='details'>Votre Adresse</span>
+                        <input required type='text' title="chiffre,nom de la rue coller et pas de caractere speciaux,ville coller" pattern="^[0-9]+[,]+[A-za-z-]+[,]+[A-Z-a-z-]+$" title="Seulement des lettres" name='postal' placeholder='Entrez votre adresse' />
                     </div>
 
                     <div class="input-box">
