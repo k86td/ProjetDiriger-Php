@@ -67,7 +67,7 @@ function MakeRequest($endpoint, $httpMethod)
     return json_decode($response, true);
 }
 
-function CreateUsager($nom, $prenom, $email, $telephone, $password, $adresse)
+function CreateUsager($nom, $prenom, $email, $telephone, $password, $adresse, $imageProfil)
 {
     $url = 'https://localhost:7103/api/Usager';
     $tableau = array(
@@ -76,7 +76,8 @@ function CreateUsager($nom, $prenom, $email, $telephone, $password, $adresse)
         "email" => $email,
         "telephone" => $telephone,
         "password" => $password,
-        "adresse" => $adresse
+        "adresse" => $adresse,
+        "imageProfil" => $imageProfil
     );
     $json_content = json_encode($tableau);
 
@@ -774,47 +775,6 @@ function DeleteOffreDemande($idOffre, $idUsager)
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
     }
-    curl_close($ch);
-}
-
-function VoidAuthorizedPayments($chosenUserId){
-    $allDemandeOffre = $_SESSION['demandeOffre'];
-    $ch = curl_init();
-    $tableau = array(
-    );
-    $json_content = json_encode($tableau);
-
-
-    foreach ($allDemandeOffre as $demandeOffre) {
-        if($demandeOffre->idUsager != $chosenUserId){
-            $url = '/v2/payments/authorizations/'.$demandeOffre->OrderId.'/void';
-            DeleteOffreDemande($demandeOffre->idOffre, $demandeOffre->idUsager);
-            curl_setopt_array(
-                $ch,
-                array(
-                    CURLOPT_URL => $url,
-                    CURLOPT_SSL_VERIFYPEER => false,
-                    CURLOPT_SSL_VERIFYHOST => false,
-                    CURLOPT_POSTFIELDS => $json_content,
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_HTTPHEADER => array(
-                        "cache-control: no-cache",
-                        "Content-Type: application/json"
-                    )
-                )
-            );
-        
-            $result = curl_exec($ch);
-            if ($errno = curl_errno($ch)) {
-                $error_message = curl_strerror($errno);
-                echo "Curl error ({$errno}): \n {$error_message}";
-            }
-        }
-    }
-
-
     curl_close($ch);
 }
 
