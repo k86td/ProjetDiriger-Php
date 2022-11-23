@@ -607,41 +607,7 @@ function GetAllUsers()
 
     return $result;
 }
-function GetAllVendeur()
-{
 
-    $url = 'https://localhost:7103/api/Vendeur';
-
-
-    $ch = curl_init();
-    curl_setopt_array(
-        $ch,
-        array(
-            CURLOPT_URL => $url,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "Get",
-            CURLOPT_HTTPHEADER => array(
-                "cache-control: no-cache",
-                "Content-Type: application/json",
-                "Authorization: Bearer " . $_SESSION['token']
-            )
-        )
-    );
-
-    $result = curl_exec($ch);
-    $result = json_decode($result);
-    if ($errno = curl_errno($ch)) {
-        $error_message = curl_strerror($errno);
-        echo "Curl error ({$errno}): \n {$error_message}";
-    }
-    curl_close($ch);
-
-    return $result;
-}
 function GetUser($id)
 {
     $url = 'https://localhost:7103/api/Usager/' . $id;
@@ -677,6 +643,110 @@ function GetUser($id)
     return $user;
 }
 
+function GetAllVendeur()
+{
+
+    $url = 'https://localhost:7103/api/Vendeur';
+
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    $result = json_decode($result,true);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+    return $result;
+}
+function GetAllRatings($idVendeur)
+{
+    $url = "https://localhost:7103/api/Rating/" . $idVendeur;
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    $result = json_decode($result,true);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+    return $result;
+}
+function AddRating($idVendeur, $userPresentId, $rating)
+{
+    $url = 'https://localhost:7103/api/Rating';
+    $tableau = array(
+        "idVendeur" =>   $idVendeur,
+        "idUsager" => $userPresentId,
+        "rating" => $rating
+    );
+    $json_content = json_encode($tableau);
+
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => $json_content,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json"
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+}
 function EditUser($id)
 {
     $url = 'https://localhost:7103/api/Usager/' . $id;
@@ -746,7 +816,9 @@ function GetDemandeOffre($id)
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
     }
+
     $_SESSION['demandeOffre'] = json_decode($result);
+    $_SESSION['offreid'] = $id;
     curl_close($ch);
 }
 function DeleteOffreDemande($idOffre, $idUsager)

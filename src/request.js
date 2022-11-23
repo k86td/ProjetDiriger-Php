@@ -95,6 +95,48 @@ export async function pPostJson(url, bearer_token, body, retry = -1, retry_timeo
 }
 
 /**
+ * Protected Post Json to a url w/o body
+ * @param {string} url to access
+ */
+ export async function pPost(url, bearer_token, retry = -1, retry_timeout = 30000, callback = undefined) {
+
+    var result = undefined;
+    result = await $.ajax({
+        type: 'POST',
+        url: url,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + bearer_token
+        },
+        // beforeSend: function (xhr) {
+        //     xhr.setRequestHeader("Authorization", "Bearer " + bearer_token);
+        //     xhr.setRequestHeader("Content-Type", "application/json");
+        // },
+        success: function (data) {
+            if (callback !== undefined)
+                callback(data);
+
+            return data;
+        },
+        error: async function () {
+
+            console.error(`[REQUEST:pPost] Failed to access "${url}". Retry count: ${retry}`);
+            retry--;
+            await new Promise(r => setTimeout(r, retry_timeout));
+
+        }
+        })
+            .catch(e => {
+                console.error(e);
+                console.error(`[REQUEST:pPost] Failed to access "${url}". Retry count: ${retry}`);
+            });
+
+    console.debug(result);
+
+    return result;
+}
+
+/**
  * Protected Delete to a url
  * @param {string} url to access
  */
@@ -167,7 +209,6 @@ export async function pPostJson(url, bearer_token, body, retry = -1, retry_timeo
 }
 
 export async function uPostBasicAuth (url, username, password, retry = -1, retry_timeout = 30000) {
-    console.debug(`Username: ${username}, password: ${password}`);
 
     var result = undefined;
     while (result == undefined && (retry > 0 || retry == -1)) {
@@ -179,11 +220,7 @@ export async function uPostBasicAuth (url, username, password, retry = -1, retry
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             },
             data: {
-                "grant_type": "client_credentials",
-                "ignoreCache": "true",
-                "return_authn_schemes": "true",
-                "return_client_metadata": "true",
-                "return_unconsented_scopes": "true"
+                "grant_type": "client_credentials"
             },
             success: function (data) {
 

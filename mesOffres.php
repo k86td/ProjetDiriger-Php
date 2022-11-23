@@ -7,12 +7,15 @@ if (isset($_SESSION['email'])) {
     header('Location: index.php');
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    
     if (isset($_POST['offreId'])) {
         GetOffre($_POST['offreId']);
         $data = GetVoiture($_POST['offreId']);
         $_SESSION['voiture'] = $data;
         header('Location:offreEdit.php');
+
     } else if (isset($_POST['offreOfferts'])) {
+
         GetDemandeOffre($_POST['offreOfferts']);
         header('Location:offreOfferts.php');
     }
@@ -47,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             for ($i = 0; $i < count($_SESSION['offre']); $i++) {
                 $data = GetVoiture($_SESSION['offre'][$i]->id);
-
                 echo '
                 <div class="box">
                     <div class="box-img">

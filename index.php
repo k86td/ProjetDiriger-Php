@@ -70,6 +70,7 @@ session_start();
                                         </div>
                                     </li>';
                               echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
+                              echo '<li><a href="listeVendeur.php">Les Vendeurs</a></li>';
                               //print_r(gettype($_SESSION['email']->idRole));
                               if ($_SESSION['email']->idRole == 2) {
                                    echo '<li><a href="listUsers_admin.php">Admin</a></li>';
