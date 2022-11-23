@@ -12,7 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $target_file = $target_dir . $_FILES["imageInput"]["name"];
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    
+    $target_file_dir = $target_dir . $_FILES["imageInput"]["name"];
+    $target_file_bd = $_FILES["imageInput"]["name"];
 
     if (file_exists($target_file)) {
         echo "<script> alert('Sorry, file already exists.') </script>";
@@ -29,16 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
       } 
       else
        {
-        if (move_uploaded_file($_FILES["imageInput"]["tmp_name"], $target_file)) {
-            CreateVoiture($_POST['annee'], $_POST['couleur'], $_POST['marque'], $_POST['modele'], $_POST['type_voiture'], $_POST['odometre'], $_POST['type'], $_POST['porte'], $_POST['siege'], $_POST['traction'], $_POST['description'], $_POST['etat'], $_POST['prix'], $_POST['postal'], $_POST['dateDebut'], $_POST['dateFin'], $_FILES["imageInput"]["name"]);
+        if (move_uploaded_file($_FILES["imageInput"]["tmp_name"], $target_file_dir)) {
+            CreateVoiture($_POST['annee'], $_POST['couleur'], $_POST['marque'], $_POST['modele'], $_POST['type_voiture'], $_POST['odometre'], $_POST['type'], $_POST['porte'], $_POST['siege'], $_POST['traction'], $_POST['description'], $_POST['etat'], $_POST['prix'], $_POST['postal'], $_POST['dateDebut'], $_POST['dateFin'], $target_file_bd);
             echo "<script> console.debug('The file ". htmlspecialchars( basename( $_FILES["imageInput"]["name"])). " has been uploaded."."') </script>";
-            header('Location: mesOffres.php');
+           // header('Location: mesOffres.php');
         } else {
           echo "<script> alert('Sorry, there was an error uploading your file.') </script>";
         }
       }
 
-    }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
     //echo $_POST['adresse'];
@@ -96,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
                             <option value=1>Vus</option>
                             <option value=2>Sport</option>
                             <option value=3>Berline</option>
-                            <option value=4>Hatchback</option>
+                            <option value=5>Hatchback</option>
                         </select>
                     </div>
                     <div class='input-box'>

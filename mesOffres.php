@@ -7,12 +7,15 @@ if (isset($_SESSION['email'])) {
     header('Location: index.php');
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    
     if (isset($_POST['offreId'])) {
         GetOffre($_POST['offreId']);
         $data = GetVoiture($_POST['offreId']);
         $_SESSION['voiture'] = $data;
         header('Location:offreEdit.php');
+
     } else if (isset($_POST['offreOfferts'])) {
+
         GetDemandeOffre($_POST['offreOfferts']);
         header('Location:offreOfferts.php');
     }
@@ -27,11 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes Offres</title>
-
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styleHome.css">
     <link rel="stylesheet" href="css/offre.css">
+    <src link="src/mesOffres.js"/>
 </head>
 
 <?php include '_headerBar.php'; ?>
@@ -47,11 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             for ($i = 0; $i < count($_SESSION['offre']); $i++) {
                 $data = GetVoiture($_SESSION['offre'][$i]->id);
-
                 echo '
                 <div class="box">
                     <div class="box-img">
-                        <img src="images/chevrolet-cruze.jpg">
+                        <img src="images/imagesOffres/'.$_SESSION['offre'][$i]->image.'">
                     </div>
                     <p>' . $data->annee . '</p>
                     <h3>' . $data->annee . ' ' . $data->marque . ' ' . $data->modele . '</h3>

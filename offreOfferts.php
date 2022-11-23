@@ -1,22 +1,23 @@
 <?php
 session_start();
 include 'requete.php';
+
 if (!isset($_SESSION['email'])) {
     header('Location: index.php');
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
+    
     DeleteOffreDemande($_SESSION['offreid'], $_POST['refuser']);
     GetDemandeOffre($_SESSION['offreid']);
+    // VoidAuthorizedPayments($_POST['accepter']);
 }
 else
 {
-    GetDemandeOffre($_SESSION['offreid']);
+    if(isset($_SESSION['offreid'])){
+        GetDemandeOffre($_SESSION['offreid']);
+    }
 }
-
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,12 +30,11 @@ else
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styleHome.css">
     <link rel="stylesheet" href="css/offre.css">
+    <script src="dist/main.js"></script>
     <title>Demande Offre</title>
 </head>
 
 <body id="top" data-spy="scroll" data-target=".navbar-collapse" data-offset="50">
-
-
     <!-- MENU -->
     <section class="navbar custom-navbar navbar-fixed-top" role="navigation">
         <div class="container">
@@ -71,7 +71,8 @@ else
 
     <section class="services" id="services">
         <div class="heading">
-            <h1> Vos offres recu pour cette voiture </h1>
+            <?php  if($_SESSION['demandeOffre'] == null){ echo ' <h1> Aucune demande de location sur ce véhicule à été effectuée actuellement </h1>';}else{echo'<h1> Vos offres recu pour cette voiture </h1>';} ?>
+
             <div class="services-container">
                 <?php
                 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['accepter'])) 
@@ -82,29 +83,39 @@ else
                 } 
                 else
                 {
-                    for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) {
-                        $_SESSION['offreid'] = $_SESSION['demandeOffre'][$i]->idOffre;
-                        GetUser($_SESSION['demandeOffre'][$i]->idUsager);
-                        if($_SESSION['demandeOffre'][$i]->accepter == null)
-                        {
-                            echo '
-                            <div class="box">
-                                <form method="POST">
-                                <div>' . $_SESSION['User']->prenom . ' vous a envoyez une offre sur cette location.</div>
-                                <br>
-                                    <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
-                                    <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
-                                </form>
-                            </div>';
-                        }
-                        else
-                        {
-                            echo '
-                            <div class="box">
-                                <div> vous avez accepter la demande de ' . $_SESSION['User']->prenom . ' une confirmation de transaction seras administrée sous peu.</div>
-                            </div>';
+                    if($_SESSION['demandeOffre'] == null)
+                    {
+
+                    }
+                    else
+                    {
+                        echo '<input hidden id="offreId" type="text" value="' . $_SESSION['demandeOffre'][0]->idOffre . '">';
+                        for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) {
+                            $_SESSION['offreid'] = $_SESSION['demandeOffre'][$i]->idOffre;
+                            GetUser($_SESSION['demandeOffre'][$i]->idUsager);
+                            if($_SESSION['demandeOffre'][$i]->accepter == null)
+                            {
+                                echo '
+                                <div class="box">
+                                    <form method="POST">
+                                    <div>' . $_SESSION['User']->prenom . ' vous a envoyez une offre sur cette location.</div>
+                                    <br>
+                                        
+                                        <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
+                                        <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
+                                    </form>
+                                </div>';
+                            }
+                            else
+                            {
+                                echo '
+                                <div class="box">
+                                    <div> vous avez accepter la demande de ' . $_SESSION['User']->prenom . ' une confirmation de transaction seras administrée sous peu.</div>
+                                </div>';
+                            }
                         }
                     }
+                  
                 }
                 ?>
             </div>
