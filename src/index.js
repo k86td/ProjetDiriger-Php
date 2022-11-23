@@ -1,5 +1,11 @@
 
-import { main } from './location';
+import { main as mainLocation } from './location';
+import { main as mainOffre } from './offreOffert';
 
-window.addEventListener('load', main)
-
+let currentUrl = document.URL;
+if (currentUrl.includes("location.php")) {
+    window.addEventListener('load', mainLocation)
+}
+else if (currentUrl.includes("offreOfferts.php")) {
+    window.addEventListener('load', mainOffre);
+}

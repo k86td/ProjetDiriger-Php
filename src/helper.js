@@ -1,4 +1,6 @@
 
+import { uPostBasicAuth } from './request';
+
 export async function GetTemplate(template_url) {
     // store templates by path in session storage to save request
 
@@ -45,4 +47,9 @@ export function parseCoordinate(coords) {
         lat: parseFloat(coords[0]),
         lng: parseFloat(coords[1])
     };
+}
+
+export async function getPaypalToken (user, pass) {
+    let paypalToken = await uPostBasicAuth("https://api-m.sandbox.paypal.com/v1/oauth2/token", user, pass);
+    return paypalToken;
 }
