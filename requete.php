@@ -745,7 +745,9 @@ function GetDemandeOffre($id)
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
     }
+
     $_SESSION['demandeOffre'] = json_decode($result);
+    $_SESSION['offreid'] = $id;
     curl_close($ch);
 }
 function DeleteOffreDemande($idOffre, $idUsager)

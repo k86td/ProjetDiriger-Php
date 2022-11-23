@@ -1,13 +1,15 @@
 <?php
 session_start();
 include 'requete.php';
+
 if (!isset($_SESSION['email'])) {
     header('Location: index.php');
 }
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
+    
     DeleteOffreDemande($_SESSION['offreid'], $_POST['refuser']);
     GetDemandeOffre($_SESSION['offreid']);
-    VoidAuthorizedPayments($_POST['accepter']);
+    // VoidAuthorizedPayments($_POST['accepter']);
 }
 else
 {
@@ -87,6 +89,7 @@ else
                     }
                     else
                     {
+                        echo '<input hidden id="offreId" type="text" value="' . $_SESSION['demandeOffre'][0]->idOffre . '">';
                         for ($i = 0; $i < count($_SESSION['demandeOffre']); $i++) {
                             $_SESSION['offreid'] = $_SESSION['demandeOffre'][$i]->idOffre;
                             GetUser($_SESSION['demandeOffre'][$i]->idUsager);
@@ -97,6 +100,7 @@ else
                                     <form method="POST">
                                     <div>' . $_SESSION['User']->prenom . ' vous a envoyez une offre sur cette location.</div>
                                     <br>
+                                        
                                         <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="refuser">Refuser</button>
                                         <button type="submit" class="btn" value="' . $_SESSION['demandeOffre'][$i]->idUsager . '" name="accepter">Accepter</button>
                                     </form>
