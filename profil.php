@@ -64,10 +64,10 @@ $users= json_decode(GetUser($_SESSION['email']->id),true);
                 <button class='form-input-btn' name='edit' type='Inscription'>
                     Sauvegarder les changements
                 </button>
-                <a href="index.php" class="delete-btn">Retour</a>
+                <button><a href="index.php" class="delete-btn">Retour</a></button>
                 <br>
                 <?php
-
+                    
 
 
                 //include 'bd.php';
