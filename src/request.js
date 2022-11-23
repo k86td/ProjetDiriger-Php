@@ -165,3 +165,41 @@ export async function pPostJson(url, bearer_token, body, retry = -1, retry_timeo
 
     return result;
 }
+
+export async function uPostBasicAuth (url, username, password, retry = -1, retry_timeout = 30000) {
+    console.debug(`Username: ${username}, password: ${password}`);
+
+    var result = undefined;
+    while (result == undefined && (retry > 0 || retry == -1)) {
+        result = await $.ajax({
+            type: 'POST',
+            url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Basic " + btoa(`${username}:${password}`));
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            },
+            data: {
+                "grant_type": "client_credentials",
+                "ignoreCache": "true",
+                "return_authn_schemes": "true",
+                "return_client_metadata": "true",
+                "return_unconsented_scopes": "true"
+            },
+            success: function (data) {
+
+                return data;
+            },
+            error: async function () {
+                console.error(`[REQUEST:uPostBasicAuth] Failed to access "${url}". Retry count: ${retry}`);
+                retry--;
+                await new Promise(r => setTimeout(r, retry_timeout));
+
+            }
+        })
+            .catch(_ => {
+                console.error(`[REQUEST:uPostBasicAuth] Failed to access "${url}". Retry count: ${retry}`);
+            });
+    }
+
+    return result;
+}

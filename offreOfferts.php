@@ -28,6 +28,7 @@ else
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styleHome.css">
     <link rel="stylesheet" href="css/offre.css">
+    <script src="dist/main.js"></script>
     <title>Demande Offre</title>
 </head>
 
