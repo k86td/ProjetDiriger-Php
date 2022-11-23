@@ -28,10 +28,10 @@ $users= json_decode(GetUser($_SESSION['email']->id),true);
         <div class='form-content-right'>
             <form class='form' method="POST">
                 <h1>
-                    Les informations de votre profile
+                    Information sur votre profil
                 </h1>
                 <br>
-                <h4> Vouillez changer vos information au besoin <h4>
+                <h4> Veuillez changer vos informations au besoin <h4>
                   <div class='form-inputs'>
                     <label class='form-label'>Prenom</label>
                     <input class='form-input' value="<?php echo $users['prenom']; ?>"  required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='prenom' placeholder='Entrez votre prenom' />
@@ -49,7 +49,7 @@ $users= json_decode(GetUser($_SESSION['email']->id),true);
                     <input class='form-input' value="<?php echo $users['telephone']; ?>" required type='text' pattern="^[]*[(][0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" title="(999)-999-9999" name='telephone' placeholder='Entrez votre Telephone' />
                 </div>
                 <div class='form-inputs'>
-                    <label class='form-label'>Email</label>
+                    <label class='form-label'>Courriel</label>
                     <input class='form-input' value="<?php echo $users['email']; ?>" required type='email' name='email' placeholder='Enter your email' />
                 </div>
                 <!-- <div class='form-inputs'>
@@ -64,7 +64,7 @@ $users= json_decode(GetUser($_SESSION['email']->id),true);
                 <button class='form-input-btn' name='edit' type='Inscription'>
                     Sauvegarder les changements
                 </button>
-                <a href="index.php" class="delete-btn">Revenir</a>
+                <a href="index.php" class="delete-btn">Retour</a>
                 <br>
                 <?php
 

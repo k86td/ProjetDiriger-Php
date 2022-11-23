@@ -87,7 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		<div class="wrapper">
 			<div class="title"><?php if ($_SERVER['REQUEST_METHOD'] == "GET") {
 									echo 'Messagerie instantanée';
-								} else {
+								} 
+								else 
+								{
 									for ($i = 0; $i < count($_SESSION['allUser']); $i++) {
 										if ($_SESSION['allUser'][$i]->id ==  $_SESSION['destinataire']) {
 											echo 'Messagerie instantanée avec : ' . $_SESSION['allUser'][$i]->prenom;
@@ -108,6 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 										   <button class="button" type="submit" class="btn" value=' . $_SESSION['allUser'][$i]->id . ' name="chatter">Lancer la discussion</button>
 										   </form>
 									   </div>';
+									
 								}
 							}
 						} 
