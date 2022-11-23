@@ -7,6 +7,7 @@ if (!isset($_SESSION['email'])) {
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['refuser'])) {
     DeleteOffreDemande($_SESSION['offreid'], $_POST['refuser']);
     GetDemandeOffre($_SESSION['offreid']);
+    VoidAuthorizedPayments($_POST['accepter']);
 }
 else
 {
