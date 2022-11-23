@@ -1,9 +1,16 @@
 // js file for /location.php
 
+import { 
+    GetTemplate, 
+    JqueryDateFormat, 
+    getCurrentPositionAsync, 
+    parseCoordinate, 
+    paypalVoidWorkflow 
+} from './helper';
 import TimeAgo from 'javascript-time-ago';
 import fr from 'javascript-time-ago/locale/fr';
-import { uGetJson, pGetJson, pPostJson, pDelete, pPutJson } from './request';
-import { GetTemplate, JqueryDateFormat, getCurrentPositionAsync, parseCoordinate } from './helper';
+import { uGetJson, pGetJson, pPostJson, pDelete, pPutJson, pPost } from './request';
+
 const Mustache = require('mustache');
 import { Toast } from 'bootstrap';
 import $ from 'jquery';
@@ -386,9 +393,15 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
         // });
 
         $("button[name='cancelRequest']").on('click', event => { // annuler demande de location
+            
             let offreId = event.target.id.split("_")[1];
 
             console.debug("OffreId is " + offreId);
+
+            let userId = $("#user_id").val();
+
+            // TODO make this cleaner
+            paypalVoidWorkflow(userId, offreId);
 
             const api_path = "/Offre/Rent/" + offreId;
 

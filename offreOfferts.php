@@ -80,7 +80,7 @@ else
                     //print_r($_SESSION['demandeOffre']);
                     AccepterDemande($_SESSION['offreid'], $_POST['accepter']);
                     header('Location: offreOfferts.php');
-                } 
+                }
                 else
                 {
                     if($_SESSION['demandeOffre'] == null)

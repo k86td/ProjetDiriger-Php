@@ -132,7 +132,6 @@ export async function pPostJson(url, bearer_token, body, retry = -1, retry_timeo
             });
 
     console.debug(result);
-
     return result;
 }
 
