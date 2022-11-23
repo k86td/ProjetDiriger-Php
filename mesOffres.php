@@ -50,11 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             for ($i = 0; $i < count($_SESSION['offre']); $i++) {
                 $data = GetVoiture($_SESSION['offre'][$i]->id);
-
                 echo '
                 <div class="box">
                     <div class="box-img">
-                        <img src="images/chevrolet-cruze.jpg">
+                        <img src="images/imagesOffres/'.$_SESSION['offre'][$i]->image.'">
                     </div>
                     <p>' . $data->annee . '</p>
                     <h3>' . $data->annee . ' ' . $data->marque . ' ' . $data->modele . '</h3>

@@ -7,8 +7,7 @@ include 'requete.php';
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 	if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['message-button'])) {
-
-		PostMessage($_POST['message'], $_POST['date'], $_SESSION['destinataire']);
+		
 		//echo $_SESSION['message']->id ;
 	} else if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['chatter'])) {
 		$_SESSION['destinataire'] = $_POST['chatter'];
@@ -83,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		</div>
 	</main>
 
-	<section <?php if(!isset($_SESSION['email'])){echo'hidden';} ?> class="messagerie" class="chat">
+	<section <?php if(!isset($_SESSION['email'])){echo'hidden';} else if(count($_SESSION['allUser']) == 1){echo'hidden';} ?> class="messagerie" class="chat">
 		<div class="wrapper">
 			<div class="title"><?php if ($_SERVER['REQUEST_METHOD'] == "GET") {
 									echo 'Messagerie instantanée';
