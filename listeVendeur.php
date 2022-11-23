@@ -2,8 +2,10 @@
 
 session_start();
 include 'requete.php';
-//$vendeur= json_decode(GetAllVendeur(),true);
-$user= json_decode(GetAllUsers(),true)
+$vendeurs= GetAllVendeur();
+$users= GetAllUsers();
+
+
 ?>
 
 
@@ -12,7 +14,7 @@ $user= json_decode(GetAllUsers(),true)
 <html lang="fr">
 <head>
 
-     <title>Home - Autorius</title>
+     <title>Les Vendeurs</title>
 
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -89,54 +91,38 @@ $user= json_decode(GetAllUsers(),true)
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Nom</th>
                             <th>Prenom</th>
                             <th>Email</th>
                             <th>Telephone</th>
-                            <th>Adresse</th>
-                            <th>Role</th>
-                            <th>Changer</th>
-                            <th>Bloque</th>
-                            <th>Supprimer</th>
                         </tr>
                         <?php
-                            foreach ($users as $user)
+                            foreach ($vendeurs as $vendeur)
                             {
-                                echo "<tr>";
-                                echo "<th>". $user['id'] ."\n"."</th>";
-                                echo "<th>". $user['nom'] ."\n"."</th>";
-                                echo "<th>". $user['prenom'] ."\n"."</th>";
-                                echo "<th>". $user['email'] ."\n"."</th>";
-                                echo "<th>". $user['telephone'] ."\n"."</th>";
-                                echo "<th>". $user['adresse'] ."\n"."</th>";
                                 
-                                if($user['idRole'] == '2')
-                                {
-                                    echo "<th>Admin</th>";
-                                }
-                                else
-                                {
-                                    echo "<th>User</th>";
-                                }
-                                ?>
-                                
-                                
-                                <th>hola</th>
-                                <th>
-                                    <form action='adminAction.php' method='POST'>
-                                        <button type='submit' name='user_block' value=<?=$user['id'] ?> class='btn btn-danger'>Block</button>
-                                    </form>
-                                </th>
-                                <th>
-                                    <form action='adminActions.php' method='POST'>
-                                        <button type='submit' name='user_delete' value=<?=$user['id'] ?> class='btn btn-danger'>Supprimer</button>
-                                    </form>
-                                </th>
-                                
+                                $user = json_decode(GetUser($vendeur['idUsager']),true);
+
+                                    echo "<tr>";
+                                    echo "<th>". $user['nom'] ."\n"."</th>";
+                                    echo "<th>". $user['prenom'] ."\n"."</th>";
+                                    echo "<th>". $user['email'] ."\n"."</th>";
+                                    echo "<th>". $user['telephone'] ."\n"."</th>";
+                                    
+                                    $_SESSION['vendeur'] = $user['id'];
+                                    
+
+                                    ?>
+                                    <th>
+                                        <form action='profilVendeur.php' method='POST'>
+                                            <button type='submit' name='view_profil' value=<?=$user['id'] ?> class='btn btn-danger'>Rating</button>
+                                        </form>
+                                    </th>
+
                                 <?php
-                                echo "<tr>";  
+                                
+                                
                             }
+
                         ?>        
                             
                         </tr>

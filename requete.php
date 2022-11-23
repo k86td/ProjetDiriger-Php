@@ -67,7 +67,7 @@ function MakeRequest($endpoint, $httpMethod)
     return json_decode($response, true);
 }
 
-function CreateUsager($nom, $prenom, $email, $telephone, $password, $adresse)
+function CreateUsager($nom, $prenom, $email, $telephone, $password, $adresse, $imageProfil)
 {
     $url = 'https://localhost:7103/api/Usager';
     $tableau = array(
@@ -76,7 +76,8 @@ function CreateUsager($nom, $prenom, $email, $telephone, $password, $adresse)
         "email" => $email,
         "telephone" => $telephone,
         "password" => $password,
-        "adresse" => $adresse
+        "adresse" => $adresse,
+        "imageProfil" => $imageProfil
     );
     $json_content = json_encode($tableau);
 
@@ -606,41 +607,7 @@ function GetAllUsers()
 
     return $result;
 }
-function GetAllVendeur()
-{
 
-    $url = 'https://localhost:7103/api/Vendeur';
-
-
-    $ch = curl_init();
-    curl_setopt_array(
-        $ch,
-        array(
-            CURLOPT_URL => $url,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "Get",
-            CURLOPT_HTTPHEADER => array(
-                "cache-control: no-cache",
-                "Content-Type: application/json",
-                "Authorization: Bearer " . $_SESSION['token']
-            )
-        )
-    );
-
-    $result = curl_exec($ch);
-    $result = json_decode($result);
-    if ($errno = curl_errno($ch)) {
-        $error_message = curl_strerror($errno);
-        echo "Curl error ({$errno}): \n {$error_message}";
-    }
-    curl_close($ch);
-
-    return $result;
-}
 function GetUser($id)
 {
     $url = 'https://localhost:7103/api/Usager/' . $id;
@@ -676,6 +643,143 @@ function GetUser($id)
     return $user;
 }
 
+function OnlyGetUser($id)
+{
+    $url = 'https://localhost:7103/api/Usager/' . $id;
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            )
+        )
+    );
+    $user = curl_exec($ch);
+
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+
+    curl_close($ch);
+    return json_decode($user);
+}
+
+function GetAllVendeur()
+{
+
+    $url = 'https://localhost:7103/api/Vendeur';
+
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    $result = json_decode($result,true);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+    return $result;
+}
+function GetAllRatings($idVendeur)
+{
+    $url = "https://localhost:7103/api/Rating/" . $idVendeur;
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    $result = json_decode($result,true);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+    return $result;
+}
+function AddRating($idVendeur, $userPresentId, $rating)
+{
+    $url = 'https://localhost:7103/api/Rating';
+    $tableau = array(
+        "idVendeur" =>   $idVendeur,
+        "idUsager" => $userPresentId,
+        "rating" => $rating
+    );
+    $json_content = json_encode($tableau);
+
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => $json_content,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json"
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+}
 function EditUser($id)
 {
     $url = 'https://localhost:7103/api/Usager/' . $id;
@@ -776,47 +880,6 @@ function DeleteOffreDemande($idOffre, $idUsager)
         $error_message = curl_strerror($errno);
         echo "Curl error ({$errno}): \n {$error_message}";
     }
-    curl_close($ch);
-}
-
-function VoidAuthorizedPayments($chosenUserId){
-    $allDemandeOffre = $_SESSION['demandeOffre'];
-    $ch = curl_init();
-    $tableau = array(
-    );
-    $json_content = json_encode($tableau);
-
-
-    foreach ($allDemandeOffre as $demandeOffre) {
-        if($demandeOffre->idUsager != $chosenUserId){
-            $url = '/v2/payments/authorizations/'.$demandeOffre->OrderId.'/void';
-            DeleteOffreDemande($demandeOffre->idOffre, $demandeOffre->idUsager);
-            curl_setopt_array(
-                $ch,
-                array(
-                    CURLOPT_URL => $url,
-                    CURLOPT_SSL_VERIFYPEER => false,
-                    CURLOPT_SSL_VERIFYHOST => false,
-                    CURLOPT_POSTFIELDS => $json_content,
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_HTTPHEADER => array(
-                        "cache-control: no-cache",
-                        "Content-Type: application/json"
-                    )
-                )
-            );
-        
-            $result = curl_exec($ch);
-            if ($errno = curl_errno($ch)) {
-                $error_message = curl_strerror($errno);
-                echo "Curl error ({$errno}): \n {$error_message}";
-            }
-        }
-    }
-
-
     curl_close($ch);
 }
 

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,116 +17,144 @@
      <link rel="stylesheet" href="css/styleHome.css">
 
 </head>
+
 <?php
 session_start();
 include '_headerBar.php';
 include 'requete.php';
+if(!isset($_SESSION['email'])){
+    header('Location:index.php');
+}
+if (isset($_POST['view_profil']))
+{
+    $user = json_decode(GetUser($_SESSION['email']->id),true);
+    $userPresentId = $user['id'];
+    $vendeurId = $_SESSION['vendeur'];
 
-$users= json_decode(GetUser($_SESSION['email']->id),true);
+
+    echo '<br><br><br>';
+    print_r($user);
+    echo $userPresentId;
+    echo $vendeurId;
+    $ratings = GetAllRatings($vendeurId);
+    print_r($ratings);
+    
+    
+    $count_r = 0;
+    $moyenne_r = 0;
+    $verification = '';
+    if($ratings != NULL)
+    {
+        foreach ($ratings as $rating)
+        {
+        
+        $count_r++;
+        $moyenne_r += $rating['rating'];
+        if($rating['idUsager']==$userPresentId){
+            $verification = "Vous ne pouvez pas mettre plus qu'un rating";
+        }
+        
+        }
+        if($userPresentId==$vendeurId)
+        {
+            $verification = "Vous ne pouvez pas mettre un rating en tant que vendeur";
+        }
+        
+        $moyenne_r = ($moyenne_r * 5) / ($count_r * 5);
+    }
+    
+}
+
 
 ?>
-    <div class='form-container'>
-        <div class='form-content-right'>
-            <form class='form' method="POST">
-                <h1>
-                    Les informations de votre profile
-                </h1>
-                <br>
-                <h4> Vouillez changer vos information au besoin <h4>
-                  <div class='form-inputs'>
-                    <label class='form-label'>Prenom</label>
-                    <input class='form-input' value="<?php echo $users['prenom']; ?>"  required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='prenom' placeholder='Entrez votre prenom' />
-                </div>
-                <div class='form-inputs'>
-                    <label class='form-label'>Nom</label>
-                    <input class='form-input' value="<?php echo $users['nom']; ?>" required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='nom' placeholder='Entrez votre nom' />
-                </div>
-                <div class='form-inputs'>
-                    <label class='form-label'>Adresse</label>
-                    <input class='form-input' value="<?php echo $users['adresse']; ?>" required type='text' pattern="^[a-zA-Z0-9- ]+$" title="Seulement des lettres et chiffre" name='adresse' placeholder='Entrez votre Adresse' />
-                </div>
-                <div class='form-inputs'>
-                    <label class='form-label'>Telephone</label>
-                    <input class='form-input' value="<?php echo $users['telephone']; ?>" required type='text' pattern="^[]*[(][0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" title="(999)-999-9999" name='telephone' placeholder='Entrez votre Telephone' />
-                </div>
-                <div class='form-inputs'>
-                    <label class='form-label'>Email</label>
-                    <input class='form-input' value="<?php echo $users['email']; ?>" required type='email' name='email' placeholder='Enter your email' />
-                </div>
-                <div>
-                    <form method="POST" name="addVendeur" id="AddVendeur">
-                        <button type="submit" value="<?php echo $_SESSION['email']->id?>" class="form-input-btn" name="addVendeur" id="addVendeur">Devenir vendeur</button>
-                    </form>
-                </div>
-                <button class='form-input-btn' name='edit' type='Inscription'>
-                    Sauvegarder les changements
-                </button>
-                <a href="index.php" class="delete-btn">Revenir</a>
-                <br>
-                <?php
+<br><br>
+<div class="row gutters-sm">
+    <div class="col-md-4 mb-3">
+        <div class="card">
+        <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+            <?php echo' <img src="images/imagesProfil/'.$user['imageProfil'].'" alt="Admin" class="rounded-circle" width="150">' ?>
+            <div class="mt-3">
+                <h4><?php echo $user['nom'].", ". $user['prenom']; ?></h4>
+                <p class="text-secondary mb-1">Hote</p>
 
-
-
-                //include 'bd.php';
-                if ($_SERVER['REQUEST_METHOD'] == "POST")
-                {
-                    if(isset($_POST['addVendeur'])){
-                        CreateVendeur($_POST['addVendeur']);
-                    }
-                    else{
-                    $prenom = $_POST['prenom'];
-                    $nom = $_POST['nom'];
-                    $adresse = $_POST['adresse'];
-                    $telephone = $_POST['telephone'];
-                    $email = $_POST['email'];
-
-
-
-                        $url = 'https://localhost:7103/api/Usager/'.$_SESSION['email']->id;
-                        //print_r($url);
-                        $tableau = array("nom" =>   $nom,
-                        "prenom" => $prenom,
-                        "email"=> $email,
-                        "telephone"=> $telephone,
-                        "adresse"=> $adresse);
-                        $json_content = json_encode($tableau);
-
-
-                        $ch = curl_init();
-                        curl_setopt_array($ch, array(
-                            CURLOPT_URL => $url,
-                            CURLOPT_SSL_VERIFYPEER => false,
-                            CURLOPT_SSL_VERIFYHOST => false,
-                            CURLOPT_POSTFIELDS => $json_content,
-                            CURLOPT_TIMEOUT => 30,
-                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                            CURLOPT_CUSTOMREQUEST => "PUT",
-                            CURLOPT_HTTPHEADER => array(
-                                "cache-control: no-cache",
-                                "Content-Type: application/json",
-                                "Authorization: Bearer " . $_SESSION['token']
-                            ))
-                        );
-
-                        $result = curl_exec($ch);
-                        if($errno = curl_errno($ch)){
-                            $error_message = curl_strerror($errno);
-                            echo "Curl error ({$errno}): \n {$error_message}";
-                        }
-
-                        curl_close($ch);
-                        
-                    }
-                    
-                    
-
-                }
-
-                
-                    
-                ?>
-            </form>
+                <button class="btn btn-outline-primary">Message</button>
+            </div>
+            </div>
+        </div>
         </div>
     </div>
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Nom complet</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <?php echo $user['nom'].", ". $user['prenom']; ?>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Email</h6>
+                    </div>
+                <div class="col-sm-9 text-secondary">
+                    <?php echo $user['email'];?>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Phone</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    <?php echo $user['telephone'];?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div>Moyenne du Rating : <?php echo $moyenne_r; ?></div>
+    <div>Nombre de Ratings : <?php echo $count_r; ?></div>
+    <!-- 5 Star Rating -->
+    <?php 
+        if($verification != ''){
+            $submit = 'submit';
+        }else{
+            $submit = '';
+        }
+    ?>
+    
+        <?php 
+            if($verification != ''){
+                echo '<br><span>'. $verification .'</span>';
+            }else{
+                echo '<form action="ratingAction.php" method="POST">
+                <input type="radio" id="1" name="rating" value="1">
+                <label for="1">1</label>
+                <input type="radio" id="2" name="rating" value="2">
+                <label for="2">2</label>
+                <input type="radio" id="3" name="rating" value="3">
+                <label for="3">3</label>
+                <input type="radio" id="4" name="rating" value="4">
+                <label for="4">4</label>
+                <input type="radio" id="5" name="rating" value="5">
+                <label for="5">5</label> <br>
+                <input type="text" name="comentaire">
+            <button type="submit" name="rating_s" value='.$vendeurId.'>Sumetre</button>
+        </form>';
+            }
+
+            // $_SESSION['rating'] = $_POST['rating'];
+
+        ?>
+    
+
+
+</div>
+
+    
 </body>
 </html>

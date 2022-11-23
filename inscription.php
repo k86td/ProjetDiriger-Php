@@ -7,11 +7,17 @@
 </head>
 
 <body>
-
+    <script>
+        function preview() {
+            let image = document.getElementById('imageInput').files[0];
+            img.src = URL.createObjectURL(event.target.files[0]);
+            console.debug(image);
+        }
+    </script>
     <div class='container'>
         <span class='close-btn'><a style="color: #ca2929;" href="index.php">x</a></span>
         <div class='title'>Inscription </div>
-        <form class='form' method="POST">
+        <form class='form' method="POST" enctype="multipart/form-data">
             <div class="user-details">
                 <h1>
                     Veuillez entrez vos informations
@@ -46,6 +52,17 @@
                 </div>
                 <div class='input-box'>
                 </div>
+                <div class="input-box">
+                    <span class="details">Apercu de l'image</span>
+                    <div class="image-preview" id="imagePreview">
+                        <img src="images/placeholder-image.png" alt="" class="image-preview__image" id="img">
+                    </div>
+                </div>
+                <div class="input-box">
+                    <span class="details"> Ajouter une image </span>
+                    <div class="button" onclick="document.getElementById('imageInput').click()">Choisir une image</div>
+                    <input type="file" name="imageInput" id="imageInput" style="display:none;" onchange="preview()">
+                </div>
                 <button class='button' type='Inscription'>
                     S'inscrire
                 </button>
@@ -62,7 +79,7 @@
 
 
 
-    
+
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $prenom = $_POST['prenom'];
         $nom = $_POST['nom'];
@@ -71,59 +88,78 @@
         $email = $_POST['email'];
         $password = $_POST['password'];
         $password2 = $_POST['password2'];
+
         if ($password != $password2) {
             echo '<div style="color: red;">Les mots de passes ne sont pas identiques</div>';
         } else {
+            $target_dir = "images/imagesProfil/";
+            $img = $_FILES["imageInput"]["tmp_name"];
+            $target_file = $target_dir . $_FILES["imageInput"]["name"];
+            $uploadOk = 1;
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+            $target_file_bd = $_FILES["imageInput"]["name"];
+            echo 'Target file : '.$target_file;
 
-            include 'mailFonction.php';
-
-            $url = 'https://localhost:7103/api/Usager';
-            $tableau = array(
-                "nom" =>   $nom,
-                "prenom" => $prenom,
-                "email" => $email,
-                "telephone" => $telephone,
-                "password" => $password,
-                "adresse" => $adresse
-            );
-            $json_content = json_encode($tableau);
-
-
-            $ch = curl_init();
-            curl_setopt_array(
-                $ch,
-                array(
-                    CURLOPT_URL => $url,
-                    CURLOPT_SSL_VERIFYPEER => false,
-                    CURLOPT_SSL_VERIFYHOST => false,
-                    CURLOPT_POSTFIELDS => $json_content,
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_HTTPHEADER => array(
-                        "cache-control: no-cache",
-                        "Content-Type: application/json"
-                    )
-                )
-            );
-
-            $result = curl_exec($ch);
-            if ($errno = curl_errno($ch)) {
-                $error_message = curl_strerror($errno);
-                echo "Curl error ({$errno}): \n {$error_message}";
+            
+            if (file_exists($target_file)) {
+                echo "<script> alert('Sorry, file already exists.');  </script>";
+                $uploadOk = 0;
             }
-            /*
-                        $response = '';
-                        $err = '';
-                        */
-            curl_close($ch);
-            //  $response = json_decode($response, true); //because of true, it's in an array
-            //print_r($response);
-            // echo "<br>";
-            //echo 'Fail: ' . $err;
-            echo $email;
-            sendMailInscription($prenom, $nom, $adresse, $telephone, $email, $mail, $webMail);
-            header('Location: confirmation.php');
+
+            if ($_FILES["imageInput"]["size"] > 500000000) {
+                echo "<script> alert('Sorry, your file is too large.');  </script>";
+                $uploadOk = 0;
+            }
+
+            if ($uploadOk == 0) {
+                echo "<script> alert('Sorry, your file was not uploaded.'); event.preventDefault();</script>";
+            } else {
+                if (move_uploaded_file($_FILES["imageInput"]["tmp_name"], $target_file)) {
+                    include 'mailFonction.php';
+
+                    $url = 'https://localhost:7103/api/Usager';
+                    $tableau = array(
+                        "nom" =>   $nom,
+                        "prenom" => $prenom,
+                        "email" => $email,
+                        "telephone" => $telephone,
+                        "password" => $password,
+                        "adresse" => $adresse,
+                        "imageProfil" => $target_file_bd
+                    );
+                    $json_content = json_encode($tableau);
+
+
+                    $ch = curl_init();
+                    curl_setopt_array(
+                        $ch,
+                        array(
+                            CURLOPT_URL => $url,
+                            CURLOPT_SSL_VERIFYPEER => false,
+                            CURLOPT_SSL_VERIFYHOST => false,
+                            CURLOPT_POSTFIELDS => $json_content,
+                            CURLOPT_TIMEOUT => 30,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => "POST",
+                            CURLOPT_HTTPHEADER => array(
+                                "cache-control: no-cache",
+                                "Content-Type: application/json"
+                            )
+                        )
+                    );
+
+                    $result = curl_exec($ch);
+                    if ($errno = curl_errno($ch)) {
+                        $error_message = curl_strerror($errno);
+                        echo "Curl error ({$errno}): \n {$error_message}";
+                    }
+
+                    curl_close($ch);
+
+                    sendMailInscription($prenom, $nom, $adresse, $telephone, $email, $mail, $webMail);
+                    header('Location: confirmation.php');
+                }
+            }
         }
     }
     ?>
