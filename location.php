@@ -7,7 +7,7 @@ include 'requete.php';
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 	if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['message-button'])) {
-		
+		PostMessage($_POST['message'], $_POST['date'], $_SESSION['destinataire']);
 		//echo $_SESSION['message']->id ;
 	} else if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['chatter'])) {
 		$_SESSION['destinataire'] = $_POST['chatter'];
