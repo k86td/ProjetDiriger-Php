@@ -6,6 +6,9 @@ import { paypalVoidWorkflow, paypalCaptureWorkflow } from './helper';
 export async function main() {
 
     $("button[name='refuser']").on("click", async event => {
+        event.preventDefault();
+        event.stopPropagation();
+
         // void payment
 
         const btnClicked = event.delegateTarget;
@@ -16,6 +19,9 @@ export async function main() {
     });
 
     $("button[name='accepter']").on("click", async event => {
+        event.preventDefault();
+        event.stopPropagation();
+        
         // capture payment
 
         const btnClicked = event.delegateTarget;

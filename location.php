@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 									
 								}
 							}
-						} 
+						}
 						else {
 							$_SESSION['message'] = GetMessage();
 							for ($i = 0; $i < count($_SESSION['message']); $i++) {

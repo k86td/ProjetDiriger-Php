@@ -113,6 +113,9 @@ export async function paypalVoidWorkflow (userId, offreId) {
 
         // get authorization id
         let orderDetail = await getPaypalOrderDetails(token, orderId);
+
+        console.debug(orderDetail);
+
         let authorizationId = orderDetail.purchase_units[0].payments.authorizations[0].id; // no need to iterate through authorization payments since we only have on type of item, but could be more dynamic
 
         return authorizationId;
