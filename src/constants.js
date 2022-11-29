@@ -59,6 +59,22 @@ export const DATA_MAPPER = {
         return {
             "fullName": `${elem.prenom} ${elem.nom}`
         };
+    },
+    "voiture": function (elem) {
+
+        return {
+            "annee": elem.annee,
+            "couleur": elem.couleur,
+            "marque": elem.marque,
+            "modele": elem.modele,
+            "odometre": elem.odometre,
+            "nombrePorte": elem.nombrePorte,
+            "nombreSiege": elem.nombreSiege,
+            "carburant": elem.carburant,
+            "traction": elem.traction,
+            "description": elem.description,
+            "accidente": elem.accidente ? "Oui" : "Non"
+        };
     }
 }
 

@@ -54,6 +54,71 @@
 </div>
 
 <!-- showDetailsModal -->
+<div class="modal fade" id="showDetailOffre" tabindex="-1" aria-labelledby="showDetailOffre" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="showDetailOffreLabel">Detail Offre</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <div class="row">
+                    <div class="col-6">
+                        <span id="detailOffreMarque"></span>
+                        <span id="detailOffreModele"></span>
+                    </div>
+                    <div class="col-6">
+                        <span id="detailOffreAnnee"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    {{! <div class="col-6">
+                        <span id="detailOffreTypeVehicule"></span>
+                    </div> }}
+                    <div class="col-6">
+                        <span id="detailOffreCouleur"></span>
+                    </div>
+                    <div class="col">
+                        <span id="detailOffreOdometre"></span> km
+                        <i style="margin: 5px" class="bi bi-speedometer2"></i>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4">
+                        <span id="detailOffreNombrePorte"></span>
+                        <i class="bi bi-door-open"></i>
+                    </div>
+                    <div class="col-4">
+                        <span id="detailOffreNombreSiege"></span>
+                        <svg style="width: 16px; height: 16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M248 48V256h48V58.7c23.9 13.8 40 39.7 40 69.3V256h48V128C384 57.3 326.7 0 256 0H192C121.3 0 64 57.3 64 128V256h48V128c0-29.6 16.1-55.5 40-69.3V256h48V48h48zM48 288c-12.1 0-23.2 6.8-28.6 17.7l-16 32c-5 9.9-4.4 21.7 1.4 31.1S20.9 384 32 384l0 96c0 17.7 14.3 32 32 32s32-14.3 32-32V384H352v96c0 17.7 14.3 32 32 32s32-14.3 32-32V384c11.1 0 21.4-5.7 27.2-15.2s6.4-21.2 1.4-31.1l-16-32C423.2 294.8 412.1 288 400 288H48z"/></svg>
+                    </div>
+                    <div class="col-4">
+                        <span id="detailOffreAccidente"></span>
+                        <svg style="width: 16px; height: 16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M176 8c-6.6 0-12.4 4-14.9 10.1l-29.4 74L55.6 68.9c-6.3-1.9-13.1 .2-17.2 5.3s-4.6 12.2-1.4 17.9l39.5 69.1L10.9 206.4c-5.4 3.7-8 10.3-6.5 16.7s6.7 11.2 13.1 12.2l78.7 12.2L90.6 327c-.5 6.5 3.1 12.7 9 15.5s12.9 1.8 17.8-2.6l35.3-32.5 9.5-35.4 10.4-38.6c8-29.9 30.5-52.1 57.9-60.9l41-59.2c11.3-16.3 26.4-28.9 43.5-37.2c-.4-.6-.8-1.2-1.3-1.8c-4.1-5.1-10.9-7.2-17.2-5.3L220.3 92.1l-29.4-74C188.4 12 182.6 8 176 8zM367.7 161.5l135.6 36.3c6.5 1.8 11.3 7.4 11.8 14.2l4.6 56.5-201.5-54 32.2-46.6c3.8-5.6 10.8-8.1 17.3-6.4zm-69.9-30l-47.9 69.3c-21.6 3-40.3 18.6-46.3 41l-10.4 38.6-16.6 61.8-8.3 30.9c-4.6 17.1 5.6 34.6 22.6 39.2l15.5 4.1c17.1 4.6 34.6-5.6 39.2-22.6l8.3-30.9 247.3 66.3-8.3 30.9c-4.6 17.1 5.6 34.6 22.6 39.2l15.5 4.1c17.1 4.6 34.6-5.6 39.2-22.6l8.3-30.9L595 388l10.4-38.6c6-22.4-2.5-45.2-19.6-58.7l-6.8-84c-2.7-33.7-26.4-62-59-70.8L384.2 99.7c-32.7-8.8-67.3 4-86.5 31.8zM268.3 308.8c-12.8-3.4-20.4-16.6-17-29.4s16.6-20.4 29.4-17s20.4 16.6 17 29.4s-16.6 20.4-29.4 17zM545 358.1c-3.4 12.8-16.6 20.4-29.4 17s-20.4-16.6-17-29.4s16.6-20.4 29.4-17s20.4 16.6 17 29.4z"/></svg>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <span id="detailOffreCarburant"></span>
+                        <svg style="width: 16px; height: 16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M32 64C32 28.7 60.7 0 96 0H256c35.3 0 64 28.7 64 64V256h8c48.6 0 88 39.4 88 88v32c0 13.3 10.7 24 24 24s24-10.7 24-24V222c-27.6-7.1-48-32.2-48-62V96L384 64c-8.8-8.8-8.8-23.2 0-32s23.2-8.8 32 0l77.3 77.3c12 12 18.7 28.3 18.7 45.3V168v24 32V376c0 39.8-32.2 72-72 72s-72-32.2-72-72V344c0-22.1-17.9-40-40-40h-8V448c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32V64zM96 80v96c0 8.8 7.2 16 16 16H240c8.8 0 16-7.2 16-16V80c0-8.8-7.2-16-16-16H112c-8.8 0-16 7.2-16 16z"/></svg>
+                    </div>
+                    <div class="col-6">
+                        Traction: <span id="detailOffreTraction"></span>   
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <span id="detailOffreDescription"></span>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="mainBody">
     <div style="text-align: left;" class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 offre-body">
@@ -63,6 +128,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ nom }}</h5>
                     <h6 class="card-subtitle text-muted">{{ prix }}$/jour</h6>
+                    
                     <img src="images/imagesOffres/{{ image }}" class="card-img-top" alt="...">
                     {{ #connected }}
                         {{ #demandes }}
@@ -97,6 +163,15 @@
 >
                             Louer
                             </button>
+                            <button id="DetailsBtn_{{ id }}" name="details"
+                                    class="btn btn-outline-info card-btn"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#showDetailOffre" 
+                                    data-bs-offreName="{{ demandes.name }}" 
+                                    data-bs-offreId="{{ id }}"
+                                >
+                                    <i class="bi bi-eye-fill"></i>
+                                </button>
                         {{ /demandes }}
 
                     {{ /connected }}

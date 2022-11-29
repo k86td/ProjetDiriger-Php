@@ -453,6 +453,39 @@ async function RenderOffres(querySelector = ".main-content", queryString = "") {
         $("#mainBody").append(toastHtml);
         new Toast(document.getElementById("notConnectedToast")).show();
     }
+
+    // map clicking on an offer
+    document.getElementById("showDetailOffre").addEventListener('show.bs.modal', async event => {
+        const getVoiture = async (idOffre) => {
+            let voitures = await uGetJson(BASE_URL + "/Voiture/" + idOffre, 1, 10000);
+    
+            if (voitures !== undefined)
+                voitures = voitures.map(DATA_MAPPER.voiture);
+    
+            return voitures;
+        }
+
+        const capitalizeFirstLetter = (word) => {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        };
+
+        let button = event.relatedTarget;
+        button = $(button);
+
+        let idOffre = button.attr("data-bs-offreid");
+        
+        let voiture = await getVoiture("?idOffre=" + idOffre);
+        voiture = voiture[0]
+
+        console.debug(voiture);
+
+        ["annee", "couleur", "marque", "modele", "odometre", "nombrePorte", "nombreSiege",
+        "carburant", "traction", "description", "accidente"].forEach(key => {
+            console.debug(`Accessin:#detailOffre${capitalizeFirstLetter(key)}`);
+            $("#detailOffre" + capitalizeFirstLetter(key)).html(voiture[key]);
+        });
+
+    });
 }
 
 const GenCheckboxFromApi = (endpoint, dataPath, mappingFunc, additionalFunc) => {
