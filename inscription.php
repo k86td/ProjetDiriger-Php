@@ -23,32 +23,32 @@
                     Veuillez entrez vos informations
                 </h1>
                 <div class='input-box'>
-                    <span class='details'>Prenom</span>
-                    <input required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='prenom' placeholder='Entrez votre prenom' />
+                    <span class='details'>Prénom</span>
+                    <input required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='prenom' placeholder='Entrer votre prénom' />
                 </div>
                 <div class='input-box'>
                     <span class='details'>Nom</span>
-                    <input required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='nom' placeholder='Entrez votre nom' />
+                    <input required type='text' pattern="^[a-zA-Z]+$" title="Seulement des lettres" name='nom' placeholder='Entrer votre nom' />
                 </div>
                 <div class='input-box'>
                     <span class='details'>Adresse</span>
-                    <input required type='text' pattern="^[a-zA-Z0-9- ]+$" title="Seulement des lettres et chiffre" name='adresse' placeholder='Entrez votre Adresse' />
+                    <input required type='text' pattern="^[a-zA-Z0-9- ]+$" title="Seulement des lettres et chiffre" name='adresse' placeholder='Entrer votre Adresse' />
                 </div>
                 <div class='input-box'>
-                    <span class='details'>Telephone</span>
-                    <input required type='text' pattern="^[]*[(][0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" title="(999)-999-9999" name='telephone' placeholder='Entrez votre Telephone' />
+                    <span class='details'>Téléphone</span>
+                    <input required type='text' pattern="^[]*[(][0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" title="(999)-999-9999" name='telephone' placeholder='Entrer votre Téléphone' />
                 </div>
                 <div class='input-box'>
                     <span class='details'>Email</span>
-                    <input required type='email' name='email' placeholder='Enter your email' />
+                    <input required type='email' name='email' placeholder='Entrer votre email' />
                 </div>
                 <div class='input-box'>
                     <span class='details'>Password</span>
-                    <input required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password' placeholder='Enter your password' />
+                    <input required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password' placeholder='Entrer votre password' />
                 </div>
                 <div class='input-box'>
-                    <span class='details'>Confirm Password</span>
-                    <input required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password2' placeholder='Confirm your password' />
+                    <span class='details'>Confirmer Password</span>
+                    <input required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password2' placeholder='Confirmer votre password' />
                 </div>
                 <div class='input-box'>
                 </div>
