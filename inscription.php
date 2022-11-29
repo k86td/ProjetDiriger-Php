@@ -98,7 +98,7 @@
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
             $target_file_bd = $_FILES["imageInput"]["name"];
-            echo 'Target file : '.$target_file;
+           // echo 'Target file : '.$target_file;
 
             
             if (file_exists($target_file)) {
@@ -157,7 +157,7 @@
                     curl_close($ch);
 
                     sendMailInscription($prenom, $nom, $adresse, $telephone, $email, $mail, $webMail);
-                    header('Location: confirmation.php');
+                    //header('Location: confirmation.php');
                 }
             }
         }
