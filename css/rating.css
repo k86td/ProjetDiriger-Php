@@ -1,0 +1,57 @@
+
+.rating-css div{
+    color: #ffe400;
+    font-size: 30px;
+    font-family: sans-serif;
+    font-weight: 80;
+    text-align: center;
+    text-transform: uppercase;
+  
+}
+.rating-css input{
+    display: none;
+}
+.rating-css input + label{
+    font-size: 30px;
+    text-shadow: 1px 1px 0 #ffe400;
+    cursor: pointer;
+}
+.rating-css input:checked + label ~ label{
+    color: #838383;
+}
+.rating-css label:active{
+    transform: scale(0.8);
+    transition: 0.3s ease;
+}
+.title{
+    font-size: 20px;
+    font-family: sans-serif;
+    font-weight: 80;
+    text-align: center;
+    text-transform: uppercase;
+    color: black;
+   
+}
+.title-commentaire{
+    font-size: 20px;
+    font-family: sans-serif;
+    font-weight: 80;
+    text-align: left;
+    text-transform: uppercase;
+    color: black; 
+}
+.commentaire{
+    padding-left: 100px;
+    text-align: left;
+}
+.image{
+    height: 25px;
+}
+.texte-commentaire{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: black;
+    font-weight: bold;
+}
+.form{
+    text-align: center;
+}

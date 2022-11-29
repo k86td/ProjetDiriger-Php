@@ -79,7 +79,7 @@ $mail->Password = 'jcwwciksgjggkyhc';
         if(!$mail->send()) {
             echo 'Message could not be sent. Mailer Error: '.$mail->ErrorInfo;
         } else {
-            echo 'Message has been sent.';
+           // echo 'Message has been sent.';
             // header('Location: index.php');
         }
         

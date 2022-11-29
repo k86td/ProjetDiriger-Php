@@ -1,6 +1,9 @@
 <?php
 
 session_start();
+if (!isset($_SESSION['email'])) {
+    header('Location:index.php');
+}
 include 'requete.php';
 $vendeurs= GetAllVendeur();
 $users= GetAllUsers();
@@ -100,21 +103,21 @@ $users= GetAllUsers();
                             foreach ($vendeurs as $vendeur)
                             {
                                 
-                                $user = json_decode(GetUser($vendeur['idUsager']),true);
+                                $user = json_decode(GetUser($vendeur['idUsager']));
 
                                     echo "<tr>";
-                                    echo "<th>". $user['nom'] ."\n"."</th>";
-                                    echo "<th>". $user['prenom'] ."\n"."</th>";
-                                    echo "<th>". $user['email'] ."\n"."</th>";
-                                    echo "<th>". $user['telephone'] ."\n"."</th>";
+                                    echo "<th>". $user->nom ."\n"."</th>";
+                                    echo "<th>". $user->prenom ."\n"."</th>";
+                                    echo "<th>". $user->email ."\n"."</th>";
+                                    echo "<th>". $user->telephone ."\n"."</th>";
                                     
-                                    $_SESSION['vendeur'] = $user['id'];
+                                    $_SESSION['vendeur'] = $user->id;
                                     
 
                                     ?>
                                     <th>
                                         <form action='profilVendeur.php' method='POST'>
-                                            <button type='submit' name='view_profil' value=<?=$user['id'] ?> class='btn btn-danger'>Rating</button>
+                                            <button type='submit' name='view_profil' value=<?php echo$user->id;?> class='btn btn-danger'>Rating</button>
                                         </form>
                                     </th>
 

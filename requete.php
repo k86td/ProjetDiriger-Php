@@ -610,7 +610,7 @@ function GetAllUsers()
 
 function GetUser($id)
 {
-    $url = 'https://localhost:7103/api/Usager/' . $id;
+    $url = 'https://localhost:7103/api/Usager/'.$id;
 
     $ch = curl_init();
     curl_setopt_array(
@@ -744,13 +744,46 @@ function GetAllRatings($idVendeur)
 
     return $result;
 }
-function AddRating($idVendeur, $userPresentId, $rating)
+function GetRating($id){
+    $url = "https://localhost:7103/api/Rating/".$id;
+
+    $ch = curl_init();
+    curl_setopt_array(
+        $ch,
+        array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "Get",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+            )
+        )
+    );
+
+    $result = curl_exec($ch);
+    $result = json_decode($result);
+    if ($errno = curl_errno($ch)) {
+        $error_message = curl_strerror($errno);
+        echo "Curl error ({$errno}): \n {$error_message}";
+    }
+    curl_close($ch);
+
+    return $result;
+
+}
+function AddRating($idVendeur, $userPresentId, $rating, $commentaire)
 {
     $url = 'https://localhost:7103/api/Rating';
     $tableau = array(
         "idVendeur" =>   $idVendeur,
         "idUsager" => $userPresentId,
-        "rating" => $rating
+        "rating" => $rating,
+        "Conversation" => $commentaire
     );
     $json_content = json_encode($tableau);
 

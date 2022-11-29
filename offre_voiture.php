@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
                             <option value=1>Vus</option>
                             <option value=2>Sport</option>
                             <option value=3>Berline</option>
-                            <option value=5>Hatchback</option>
+                            <option value=4>Hatchback</option>
                         </select>
                     </div>
                     <div class='input-box'>
