@@ -280,6 +280,8 @@ function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odome
     $details = file_get_contents($google);
     $result = json_decode($details, true);
 
+    $nomOffre = $marque . ' ' . $modele . ' ' . $annee;
+
     $lat = $result['results'][0]['geometry']['location']['lat'];
     $lng = $result['results'][0]['geometry']['location']['lng'];
 
@@ -290,7 +292,7 @@ function CreateVoiture($annee, $couleur, $marque, $modele, $type_voiture, $odome
     $url = 'https://localhost:7103/api/Offre';
 
     $tableau = array(
-        "nom" => $_SESSION['email']->prenom,
+        "nom" => $nomOffre,
         "idVendeur" => $_SESSION['email']->id,
         "prix" => $prix,
         "coordonner" => $coordonner,
