@@ -16,6 +16,20 @@
     </script>
     <div class='container'>
         <span class='close-btn'><a style="color: #ca2929;" href="index.php">x</a></span>
+        <?php 
+                  if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                    $password = $_POST['password'];
+                    $password2 = $_POST['password2'];
+                    if ($password == $password2) {
+                        echo '<div style="color: green;"> Votre compte à bien été créé. Vous pouvez cliquer sur le lien en bas du formulaire pour vous connecter</div>';
+                    }
+                    else
+                    {
+                        echo '<div style="color: red;">Les mots de passes ne sont pas identiques</div>';
+                    }
+                  }
+                   
+                 ?>
         <div class='title'>Inscription </div>
         <form class='form' method="POST" enctype="multipart/form-data">
             <div class="user-details">
@@ -66,6 +80,7 @@
                 <button class='button' type='Inscription'>
                     S'inscrire
                 </button>
+                
                 <span class='form-input-login'>
                     déjà un compte? Connectez-vous
                     <a href="login.php">ici</a>
@@ -90,21 +105,16 @@
         $password2 = $_POST['password2'];
 
         if ($password != $password2) {
-            echo '<div style="color: red;">Les mots de passes ne sont pas identiques</div>';
+           
         } else {
             $target_dir = "images/imagesProfil/";
             $img = $_FILES["imageInput"]["tmp_name"];
             $target_file = $target_dir . $_FILES["imageInput"]["name"];
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-            $target_file_bd = $_FILES["imageInput"]["name"];
-           // echo 'Target file : '.$target_file;
-
-            
-            if (file_exists($target_file)) {
-                echo "<script> alert('Sorry, file already exists.');  </script>";
-                $uploadOk = 0;
-            }
+            $randomFilename = substr(md5(mt_rand(0, 1000)), 0, 21) . '-' . $_FILES["imageInput"]["name"];
+            $target_file_dir = $target_dir . $randomFilename;
+            $target_file_bd = $randomFilename;
 
             if ($_FILES["imageInput"]["size"] > 500000000) {
                 echo "<script> alert('Sorry, your file is too large.');  </script>";
@@ -155,7 +165,6 @@
                     }
 
                     curl_close($ch);
-
                     sendMailInscription($prenom, $nom, $adresse, $telephone, $email, $mail, $webMail);
                     //header('Location: confirmation.php');
                 }

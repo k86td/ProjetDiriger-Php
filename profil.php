@@ -91,7 +91,10 @@ $users= json_decode(GetUser($_SESSION['email']->id),true);
                         "prenom" => $prenom,
                         "email"=> $email,
                         "telephone"=> $telephone,
-                        "adresse"=> $adresse);
+                        "adresse"=> $adresse,
+                        "age" => 0,
+                        "imageProfil" => $users['imageProfil'],
+                        );
                         $json_content = json_encode($tableau);
 
 

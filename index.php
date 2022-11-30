@@ -54,7 +54,7 @@ session_start();
                <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-nav-first">
                          <li class="active"><a href="index.php">Accueil</a></li>
-                         <li><a href="location.php">Offres</a></li>
+                         <li><a href="location.php" style="background-color:DodgerBlue;">Offres</a></li>
                          <li><a href="about.php">À propos</a></li>
                          <?php
                          if (isset($_SESSION['email'])) {

@@ -28,30 +28,55 @@ session_start();
 
     <!-- MENU -->
     <section class="navbar custom-navbar navbar-fixed-top" role="navigation">
-        <div class="container">
+          <div class="container">
 
-            <div class="navbar-header">
-                <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon icon-bar"></span>
-                    <span class="icon icon-bar"></span>
-                    <span class="icon icon-bar"></span>
-                </button>
+               <div class="navbar-header">
+                    <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                         <span class="icon icon-bar"></span>
+                         <span class="icon icon-bar"></span>
+                         <span class="icon icon-bar"></span>
+                    </button>
 
-                <!-- lOGO TEXT HERE -->
-                <a href="#" class="navbar-brand">Autorius</a>
-            </div>
+                    <!-- lOGO TEXT HERE -->
+                    <a href="#" class="navbar-brand">Autorius</a>
+               </div>
 
-            <!-- MENU LINKS -->
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-nav-first">
-                    <li class="active"><a href="index.php">Accueil</a></li>
-                    <li><a href="location.php">Offres</a></li>
-                    <li><a href="about.php">À propos</a></li>
-                </ul>
-            </div>
+               <!-- MENU LINKS -->
+               <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-nav-first">
+                         <li class="active"><a href="index.php">Accueil</a></li>
+                         <li><a href="location.php" style="background-color:DodgerBlue;">Offres</a></li>
+                         <li><a href="about.php">À propos</a></li>
+                         <?php
+                         if (isset($_SESSION['email'])) {
+                              echo '<li><a href="profil.php">Profil</a></li>';
+                              
+                              echo '<li>
+                                        <a class="dropdown">Ajouter une location</a>
+                                        <div class="dropdown-content">
+                                             <a href="offre_voiture.php">Voiture</a>
+                                             <a href="#">Camion</a>
+                                             <a href="#">Bateau</a>
+                                             
+                                        </div>
+                                    </li>';
+                              echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
+                              echo '<li><a href="listeVendeur.php">Les Vendeurs</a></li>';
+                              //print_r(gettype($_SESSION['email']->idRole));
+                              if ($_SESSION['email']->idRole == 2) {
+                                   echo '<li><a href="listUsers_admin.php">Admin</a></li>';
+                              }
+                              echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
+                         } else {
+                              echo '<li><a href="login.php">Se connecter</a></li>';
+                              echo '<li><a href="inscription.php">Inscription</a></li>';
+                         }
+                         ?>
+                    </ul>
+               </div>
 
-        </div>
-    </section>
+          </div>
+     </section>
     <h1 id="titre"> Qu'est-ce que Autorius? </h1> </br>
     <div class="paragraphe">Autorius c'est une plateforme d’autopartage. Notre site web vous permet de réserver un véhicule que vous voulez, peu importe où vous vous trouvez, offert par un d’hôte vérifié et approuvé par notre équipe. Bâtie avec une option de mode de paiement pour permettre les transactions et une possibilité de clavardage en direct avec les hôtes, notre plateforme permet à tout type de personne en besoin de trouver votre moyen de transport parfait pour chaque occasion. De plus, les utilisateurs sont libres de négocier le prix, de choisir la période désirée et devenir hôte. N’importe quel usager sera capable par la suite de voir les véhicules disponibles et pourra faire une offre de location. Le propriétaire sera en mesure d’accepter ou de refuser l’offre selon l’historique de l’usager.
 

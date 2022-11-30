@@ -12,20 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $target_file = $target_dir . $_FILES["imageInput"]["name"];
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    $target_file_dir = $target_dir . $_FILES["imageInput"]["name"];
-    $target_file_bd = $_FILES["imageInput"]["name"];
-
-    if (file_exists($target_file)) {
-        echo "<script> alert('Sorry, file already exists.') </script>";
-        $uploadOk = 0;
-    }
+    $randomFilename = substr(md5(mt_rand(0, 1000)), 0, 21) . '-' . $_FILES["imageInput"]["name"];
+    $target_file_dir = $target_dir . $randomFilename;
+    $target_file_bd = $randomFilename;
 
     if ($_FILES["imageInput"]["size"] > 500000000) {
         echo "<script> alert('Sorry, your file is too large.') </script>";
         $uploadOk = 0;
     }
 
-    if ($uploadOk == 0) {
+    if ($uploadOk == 0) 
+    {
         echo "<script> alert('Sorry, your file was not uploaded.') </script>";
       } 
       else
@@ -38,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
           echo "<script> alert('Sorry, there was an error uploading your file.') </script>";
         }
       }
-
 }
 
 
@@ -71,11 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
         }
     </script>
     <div class='container'>
-        <span class='close-btn'><a style="color: white;" href="index.php">x</a></span>
         <div class='form-content-right'>
             <div class="title">Veuillez entrez les informations de votre véhicule</div>
+            <?php 
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            echo '<div style="color: green;"> Votre location à bien été créé. Vous pouvez cliquer sur le lien pour retourner au menu principal et aller sur mes offres pour voir votre location : <a href="index.php">ici</a> </div>';
+        }
+        ?>
             <form class='form' method="POST" enctype="multipart/form-data">
                 <div class="user-details">
+                   
                     <div class='input-box'>
                         <span class='details'>Année de fabrication</span>
                         <input required type='number' pattern="^[0-9]+$" title=" seulement des chiffres entre 1980 et 2023" min="1980" max="2023" name='annee' placeholder='Entrez la date de fabrication'>
@@ -175,6 +176,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
                     <button class='button' type='Inscription'>
                         Ajouter l'offre
                     </button>
+                    <div class="button" onclick='location.href = "./index.php";'>Retour</div>
+
                     <br>
                 </div>
             </form>
