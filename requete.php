@@ -530,6 +530,8 @@ function GetOffre($offerId)
     }
     $_SESSION['offreDetails'] = json_decode($result);
     curl_close($ch);
+    return $result;
+
 }
 
 function UpdateOffre($nom, $prix, $coordonner, $idCategorie, $idType, $dateDebut, $dateFin)
