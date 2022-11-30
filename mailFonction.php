@@ -55,8 +55,8 @@ $mail->Password = 'jcwwciksgjggkyhc';
     }
 
     function sendMailInscription($prenom, $nom, $adresse, $tel, $email, $mail, $webMail){
-        echo $email;
-        echo $tel;
+       // echo $email;
+        //echo $tel;
         $mail->addAddress($email); // Add a recipient
 
         $mail->setFrom($webMail, 'Autorius'); // Sender info
