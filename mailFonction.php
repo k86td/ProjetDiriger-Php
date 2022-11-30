@@ -71,7 +71,7 @@ $mail->Password = 'jcwwciksgjggkyhc';
         <p> votre nom complet :$nom, $prenom <br>
         Votre adresse: $adresse <br>
         Votre numéro de téléphone: $tel <br>
-        Et du moment que vous recevez ce courriel, vous êtes bien inscrit sur notre site.
+        Et du moment que vous recevez ce courriel, vous êtes bien inscrit sur notre site.";
 
         $mail->Body    = $bodyContent;
 
@@ -84,7 +84,7 @@ $mail->Password = 'jcwwciksgjggkyhc';
         }
         
     }
-
+    
 if (isset($_POST['offre_appli'])){
 
     $id_offre= $_POST['offre_appli'];
