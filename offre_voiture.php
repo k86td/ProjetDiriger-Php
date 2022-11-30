@@ -12,14 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $target_file = $target_dir . $_FILES["imageInput"]["name"];
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    $target_file_dir = $target_dir . $_FILES["imageInput"]["name"];
-    $target_file_bd = $_FILES["imageInput"]["name"];
-
-    if (file_exists($target_file)) {
-        echo "<script> alert('Sorry, file already exists.') </script>";
-        $uploadOk = 0;
-    }
-
+    $randomFilename = substr(md5(mt_rand(0, 1000)), 0, 21) . '-' . $_FILES["imageInput"]["name"];
+    $target_file_dir = $target_dir . $randomFilename;
+    $target_file_bd = $randomFilename;
+    echo "target_file_dir: ". $target_file_dir;
+    echo "target_file_bd: ". $target_file_bd; 
+/*
     if ($_FILES["imageInput"]["size"] > 500000000) {
         echo "<script> alert('Sorry, your file is too large.') </script>";
         $uploadOk = 0;
@@ -38,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
           echo "<script> alert('Sorry, there was an error uploading your file.') </script>";
         }
       }
+*/
 
 }
 
