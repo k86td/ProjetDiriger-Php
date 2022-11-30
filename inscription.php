@@ -116,8 +116,6 @@
             $target_file_dir = $target_dir . $randomFilename;
             $target_file_bd = $randomFilename;
 
-            echo "<script> alert('Var is : " . $target_file_dir . ".') </script>";
-
             if ($_FILES["imageInput"]["size"] > 500000000) {
                 echo "<script> alert('Sorry, your file is too large.');  </script>";
                 $uploadOk = 0;
