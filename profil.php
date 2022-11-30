@@ -1,3 +1,64 @@
+<?php
+session_start();
+
+//include 'bd.php';
+if ($_SERVER['REQUEST_METHOD'] == "POST")
+{
+    if(isset($_POST['addVendeur'])){
+        CreateVendeur($_POST['addVendeur']);
+    }
+    else{
+    $prenom = $_POST['prenom'];
+    $nom = $_POST['nom'];
+    $adresse = $_POST['adresse'];
+    $telephone = $_POST['telephone'];
+    $email = $_POST['email'];
+
+
+
+        $url = 'https://localhost:7103/api/Usager/'.$_SESSION['email']->id;
+        //print_r($url);
+        $tableau = array(
+            "nom" =>   $nom,
+            "prenom" => $prenom,
+            "email"=> $email,
+            "telephone"=> $telephone,
+            "adresse"=> $adresse,
+            "age" => 0,
+            "ImageProfil" => $_POST['imageUrl']
+        );
+        $json_content = json_encode($tableau);
+
+
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => $json_content,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $_SESSION['token']
+            ))
+        );
+
+        $result = curl_exec($ch);
+        if($errno = curl_errno($ch)){
+            $error_message = curl_strerror($errno);
+            echo "Curl error ({$errno}): \n {$error_message}";
+        }
+
+        curl_close($ch);
+
+    }
+    header('Location: index.php');
+}     
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -17,11 +78,11 @@
 
 </head>
 <?php
-session_start();
 include '_headerBar.php';
 include 'requete.php';
 
 $users= json_decode(GetUser($_SESSION['email']->id),true);
+
 
 ?>
     <div class='form-container'>
@@ -52,6 +113,9 @@ $users= json_decode(GetUser($_SESSION['email']->id),true);
                     <label class='form-label'>Courriel</label>
                     <input class='form-input' value="<?php echo $users['email']; ?>" required type='email' name='email' placeholder='Enter your email' />
                 </div>
+                <div class='form-inputs'>
+                    <input type="text" name="imageUrl" id="imageUrl"  value="<?php echo $users['imageProfil']; ?>" hidden>
+                </div>
                 <!-- <div class='form-inputs'>
                     <label class='form-label'>Mot de passe</label>
                     <input class='form-input' required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" title="Minimum huit caractères, au moins une lettre majuscule, une lettre minuscule et un chiffre" type='password' name='password' placeholder='Enter your password' />
@@ -66,71 +130,7 @@ $users= json_decode(GetUser($_SESSION['email']->id),true);
                 </button>
                 <button><a href="index.php" class="delete-btn">Retour</a></button>
                 <br>
-                <?php
-                    
 
-
-                //include 'bd.php';
-                if ($_SERVER['REQUEST_METHOD'] == "POST")
-                {
-                    if(isset($_POST['addVendeur'])){
-                        CreateVendeur($_POST['addVendeur']);
-                    }
-                    else{
-                    $prenom = $_POST['prenom'];
-                    $nom = $_POST['nom'];
-                    $adresse = $_POST['adresse'];
-                    $telephone = $_POST['telephone'];
-                    $email = $_POST['email'];
-
-
-
-                        $url = 'https://localhost:7103/api/Usager/'.$_SESSION['email']->id;
-                        //print_r($url);
-                        $tableau = array("nom" =>   $nom,
-                        "prenom" => $prenom,
-                        "email"=> $email,
-                        "telephone"=> $telephone,
-                        "adresse"=> $adresse,
-                        "age" => 0,
-                        "imageProfil" => $users['imageProfil'],
-                        );
-                        $json_content = json_encode($tableau);
-
-
-                        $ch = curl_init();
-                        curl_setopt_array($ch, array(
-                            CURLOPT_URL => $url,
-                            CURLOPT_SSL_VERIFYPEER => false,
-                            CURLOPT_SSL_VERIFYHOST => false,
-                            CURLOPT_POSTFIELDS => $json_content,
-                            CURLOPT_TIMEOUT => 30,
-                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                            CURLOPT_CUSTOMREQUEST => "PUT",
-                            CURLOPT_HTTPHEADER => array(
-                                "cache-control: no-cache",
-                                "Content-Type: application/json",
-                                "Authorization: Bearer " . $_SESSION['token']
-                            ))
-                        );
-
-                        $result = curl_exec($ch);
-                        if($errno = curl_errno($ch)){
-                            $error_message = curl_strerror($errno);
-                            echo "Curl error ({$errno}): \n {$error_message}";
-                        }
-
-                        curl_close($ch);
-                        
-                    }
-                    
-                    
-
-                }
-
-                
-                    
-                ?>
             </form>
         </div>
     </div>
