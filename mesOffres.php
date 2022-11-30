@@ -40,34 +40,56 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <?php include '_headerBar.php'; ?>
 
 <body>
-    <section class="services" id="services">
-        <div class="heading">
-            <h1 style="margin-left: 10px;"> Mes offres </h1>
-        </div>
-        <div class="services-container">
+<section class="navbar custom-navbar navbar-fixed-top" role="navigation">
+          <div class="container">
 
-            <?php
+               <div class="navbar-header">
+                    <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                         <span class="icon icon-bar"></span>
+                         <span class="icon icon-bar"></span>
+                         <span class="icon icon-bar"></span>
+                    </button>
 
-            for ($i = 0; $i < count($_SESSION['offre']); $i++) {
-                $data = GetVoiture($_SESSION['offre'][$i]->id);
-                echo '
-                <div class="box">
-                    <div class="box-img">
-                        <img src="images/imagesOffres/'.$_SESSION['offre'][$i]->image.'">
-                    </div>
-                    <p>' . $data->annee . '</p>
-                    <h3>' . $data->annee . ' ' . $data->marque . ' ' . $data->modele . '</h3>
-                    <h2>' . $_SESSION['offre'][$i]->prix . '$ | <span>Jours</span></h2>
-                    <form action="mesOffres.php" id="' . $_SESSION['offre'][$i]->id . '" method="POST">
-                        <button type="submit" id="' . $_SESSION['offre'][$i]->id . '" class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreId">Modifier mon offre</button>
-                        <button type="submit"  class="btn" value="' . $_SESSION['offre'][$i]->id . '" name="offreOfferts">Voir les demandes offre</button>
-                    </form>
-                 </div>';
-            }
-            ?>
-        </div>
+                    <!-- lOGO TEXT HERE -->
+                    <a href="#" class="navbar-brand">Autorius</a>
+               </div>
 
-    </section>
+               <!-- MENU LINKS -->
+               <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-nav-first">
+                         <li class="active"><a href="index.php">Accueil</a></li>
+                         <li><a href="location.php" style="background-color:DodgerBlue;">Offres</a></li>
+                         <li><a href="about.php">À propos</a></li>
+                         <?php
+                         if (isset($_SESSION['email'])) {
+                              echo '<li><a href="profil.php">Profil</a></li>';
+                              
+                              echo '<li>
+                                        <a class="dropdown">Ajouter une location</a>
+                                        <div class="dropdown-content">
+                                             <a href="offre_voiture.php">Voiture</a>
+                                             <a href="#">Camion</a>
+                                             <a href="#">Bateau</a>
+                                             
+                                        </div>
+                                    </li>';
+                              echo '<li><a href="mesOffres.php">Mes Offres</a></li>';
+                              echo '<li><a href="listeVendeur.php">Les Vendeurs</a></li>';
+                              //print_r(gettype($_SESSION['email']->idRole));
+                              if ($_SESSION['email']->idRole == 2) {
+                                   echo '<li><a href="listUsers_admin.php">Admin</a></li>';
+                              }
+                              echo ' <li><a href="deconnection.php">Se déconnecter</a></li>';
+                         } else {
+                              echo '<li><a href="login.php">Se connecter</a></li>';
+                              echo '<li><a href="inscription.php">Inscription</a></li>';
+                         }
+                         ?>
+                    </ul>
+               </div>
+
+          </div>
+     </section>
 
     <!-- SCRIPTS -->
     <script src="js/jquery.js"></script>
