@@ -15,8 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $randomFilename = substr(md5(mt_rand(0, 1000)), 0, 21) . '-' . $_FILES["imageInput"]["name"];
     $target_file_dir = $target_dir . $randomFilename;
     $target_file_bd = $randomFilename;
-    echo "target_file_dir: ". $target_file_dir;
-    echo "target_file_bd: ". $target_file_bd; 
+
 
     if ($_FILES["imageInput"]["size"] > 500000000) {
         echo "<script> alert('Sorry, your file is too large.') </script>";
@@ -68,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
         }
     </script>
     <div class='container'>
-        <span class='close-btn'><a style="color: white;" href="index.php">x</a></span>
         <div class='form-content-right'>
             <div class="title">Veuillez entrez les informations de votre véhicule</div>
             <form class='form' method="POST" enctype="multipart/form-data">
@@ -172,6 +170,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['test'])){
                     <button class='button' type='Inscription'>
                         Ajouter l'offre
                     </button>
+                    <div class="button" onclick='location.href = "./index.php";'>Retour</div>
+
                     <br>
                 </div>
             </form>

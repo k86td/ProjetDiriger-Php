@@ -112,14 +112,9 @@
             $target_file = $target_dir . $_FILES["imageInput"]["name"];
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-            $target_file_bd = $_FILES["imageInput"]["name"];
-           // echo 'Target file : '.$target_file;
-
-            
-            if (file_exists($target_file)) {
-                echo "<script> alert('Sorry, file already exists.');  </script>";
-                $uploadOk = 0;
-            }
+            $randomFilename = substr(md5(mt_rand(0, 1000)), 0, 21) . '-' . $_FILES["imageInput"]["name"];
+            $target_file_dir = $target_dir . $randomFilename;
+            $target_file_bd = $randomFilename;
 
             if ($_FILES["imageInput"]["size"] > 500000000) {
                 echo "<script> alert('Sorry, your file is too large.');  </script>";
