@@ -65,14 +65,14 @@ $mail->Password = 'jcwwciksgjggkyhc';
 
         // Mail body content
         $bodyContent = "<h2>Inscription Reussie !! </h2>";
-        $bodyContent .= "<h5>A partire de maintenant vous pouvez avoir accer a notre site web!<br>
-        Voisi vos informations a fin de verifier si tout est correcte, si non vous pouvez toujours les changer
-        sur le site dans l'option <b> Profile </b>. </h5><br>
-        <p> Votre nom complet :$nom, $prenom <br>
-        Votre adress: $adresse <br>
-        Votre numero de telephone: $tel <br>
-        Et du moment que vous resevez se courriel je suppose que vous avez bien rentrez votre adresse email.
-        </p>";
+        $bodyContent .= "<h5>À partir de maintenant vous pouvez avoir accès a notre site web!<br>
+        Voici vos informations a fin de vérifier si tout est correcte, sinon vous pouvez toujours les changer
+        sur le site dans l'option <b> profile </b>. </h5><br>
+        <p> votre nom complet :$nom, $prenom <br>
+        Votre adresse: $adresse <br>
+        Votre numéro de téléphone: $tel <br>
+        Et du moment que vous recevez ce courriel, vous êtes bien inscrit sur notre site.
+
         $mail->Body    = $bodyContent;
 
         // Send email
