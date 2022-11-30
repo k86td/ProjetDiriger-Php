@@ -116,6 +116,8 @@
             $target_file_dir = $target_dir . $randomFilename;
             $target_file_bd = $randomFilename;
 
+            echo "<script> alert('Var is : " . $target_file_dir . ".') </script>";
+
             if ($_FILES["imageInput"]["size"] > 500000000) {
                 echo "<script> alert('Sorry, your file is too large.');  </script>";
                 $uploadOk = 0;
@@ -124,7 +126,7 @@
             if ($uploadOk == 0) {
                 echo "<script> alert('Sorry, your file was not uploaded.'); event.preventDefault();</script>";
             } else {
-                if (move_uploaded_file($_FILES["imageInput"]["tmp_name"], $target_file)) {
+                if (move_uploaded_file($_FILES["imageInput"]["tmp_name"], $target_file_dir)) {
                     include 'mailFonction.php';
 
                     $url = 'https://localhost:7103/api/Usager';
