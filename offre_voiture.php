@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $target_file_bd = $randomFilename;
     echo "target_file_dir: ". $target_file_dir;
     echo "target_file_bd: ". $target_file_bd; 
-/*
+
     if ($_FILES["imageInput"]["size"] > 500000000) {
         echo "<script> alert('Sorry, your file is too large.') </script>";
         $uploadOk = 0;
@@ -36,8 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
           echo "<script> alert('Sorry, there was an error uploading your file.') </script>";
         }
       }
-*/
-
 }
 
 
